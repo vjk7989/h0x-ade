@@ -65,23 +65,25 @@ export function installedElectronCandidates(
   const joinPath = platform === 'win32' ? win32.join : posix.join
   if (platform === 'darwin') {
     return [
-      '/Applications/Orca.app/Contents/MacOS/Orca',
-      joinPath(homePath, 'Applications', 'Orca.app', 'Contents', 'MacOS', 'Orca')
+      '/Applications/h0x-ADE.app/Contents/MacOS/h0x-ADE',
+      joinPath(homePath, 'Applications', 'h0x-ADE.app', 'Contents', 'MacOS', 'h0x-ADE')
     ]
   }
   if (platform === 'win32') {
     return [
       ...(environment.LOCALAPPDATA
-        ? [joinPath(environment.LOCALAPPDATA, 'Programs', 'Orca', 'Orca.exe')]
+        ? [joinPath(environment.LOCALAPPDATA, 'Programs', 'h0x-ADE', 'h0x-ADE.exe')]
         : []),
-      ...(environment.ProgramFiles ? [joinPath(environment.ProgramFiles, 'Orca', 'Orca.exe')] : [])
+      ...(environment.ProgramFiles
+        ? [joinPath(environment.ProgramFiles, 'h0x-ADE', 'h0x-ADE.exe')]
+        : [])
     ]
   }
   return [
-    joinPath(homePath, '.local', 'bin', 'orca-ide'),
-    '/usr/local/bin/orca-ide',
-    '/usr/bin/orca-ide',
-    '/opt/Orca/orca-ide'
+    joinPath(homePath, '.local', 'bin', 'h0x'),
+    '/usr/local/bin/h0x',
+    '/usr/bin/h0x',
+    '/opt/h0x-ADE/h0x'
   ]
 }
 

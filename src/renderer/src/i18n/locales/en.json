@@ -330,7 +330,7 @@
         "b411ec0069": "Connect",
         "2cf9e5a294": "Clear saved server",
         "4a4c017be1": "Endpoint:",
-        "27393856e4": "orca://pair?code=...",
+        "27393856e4": "pavii-h0x://pair?code=...",
         "7a566540de": "Pairing URL or code",
         "cb4d287238": "Server name",
         "3affe7de3a": "Paste a pairing URL from an Orca server that this browser can reach.",
@@ -6067,7 +6067,7 @@
           "serverName": "Server name",
           "serverNamePlaceholder": "Dev box",
           "pairingCode": "Pairing code",
-          "pairingCodePlaceholder": "orca://pair?code=...",
+          "pairingCodePlaceholder": "pavii-h0x://pair?code=...",
           "pairingHelpPrefix": "Run",
           "pairingCommand": "orca serve --pairing-address <host>",
           "pairingHelpSuffix": "on the server and paste the printed pairing URL.",
@@ -7954,7 +7954,7 @@
           "55fcc964cd": "on the server and paste the printed pairing URL.",
           "960e901ae4": "orca serve --pairing-address <host>",
           "163671f7b5": "Run",
-          "c3d772c514": "orca://pair?code=...",
+          "c3d772c514": "pavii-h0x://pair?code=...",
           "9bc9b83474": "Pairing code",
           "e038625857": "Dev box",
           "54ebacc600": "Server name",
@@ -8754,7 +8754,7 @@
           "e49688f67f": "Register `{{value0}}` in WSL?",
           "61ac55278e": "Remove `{{value0}}` from WSL?",
           "e2b0ee267f": "stale",
-          "7aa456a460": "Register `orca-ide` in ~/.local/bin inside WSL.",
+          "7aa456a460": "Register `h0x` in ~/.local/bin inside WSL.",
           "0307677bb9": "Checking WSL CLI registration..."
         },
         "accounts": {
@@ -11475,7 +11475,7 @@
           "namePlaceholder": "Linux workstation",
           "nameHelp": "This only changes how the computer appears in Orca.",
           "accessLink": "Access link",
-          "accessLinkPlaceholder": "orca://pair?code=...",
+          "accessLinkPlaceholder": "pavii-h0x://pair?code=...",
           "accessLinkHelp": "Orca shows the destination before connecting. Credentials stay hidden.",
           "destination": "Link destination",
           "loopbackTitle": "This link points back to this device",
@@ -17050,7 +17050,7 @@
       "orchestrationPaused": {
         "label": "Orchestration paused",
         "message": "Structured Chat blocks terminal prompts and sends. Orchestration messages remain queued; switch to Terminal, then check the Orca inbox with",
-        "command": "orca orchestration check"
+        "command": "h0x orchestration check"
       },
       "structuredSessionCloseFailed": "Could not close this chat session",
       "structuredSessionLaunchFailed": "Could not open {{value0}} chat",

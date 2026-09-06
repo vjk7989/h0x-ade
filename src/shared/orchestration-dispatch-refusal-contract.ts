@@ -20,8 +20,8 @@ export function taskNotFoundRefusal(
     data: {
       ...detail,
       nextSteps: [
-        'Run orca orchestration task-list --json in the bound Run to find the intended Task id.',
-        'If the Task does not exist yet, create it with orca orchestration task-create --spec <text> --json.'
+        'Run h0x orchestration task-list --json in the bound Run to find the intended Task id.',
+        'If the Task does not exist yet, create it with h0x orchestration task-create --spec <text> --json.'
       ]
     }
   }
@@ -48,17 +48,17 @@ export function taskNotStartableRefusal(
 function taskNotStartableNextSteps(detail: TaskNotStartableDetail): string[] {
   if (detail.retryOf) {
     return [
-      `--retry-of must name the latest settled Dispatch of a failed or blocked Task; check orca orchestration dispatch-show --task ${detail.taskId} --json and orca orchestration worker-show --dispatch ${detail.retryOf} --json.`
+      `--retry-of must name the latest settled Dispatch of a failed or blocked Task; check h0x orchestration dispatch-show --task ${detail.taskId} --json and h0x orchestration worker-show --dispatch ${detail.retryOf} --json.`
     ]
   }
   if (detail.unmetDependencies.length > 0) {
     return [
-      `Dependencies ${detail.unmetDependencies.join(', ')} are not completed. Wait for running ones with orca orchestration check --wait --json; retry or unblock failed ones before dispatching again.`
+      `Dependencies ${detail.unmetDependencies.join(', ')} are not completed. Wait for running ones with h0x orchestration check --wait --json; retry or unblock failed ones before dispatching again.`
     ]
   }
   if (detail.status === 'dispatched') {
     return [
-      `The Task already has an active Dispatch; inspect it with orca orchestration dispatch-show --task ${detail.taskId} --json.`
+      `The Task already has an active Dispatch; inspect it with h0x orchestration dispatch-show --task ${detail.taskId} --json.`
     ]
   }
   return [

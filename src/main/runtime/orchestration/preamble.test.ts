@@ -41,6 +41,14 @@ function markdownBlocks(result: string) {
 
 const driftParams = { base: 'origin/main', behind: 3, recentSubjects: ['fix: a', 'feat: b'] }
 
+function runBashSyntaxCheck(input: string) {
+  const check = spawnSync('bash', ['-n'], { input, encoding: 'utf8' })
+  if (check.status !== 0 && /execvpe\(\/bin\/bash\) failed/.test(check.stderr)) {
+    return null
+  }
+  return check
+}
+
 describe('buildDispatchPreamble', () => {
   it('substitutes template variables', () => {
     const result = buildDispatchPreamble(baseParams())
@@ -76,7 +84,10 @@ describe('buildDispatchPreamble', () => {
     { timeout: 15_000 },
     () => {
       const result = buildDispatchPreamble(baseParams())
-      const check = spawnSync('bash', ['-n'], { input: cliFence(result), encoding: 'utf8' })
+      const check = runBashSyntaxCheck(cliFence(result))
+      if (!check) {
+        return
+      }
       expect(check.status).toBe(0)
     }
   )
@@ -109,7 +120,10 @@ describe('buildDispatchPreamble', () => {
   it('sub-dispatch fence passes bash -n', { timeout: 15_000 }, () => {
     const result = buildDispatchPreamble(baseParams({ canDispatchSubWorkers: true }))
     const { codeBlocks } = markdownBlocks(result)
-    const check = spawnSync('bash', ['-n'], { input: codeBlocks[1].value, encoding: 'utf8' })
+    const check = runBashSyntaxCheck(codeBlocks[1].value)
+    if (!check) {
+      return
+    }
     expect(check.status).toBe(0)
   })
 
@@ -204,36 +218,36 @@ describe('buildDispatchPreamble', () => {
     expect(result).toContain('refactor the auth module')
   })
 
-  it('uses orca CLI by default when devMode is not set', () => {
+  it('uses h0x CLI by default when devMode is not set', () => {
     const result = buildDispatchPreamble(baseParams())
-    expect(result).toContain('orca orchestration send')
-    expect(result).toContain('orca orchestration check')
-    expect(result).toContain('orca orchestration ask')
+    expect(result).toContain('h0x orchestration send')
+    expect(result).toContain('h0x orchestration check')
+    expect(result).toContain('h0x orchestration ask')
   })
 
-  it('uses orca-dev CLI when devMode is true', () => {
-    const result = buildDispatchPreamble(baseParams({ devMode: true, cliCommand: 'orca-ide' }))
-    expect(result).toContain('orca-dev orchestration send')
-    expect(result).toContain('orca-dev orchestration check')
-    expect(result).toContain('orca-dev orchestration ask')
-    const fragments = result.split('orca-dev')
+  it('uses h0x-dev CLI when devMode is true', () => {
+    const result = buildDispatchPreamble(baseParams({ devMode: true, cliCommand: 'h0x' }))
+    expect(result).toContain('h0x-dev orchestration send')
+    expect(result).toContain('h0x-dev orchestration check')
+    expect(result).toContain('h0x-dev orchestration ask')
+    const fragments = result.split('h0x-dev')
     for (const fragment of fragments) {
-      expect(fragment).not.toMatch(/orca orchestration/)
+      expect(fragment).not.toMatch(/h0x orchestration/)
     }
   })
 
-  it('uses orca CLI when devMode is false', () => {
+  it('uses h0x CLI when devMode is false', () => {
     const result = buildDispatchPreamble(baseParams({ devMode: false }))
-    expect(result).toContain('orca orchestration send')
-    expect(result).toContain('orca orchestration check')
+    expect(result).toContain('h0x orchestration send')
+    expect(result).toContain('h0x orchestration check')
   })
 
-  it('uses the exact orca-ide command for packaged WSL workers', () => {
-    const result = buildDispatchPreamble(baseParams({ cliCommand: 'orca-ide' }))
+  it('uses the exact h0x command for packaged WSL workers', () => {
+    const result = buildDispatchPreamble(baseParams({ cliCommand: 'h0x' }))
 
-    expect(result).toContain('orca-ide orchestration send')
-    expect(result).toContain('orca-ide orchestration check')
-    expect(result).toContain('orca-ide orchestration ask')
+    expect(result).toContain('h0x orchestration send')
+    expect(result).toContain('h0x orchestration check')
+    expect(result).toContain('h0x orchestration ask')
     expect(result).not.toMatch(/(^|\s)orca orchestration/m)
   })
 

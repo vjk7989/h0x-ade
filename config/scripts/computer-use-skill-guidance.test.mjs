@@ -18,9 +18,9 @@ describe('computer-use skill guidance', () => {
 
     expect(description).toContain('OS/window-level inspection and input')
     expect(description).toContain('external browser window')
-    expect(description).toContain("Do not use for Orca's embedded browser")
+    expect(description).toContain("Do not use for h0x-ADE's embedded browser")
     expect(description).toContain('page-only browser automation')
-    expect(description).toContain("`orca-cli` for Orca's embedded pages")
+    expect(description).toContain("`orca-cli` for h0x-ADE's embedded pages")
     expect(description).toContain(
       'page-automation tool such as Playwright or CDP for external pages'
     )
@@ -31,13 +31,13 @@ describe('computer-use skill guidance', () => {
       /\s+/gu,
       ' '
     )
-    expect(orcaCli).toContain('browser embedded inside the Orca app')
+    expect(orcaCli).toContain('browser embedded inside the h0x-ADE app')
   })
 
   it('keeps web-app targeting on the computer-use surface', () => {
     const skill = readFileSync(guidePath, 'utf8')
 
-    expect(skill).toContain('Use this skill for desktop UI through `orca computer`')
+    expect(skill).toContain('Use this skill for desktop UI through `h0x computer`')
     expect(skill).toContain('external desktop browser window that needs desktop-level control')
     expect(skill).not.toContain('orca goto')
     expect(skill).not.toContain('orca snapshot')
@@ -99,9 +99,9 @@ describe('computer-use install stub', () => {
     expect(stub).toContain('ORCA skills get computer-use')
     // The safe CLI-resolution contract must survive in the stub, never a bare `orca`.
     expect(stub).toContain('ORCA_CLI_COMMAND')
-    expect(stub).toContain('orca-dev')
-    expect(stub).toContain('orca-ide')
-    expect(stub).toContain('GNOME Orca screen reader')
+    expect(stub).toContain('h0x-dev')
+    expect(stub).toContain('h0x')
+    expect(stub).not.toContain('orca-ide')
     expect(stub).not.toMatch(/^orca /mu)
   })
 

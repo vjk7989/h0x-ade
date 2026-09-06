@@ -1,39 +1,37 @@
 ---
 name: orca-cli
 description: >-
-  Use the public `orca` CLI to operate Orca-managed worktrees, folder contexts,
+  Use the public `h0x` CLI to operate h0x-ADE-managed worktrees, folder contexts,
   terminals, repos, automations, artifacts, skill sharing, worktree comments, and the browser
-  embedded inside the Orca app. Use when the user says "$orca-cli", "use orca cli",
-  "Orca worktree", "child worktree", "cardStatus", "spawn codex/claude in a worktree",
-  "read/wait/send Orca terminal", "terminal send", "full handoff", "handover",
-  "give this to another agent", "another worktree", "Orca browser", "orca artifacts",
+  embedded inside the h0x-ADE app. Use when the user says "$orca-cli", "use h0x cli",
+  "h0x-ADE worktree", "child worktree", "cardStatus", "spawn codex/claude in a worktree",
+  "read/wait/send h0x-ADE terminal", "terminal send", "full handoff", "handover",
+  "give this to another agent", "another worktree", "h0x-ADE browser", "h0x artifacts",
   "share HTML/Markdown", "public artifact link", "share skills", or "control the browser inside
-  Orca". Prefer this over raw `git worktree`, ad hoc
-  PTYs, Playwright, or Computer Use when the task touches Orca-managed state.
+  h0x-ADE". Prefer this over raw `git worktree`, ad hoc
+  PTYs, Playwright, or Computer Use when the task touches h0x-ADE-managed state.
   Use Computer Use for external browser windows, webviews, or desktop UI only
   when the task requires OS/window-level control such as focus, menus, dialogs,
-  coordinates, or screenshots. Use `orca-cli` for Orca's embedded pages and a
+  coordinates, or screenshots. Use `orca-cli` for h0x-ADE's embedded pages and a
   page-automation tool such as Playwright or CDP for external pages.
 ---
 
-# Orca CLI
+# h0x CLI
 
-Use `orca` when Orca's running editor/runtime is the source of truth. Inside Orca-managed terminals, `orca` always resolves to the Orca CLI on every platform. In any other shell on Linux, use `orca-ide` wherever this file says `orca` — outside Orca's terminals, bare `orca` on Linux is usually the GNOME Orca screen reader (`/usr/bin/orca`), and running it starts speech on the user's machine.
+Use `h0x` when h0x-ADE's running editor/runtime is the source of truth. Inside h0x-ADE-managed terminals, `h0x` resolves to the h0x-ADE CLI on every platform.
 
-**Dev builds (`pnpm dev`):** after `pnpm build:cli`, the dev CLI is exposed as `orca-dev` (the global shim points at this checkout's wrapper + out/cli). Inside a dev Orca's terminals use `orca-dev emulator ...` (or `./config/scripts/orca-dev.mjs emulator ...` for worktree-local invocation that does not depend on the /usr/local/bin symlink). Plain `orca` targets any installed production Orca. The app's own agent preambles use `orca-dev` automatically in dev mode.
+**Dev builds (`pnpm dev`):** after `pnpm build:cli`, the dev CLI is exposed as `h0x-dev` (the global shim points at this checkout's wrapper + out/cli). Inside a dev h0x-ADE terminal use `h0x-dev emulator ...` (or `./config/scripts/h0x-dev.mjs emulator ...` for worktree-local invocation that does not depend on the /usr/local/bin symlink). Plain `h0x` targets any installed production h0x-ADE. The app's own agent preambles use `h0x-dev` automatically in dev mode.
 
-Use plain shell tools when Orca state does not matter.
+Use plain shell tools when h0x-ADE state does not matter.
 
 ## Start Here
 
 Choose the executable once for the current session:
 
-- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. Orca exports this
+- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. h0x-ADE exports this
   for managed WSL sessions.
-- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `orca-dev`.
-- Otherwise, on Linux outside an Orca-managed terminal, use `orca-ide`. Never use bare
-  `orca` there because it normally resolves to the GNOME screen reader.
-- Otherwise, use `orca`.
+- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `h0x-dev`.
+- Otherwise, use `h0x`.
 
 In every command block, `ORCA` is a documentation placeholder. Replace it with the chosen
 executable before running the command; do not create a shell variable or run `ORCA`
@@ -61,7 +59,7 @@ Prefer `--json` for agent-driven calls. If the CLI is missing, say so explicitly
 
 A full handoff transfers ownership to another agent or worktree, then the original agent stops. Treat requests phrased as "hand off", "handoff", "handover", "give this to another agent", "give this to another worktree", "another agent", or "another worktree" as full handoffs unless the user explicitly asks to supervise, monitor, wait for results, track completion, coordinate a DAG, use decision gates, or manage ask/reply.
 
-Do not use `orca orchestration task-create`, `orca orchestration dispatch --inject`, or `orca orchestration check --wait` for full handoffs. `task-create` is also forbidden because it records coordinator-owned tracking state; if a task row is needed, the user asked for supervised orchestration. Deliver the prompt with worktree/terminal commands, report the created worktree/terminal if useful, and stop monitoring.
+Do not use `h0x orchestration task-create`, `h0x orchestration dispatch --inject`, or `h0x orchestration check --wait` for full handoffs. `task-create` is also forbidden because it records coordinator-owned tracking state; if a task row is needed, the user asked for supervised orchestration. Deliver the prompt with worktree/terminal commands, report the created worktree/terminal if useful, and stop monitoring.
 
 Independent new-worktree handoff:
 
@@ -94,9 +92,9 @@ ORCA terminal send --terminal <handle> --text "<task brief>" --enter --json
 
 ## Worktrees
 
-An Orca worktree is Orca's tracked view of a repo checkout, its metadata, terminals, browser tabs, and UI state.
+An h0x-ADE worktree is h0x-ADE's tracked view of a repo checkout, its metadata, terminals, browser tabs, and UI state.
 
-Think of its id as a two-part address: `<repoId>::<worktreePath>`. For example, `repo-123::/Users/me/orca/fix-login` means “the `fix-login` checkout inside repo `repo-123`.” Always copy the complete `id` field from `orca worktree create --json` or `orca worktree list --json`; `repo-123` alone identifies only the repo.
+Think of its id as a two-part address: `<repoId>::<worktreePath>`. For example, `repo-123::/Users/me/orca/fix-login` means “the `fix-login` checkout inside repo `repo-123`.” Always copy the complete `id` field from `h0x worktree create --json` or `h0x worktree list --json`; `repo-123` alone identifies only the repo.
 
 Common commands:
 
@@ -124,18 +122,18 @@ ORCA worktree rm --worktree id:<repoId>::<worktreePath> --force --json
 Selectors:
 
 - `id:<repoId>::<worktreePath>`, `name:<displayName>`, `path:<absolutePath>`, `branch:<branchName>`, `issue:<number>`
-- The full id is the exact `<repo-id>::<path>` value returned by `orca worktree create --json` or `orca worktree list --json`; a bare repo id is not a worktree id.
-- `active` / `current` for the enclosing Orca-managed worktree from the shell cwd
+- The full id is the exact `<repo-id>::<path>` value returned by `h0x worktree create --json` or `h0x worktree list --json`; a bare repo id is not a worktree id.
+- `active` / `current` for the enclosing h0x-ADE-managed worktree from the shell cwd
 - For `worktree create --parent-worktree` only, folder/worktree parent context keys are also valid: `folder:<folderId>`, `worktree:<repoId>::<worktreePath>`, `id:folder:<folderId>`, `id:worktree:<repoId>::<worktreePath>`
 
 Lineage rules:
 
-- When creating from inside an Orca-managed worktree or folder context, Orca infers the current parent context when it can.
+- When creating from inside an h0x-ADE-managed worktree or folder context, Orca infers the current parent context when it can.
 - Use `--parent-worktree active` when the child worktree relationship should be explicit.
 - Use `--parent-worktree folder:<folderId>` or `--parent-worktree worktree:<repoId>::<worktreePath>` when a folder or worktree parent context should be explicit.
 - Use `--no-parent` only when the new work is independent.
-- `--no-parent` only controls Orca lineage; it does not choose the Git base. For independent top-level work, omit `--base-branch` so Orca uses the repo default base, or explicitly pass the repo default base. Never base it on the current feature branch unless the user asks for stacked work or "branch from current".
-- If `--repo` is omitted, Orca infers the repo from the current Orca worktree when possible.
+- `--no-parent` only controls h0x-ADE lineage; it does not choose the Git base. For independent top-level work, omit `--base-branch` so h0x-ADE uses the repo default base, or explicitly pass the repo default base. Never base it on the current feature branch unless the user asks for stacked work or "branch from current".
+- If `--repo` is omitted, h0x-ADE infers the repo from the current h0x-ADE worktree when possible.
 
 Agent/setup flags:
 
@@ -147,14 +145,14 @@ ORCA worktree create --name task --run-hooks --json
 ```
 
 - `--agent <id>` launches that agent **in the first terminal** (Orca docs: _"`--agent` launches the selected agent in the first terminal"_); `--prompt <text>` sends initial work to it. Known ids include `claude`, `codex`, `omp`, `pi`, `grok`, and other installed TUI agents.
-- **Prefer agent-first create for agent workers.** `orca worktree create --agent <id> --prompt "..."` puts the agent in the worktree's first terminal without adding a separate fallback shell for that worker. Repo setup or default-terminal settings may still add tabs or splits. Without configured default tabs, the bare-create fallback shell plus a later `terminal create --command <agent>` is an anti-pattern for ordinary agent worktrees — use `--agent` instead of “create worktree, then open agent.” Configured default tabs are intentional surfaces; never treat one as disposable without verifying that it is an unused shell.
-- After create, use exactly one agent handle: `startupTerminal.handle` from the create response when present, or the matching result from `orca terminal list --worktree id:<repoId>::<newWorktreePath> --json` (or `name:<displayName>`) when the response omits it. If a handle later returns `terminal_handle_stale`, re-list it; never dual-send to old and replacement handles.
+- **Prefer agent-first create for agent workers.** `h0x worktree create --agent <id> --prompt "..."` puts the agent in the worktree's first terminal without adding a separate fallback shell for that worker. Repo setup or default-terminal settings may still add tabs or splits. Without configured default tabs, the bare-create fallback shell plus a later `terminal create --command <agent>` is an anti-pattern for ordinary agent worktrees — use `--agent` instead of “create worktree, then open agent.” Configured default tabs are intentional surfaces; never treat one as disposable without verifying that it is an unused shell.
+- After create, use exactly one agent handle: `startupTerminal.handle` from the create response when present, or the matching result from `h0x terminal list --worktree id:<repoId>::<newWorktreePath> --json` (or `name:<displayName>`) when the response omits it. If a handle later returns `terminal_handle_stale`, re-list it; never dual-send to old and replacement handles.
 - `--setup run|skip|inherit` controls repo setup hooks. Default is `inherit`, which follows the repo's setup policy.
 - `--run-hooks` is a legacy alias for `--setup run`; it also reveals/activates the new worktree.
 - `--activate` and `--run-hooks` reveal the new worktree. `--agent` alone stays in the background.
 - Let Orca choose setup terminal placement from repo settings, including tab vs split behavior. Do not manually create extra setup terminals when `--agent` already owns the first tab.
-- If an older installed CLI rejects `--agent`, `--prompt`, or `--setup`, create the worktree normally, then run `orca terminal create --worktree <selector> --command "<requested-agent>"` and `orca terminal send` if a prompt is needed. This can leave a fallback shell when no default tabs are configured; close it only after confirming it is unused.
-- `worktree create` creates a new checkout. For a fresh agent in the **current** checkout (no new worktree), use `orca terminal create --worktree active --command "codex" --json` — that path does not create a second worktree shell.
+- If an older installed CLI rejects `--agent`, `--prompt`, or `--setup`, create the worktree normally, then run `h0x terminal create --worktree <selector> --command "<requested-agent>"` and `h0x terminal send` if a prompt is needed. This can leave a fallback shell when no default tabs are configured; close it only after confirming it is unused.
+- `worktree create` creates a new checkout. For a fresh agent in the **current** checkout (no new worktree), use `h0x terminal create --worktree active --command "codex" --json` — that path does not create a second worktree shell.
 
 ## Worktree Comments
 
@@ -204,7 +202,7 @@ Terminal rules:
 - `terminal list --json` omits `visualLayouts` to keep the common agent payload bounded. Add `--include-visual-layouts` only when tab and pane topology is required.
 - Use `terminal read` before `terminal send` unless the next input is obvious.
 - Use `terminal send` only for direct terminal input or one-off prompts where no task state, inbox, or reply tracking is needed.
-- For structured coordination, invoke the `orchestration` skill; it uses `orca orchestration ...` commands for messages, handoffs, task DAGs, dispatches, inbox/reply flows, and coordinator loops. A receiving agent can run `orca orchestration check --unread --format` to render its unread mail in agent-readable form; this checks the caller's inbox and does not remotely deliver input to another terminal.
+- For structured coordination, invoke the `orchestration` skill; it uses `h0x orchestration ...` commands for messages, handoffs, task DAGs, dispatches, inbox/reply flows, and coordinator loops. A receiving agent can run `h0x orchestration check --unread --format` to render its unread mail in agent-readable form; this checks the caller's inbox and does not remotely deliver input to another terminal.
 - Use `terminal create --worktree active --command "<agent>"` for a fresh agent in the current worktree. Use `worktree create --agent <agent>` only for a separate checkout (agent in the first terminal — do not also `terminal create` the same agent).
 - Use `terminal wait --for tui-idle` for agent CLIs such as Claude Code, Gemini, Codex, OMP, Pi, and Grok; always pass `--timeout-ms`.
 - Terminal handles are runtime-scoped. Use `startupTerminal.handle` as the sole agent handle when `worktree create --agent` returns it; if Orca restarts, omits the handle, or returns `terminal_handle_stale`, reacquire with `terminal list` and continue with the replacement only.
@@ -229,7 +227,7 @@ ORCA automations remove <automationId> --json
 
 Schedules accept `hourly`, `daily`, `weekdays`, `weekly`, 5-field cron, or RRULE. Use `--time <HH:MM>` with `daily`/`weekdays`/`weekly`, and `--day <0-6>` only with `weekly` where Sunday is `0`.
 
-Use `--repo <selector>` for a new worktree per run, or `--workspace <selector>` / `--workspace-mode existing` for an existing Orca worktree. `--repo` and `--workspace` are mutually exclusive. Use `--reuse-session` only for existing-workspace automations; if the previous terminal is gone, Orca falls back to a fresh session. Prefer `--disabled` while testing setup.
+Use `--repo <selector>` for a new worktree per run, or `--workspace <selector>` / `--workspace-mode existing` for an existing h0x-ADE worktree. `--repo` and `--workspace` are mutually exclusive. Use `--reuse-session` only for existing-workspace automations; if the previous terminal is gone, h0x-ADE falls back to a fresh session. Prefer `--disabled` while testing setup.
 
 ## Artifacts
 
@@ -304,17 +302,17 @@ ORCA skills share --skill <selector> [--skill <selector> ...] --bundle-name <nam
   enable the switch in the desktop app if they want this action.
 - Orca stages one agent-published bundle at a time per host. If another publish is active,
   wait for it to finish before retrying `agent_skill_sharing_busy`.
-- Run the command in an Orca terminal on the machine that stores the skills. Forwarded WSL,
-  SSH, and paired-runtime invocations fail before discovery so Orca cannot read from the
+- Run the command in a h0x-ADE terminal on the machine that stores the skills. Forwarded WSL,
+  SSH, and paired-runtime invocations fail before discovery so h0x-ADE cannot read from the
   wrong filesystem.
 - The JSON result contains the unlisted URL and public share/package/version IDs. It never
   includes cloud authentication tokens.
 
 ## Built-In Browser
 
-The built-in browser is Orca's embedded browser tab surface, scoped to Orca worktrees; it is not Chrome/Safari or desktop app UI.
+The built-in browser is h0x-ADE's embedded browser tab surface, scoped to h0x-ADE worktrees; it is not Chrome/Safari or desktop app UI.
 
-These commands control only Orca's embedded browser tabs. For external Chrome/Safari/webviews or Orca app chrome/settings, use the Computer Use skill/tool only when the task requires OS/window-level control. Use `orca-cli` for Orca's embedded pages and a page-automation tool such as Playwright or CDP for external pages. If the user explicitly asks for Orca CLI desktop control, use `orca computer ...`; do not use browser commands for desktop UI.
+These commands control only h0x-ADE's embedded browser tabs. For external Chrome/Safari/webviews or h0x-ADE app chrome/settings, use the Computer Use skill/tool only when the task requires OS/window-level control. Use `orca-cli` for h0x-ADE's embedded pages and a page-automation tool such as Playwright or CDP for external pages. If the user explicitly asks for h0x CLI desktop control, use `h0x computer ...`; do not use browser commands for desktop UI.
 
 Use a snapshot-interact-re-snapshot loop:
 
@@ -383,7 +381,7 @@ Common recoveries:
 
 ## Next Action
 
-Confirm `orca status --json` unless already checked this turn, then choose the narrowest command for the job: `worktree ps/current/create`, `terminal list/read/wait/send`, `automations list`, `artifacts list/share`, `skills installed/share`, or built-in browser `snapshot`.
+Confirm `h0x status --json` unless already checked this turn, then choose the narrowest command for the job: `worktree ps/current/create`, `terminal list/read/wait/send`, `automations list`, `artifacts list/share`, `skills installed/share`, or built-in browser `snapshot`.
 
 ## Mobile Emulator (iOS Simulator via serve-sim)
 

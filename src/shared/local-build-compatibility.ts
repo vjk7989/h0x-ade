@@ -1,6 +1,6 @@
 import { LOCAL_BUILD_COMPATIBILITY_CONTRACT } from './local-build-compatibility-contract'
 
-export const LOCAL_BUILD_COMPATIBILITY_FILENAME = 'orca-local-build.json'
+export const LOCAL_BUILD_COMPATIBILITY_FILENAME = 'h0x-local-build.json'
 export const LOCAL_BUILD_COMPATIBILITY_FORMAT_VERSION =
   LOCAL_BUILD_COMPATIBILITY_CONTRACT.formatVersion
 export const ORCA_APP_ID = LOCAL_BUILD_COMPATIBILITY_CONTRACT.appId
@@ -78,7 +78,7 @@ export function getLocalBuildCompatibilityError(
   liveDaemonProtocols: readonly number[]
 ): string | null {
   if (!target.readableStateSchemaVersions.includes(currentStateSchemaVersion)) {
-    return `This build cannot read Orca workspace state schema ${currentStateSchemaVersion}. Your workspace was not changed.`
+    return `This build cannot read h0x-ADE workspace state schema ${currentStateSchemaVersion}. Your workspace was not changed.`
   }
   const unsupportedProtocols = liveDaemonProtocols.filter(
     (protocol) => !target.attachableDaemonProtocolVersions.includes(protocol)

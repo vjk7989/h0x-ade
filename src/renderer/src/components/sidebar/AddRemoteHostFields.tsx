@@ -205,14 +205,14 @@ export function RemoteServerFields({
           onChange={(event) => onPairingCodeChange(event.target.value)}
           placeholder={translate(
             'auto.components.sidebar.AddRemoteHostDialog.pairingCodePlaceholder',
-            'orca://pair?code=...'
+            'pavii-h0x://pair?code=...'
           )}
           className="font-mono"
         />
         <p id="add-server-pairing-code-help" className="text-xs text-muted-foreground">
           {translate(
             'auto.components.sidebar.AddRemoteHostDialog.pairingHelpSuffix',
-            'Create this under Settings → Remote Orca Servers → Share this host on the other computer.'
+            'Create this under Settings → Remote h0x-ADE Servers → Share this host on the other computer.'
           )}
         </p>
         {inputError ? (

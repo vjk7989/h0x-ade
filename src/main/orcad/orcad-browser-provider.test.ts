@@ -177,16 +177,16 @@ describe('ExternalChromiumBrowserProcess', () => {
 describe('cross-platform browser provider paths', () => {
   it('resolves installed Electron launchers on macOS, Linux, and Windows', () => {
     expect(installedElectronCandidates('darwin', '/Users/test', {})).toContain(
-      '/Users/test/Applications/Orca.app/Contents/MacOS/Orca'
+      '/Users/test/Applications/h0x-ADE.app/Contents/MacOS/h0x-ADE'
     )
     expect(installedElectronCandidates('linux', '/home/test', {})).toContain(
-      '/home/test/.local/bin/orca-ide'
+      '/home/test/.local/bin/h0x'
     )
     expect(
       installedElectronCandidates('win32', 'C:\\Users\\test', {
         LOCALAPPDATA: 'C:\\Users\\test\\AppData\\Local'
       })
-    ).toContain('C:\\Users\\test\\AppData\\Local\\Programs\\Orca\\Orca.exe')
+    ).toContain('C:\\Users\\test\\AppData\\Local\\Programs\\h0x-ADE\\h0x-ADE.exe')
   })
 
   it('uses platform-specific bundled agent-browser names', () => {
@@ -294,7 +294,7 @@ describe('resolveOrcadBrowserProvider', () => {
       resolveOrcadBrowserProvider({
         userDataPath: root,
         environment: {},
-        resolveInstalledElectronExecutable: async () => '/opt/Orca/orca-ide',
+        resolveInstalledElectronExecutable: async () => '/opt/h0x-ADE/h0x',
         resolveAgentBrowserBinary: () => '/agent-browser'
       })
     ).resolves.toBeNull()
@@ -313,7 +313,7 @@ describe('resolveOrcadBrowserProvider', () => {
       resolveOrcadBrowserProvider({
         userDataPath: root,
         environment: { ORCA_BROWSER_EXECUTABLE: join(root, 'absent-chromium') },
-        resolveInstalledElectronExecutable: async () => '/opt/Orca/orca-ide',
+        resolveInstalledElectronExecutable: async () => '/opt/h0x-ADE/h0x',
         resolveAgentBrowserBinary: () => null
       })
     ).resolves.toBeNull()

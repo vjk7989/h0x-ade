@@ -140,7 +140,7 @@ describe('MobilePage pairing connection mode', () => {
       available: true,
       qrDataUrl: 'data:image/png;base64,qr',
       qrSize: 218,
-      pairingUrl: 'orca://pair#automatic'
+      pairingUrl: 'pavii-h0x://pair#automatic'
     })
     listNetworkInterfaces.mockReset().mockResolvedValue({ interfaces: [] })
     mocks.storeState = {
@@ -219,7 +219,7 @@ describe('MobilePage pairing connection mode', () => {
     resolveRotatedLocalQr?.({
       available: true,
       qrDataUrl: 'data:image/png;base64,local-qr',
-      pairingUrl: 'orca://pair#local'
+      pairingUrl: 'pavii-h0x://pair#local'
     })
     await waitFor(() => expect(screen.getByTestId('pairing-qr')).toHaveTextContent('local-qr'))
   })
@@ -346,7 +346,7 @@ describe('MobilePage pairing connection mode', () => {
     resolveRelayQr?.({
       available: true,
       qrDataUrl: 'data:image/png;base64,qr',
-      pairingUrl: 'orca://pair#automatic'
+      pairingUrl: 'pavii-h0x://pair#automatic'
     })
     await waitFor(() => expect(screen.getByTestId('pairing-qr')).toHaveTextContent('base64,qr'))
     expect(screen.getByTestId('mode')).toHaveTextContent('automatic')
@@ -369,7 +369,7 @@ describe('MobilePage pairing connection mode', () => {
       available: true,
       qrDataUrl: null,
       qrError: 'encoding_failed',
-      pairingUrl: 'orca://pair?code=copy-fallback',
+      pairingUrl: 'pavii-h0x://pair?code=copy-fallback',
       endpoint: 'wss://host.example/large',
       connectionMode: 'automatic'
     })
@@ -400,7 +400,7 @@ describe('MobilePage pairing connection mode', () => {
     getPairingQR.mockResolvedValueOnce({
       available: true,
       qrDataUrl: 'data:image/png;base64,retried',
-      pairingUrl: 'orca://pair#retried',
+      pairingUrl: 'pavii-h0x://pair#retried',
       endpoint: 'ws://host',
       connectionMode: 'automatic'
     })
@@ -442,7 +442,7 @@ describe('MobilePage pairing connection mode', () => {
     getPairingQR.mockResolvedValueOnce({
       available: true,
       qrDataUrl: 'data:image/png;base64,local',
-      pairingUrl: 'orca://pair#local',
+      pairingUrl: 'pavii-h0x://pair#local',
       endpoint: 'ws://host',
       connectionMode: 'local-only'
     })
@@ -456,7 +456,7 @@ describe('MobilePage pairing connection mode', () => {
     resolveRetry?.({
       available: true,
       qrDataUrl: 'data:image/png;base64,stale-relay',
-      pairingUrl: 'orca://pair#stale-relay',
+      pairingUrl: 'pavii-h0x://pair#stale-relay',
       endpoint: 'ws://relay',
       connectionMode: 'automatic'
     })
@@ -472,7 +472,7 @@ describe('MobilePage pairing connection mode', () => {
       available: true,
       qrDataUrl: null,
       qrError: 'encoding_failed',
-      pairingUrl: 'orca://pair?code=copy-fallback',
+      pairingUrl: 'pavii-h0x://pair?code=copy-fallback',
       endpoint: 'wss://custom.example/large',
       connectionMode: 'automatic'
     })

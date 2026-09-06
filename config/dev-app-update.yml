@@ -1,4 +1,4 @@
 provider: github
-owner: stablyai
-repo: orca
-updaterCacheDirName: orca-updater
+owner: vjk7989
+repo: h0x-ade
+updaterCacheDirName: h0x-updater

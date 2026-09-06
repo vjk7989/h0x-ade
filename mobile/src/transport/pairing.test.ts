@@ -19,28 +19,30 @@ afterEach(() => {
 
 describe('pairing deep links', () => {
   it('extracts the QR pairing code from the hash payload', () => {
-    expect(extractPairingCodeFromUrl('orca://pair#abc123')).toBe('abc123')
+    expect(extractPairingCodeFromUrl('pavii-h0x://pair#abc123')).toBe('abc123')
   })
 
   it('extracts the pairing code from a query param', () => {
-    expect(extractPairingCodeFromUrl('orca://pair?code=abc123')).toBe('abc123')
+    expect(extractPairingCodeFromUrl('pavii-h0x://pair?code=abc123')).toBe('abc123')
   })
 
   it('accepts scanner casing and surrounding whitespace', () => {
-    expect(extractPairingCodeFromUrl('  ORCA://PAIR?code=abc123\n')).toBe('abc123')
+    expect(extractPairingCodeFromUrl('  PAVII-H0X://PAIR?code=abc123\n')).toBe('abc123')
   })
 
   it('rejects lookalike routes', () => {
-    expect(extractPairingCodeFromUrl('orca://pairing?code=abc123')).toBeNull()
-    expect(extractPairingCodeFromUrl('orca://pair-extra?code=abc123')).toBeNull()
+    expect(extractPairingCodeFromUrl('pavii-h0x://pairing?code=abc123')).toBeNull()
+    expect(extractPairingCodeFromUrl('pavii-h0x://pair-extra?code=abc123')).toBeNull()
   })
 
   it('prefers the query pairing code when both query and hash are present', () => {
-    expect(extractPairingCodeFromUrl('orca://pair?code=query-code#hash-code')).toBe('query-code')
+    expect(extractPairingCodeFromUrl('pavii-h0x://pair?code=query-code#hash-code')).toBe(
+      'query-code'
+    )
   })
 
   it('ignores empty and unrelated URLs', () => {
-    expect(extractPairingCodeFromUrl('orca://pair')).toBeNull()
+    expect(extractPairingCodeFromUrl('pavii-h0x://pair')).toBeNull()
     expect(extractPairingCodeFromUrl('https://example.com/pair#abc123')).toBeNull()
   })
 
@@ -53,13 +55,13 @@ describe('pairing deep links', () => {
       return realAtob(input)
     })
 
-    expect(decodePairingUrl(`orca://pair?code=${encodeOffer()}`)).toEqual(offer)
+    expect(decodePairingUrl(`pavii-h0x://pair?code=${encodeOffer()}`)).toEqual(offer)
   })
 
   it('parses a full pairing URL and a bare copied code', () => {
     const code = encodeOffer()
 
-    expect(parsePairingCode(`orca://pair?code=${code}`)).toEqual(offer)
+    expect(parsePairingCode(`pavii-h0x://pair?code=${code}`)).toEqual(offer)
     expect(parsePairingCode(code)).toEqual(offer)
   })
 

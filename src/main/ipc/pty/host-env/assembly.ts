@@ -224,18 +224,18 @@ export function buildPtyHostEnv(
     delete baseEnv.ORCA_CODEX_LAUNCH_PREFLIGHT
   }
 
-  // Why: WSL shells need the managed userData root for shell-ready wrappers; dev-mode terminals need the same export so `orca` targets the live dev instance.
+  // Why: WSL shells need the managed userData root for shell-ready wrappers; dev-mode terminals need the same export so `h0x` targets the live dev instance.
   if (opts.isWsl) {
     baseEnv.ORCA_USER_DATA_PATH = opts.userDataPath
-    // Why: managed WSL registration uses `orca-ide`; exposing that literal scopes agent guidance to WSL without a bare-orca shim.
-    baseEnv.ORCA_CLI_COMMAND = opts.isPackaged ? 'orca-ide' : 'orca-dev'
+    // Why: managed WSL registration uses `h0x`; exposing that literal keeps agent guidance aligned with the registered CLI.
+    baseEnv.ORCA_CLI_COMMAND = opts.isPackaged ? 'h0x' : 'h0x-dev'
   } else {
     if (!opts.isPackaged) {
       baseEnv.ORCA_USER_DATA_PATH ??= opts.userDataPath
     }
     delete baseEnv.ORCA_CLI_COMMAND
   }
-  // Why: dev mode needs the launcher PATH override so `orca` resolves to the dev build instead of the production binary at /usr/local/bin/orca.
+  // Why: dev mode needs the launcher PATH override so `h0x` resolves to the dev build instead of the production binary at /usr/local/bin/h0x.
   if (!opts.isPackaged) {
     const devCliBin = join(opts.userDataPath, 'cli', 'bin')
     const inheritedPath = readInheritedPath(baseEnv)
@@ -244,7 +244,7 @@ export function buildPtyHostEnv(
       ? `${devCliBin}${delimiter}${inheritedPath}`
       : devCliBin
   } else if (process.platform === 'linux') {
-    // Why: bare-`orca` shim scoped to Orca PTYs — Linux CLI installs as `orca-ide` to avoid shadowing GNOME's /usr/bin/orca screen reader (stablyai/orca#7904).
+    // Why: the bundled Linux shim stays scoped to h0x-ADE PTYs so managed sessions use this app's CLI first.
     const shimDir = ensureLinuxTerminalOrcaCliShimDir({ userDataPath: opts.userDataPath })
     if (shimDir) {
       const inheritedEntries = readInheritedPath(baseEnv)
@@ -256,7 +256,7 @@ export function buildPtyHostEnv(
     opts.resourcesPath &&
     (process.platform === 'darwin' || process.platform === 'win32')
   ) {
-    // Why: global CLI registration is optional, but agents in Orca-managed PTYs must always reach this app's bundled CLI.
+    // Why: global CLI registration is optional, but agents in h0x-ADE-managed PTYs must always reach this app's bundled CLI.
     const bundledCliBin = join(opts.resourcesPath, 'bin')
     const inheritedPath = readInheritedPath(baseEnv)
     baseEnv[resolvePathEnvKey(baseEnv, process.platform)] = inheritedPath
@@ -269,7 +269,7 @@ export function buildPtyHostEnv(
     baseEnv.BROWSER === undefined &&
     process.env.BROWSER === undefined
   ) {
-    const cliCommand = opts.isWsl ? (opts.isPackaged ? 'orca-ide' : 'orca-dev') : 'orca'
+    const cliCommand = opts.isWsl ? (opts.isPackaged ? 'h0x' : 'h0x-dev') : 'h0x'
     baseEnv.BROWSER = `${cliCommand} open-url --url %s`
   }
 

@@ -50,11 +50,11 @@ export class CliInstaller extends CliPathRegistration {
     const launcherPath = await this.resolveLauncherPath()
     if (!launcherPath) {
       const detail = this.hasUnverifiedAppImageRuntime
-        ? 'Orca could not verify the inherited AppImage runtime identity, so CLI registration is unavailable.'
+        ? 'h0x-ADE could not verify the inherited AppImage runtime identity, so CLI registration is unavailable.'
         : this.isLinuxAppImage() && this.appImagePath
           ? `The AppImage file at ${this.appImagePath} is missing. Move it back or re-run CLI registration from the current AppImage location.`
           : this.isPackaged
-            ? 'The bundled CLI launcher is missing from this Orca build.'
+            ? 'The bundled CLI launcher is missing from this h0x-ADE build.'
             : 'Development mode uses a generated launcher for validation only.'
       return {
         platform: this.platform,
@@ -117,7 +117,7 @@ export class CliInstaller extends CliPathRegistration {
     }
     if (initialStatus.state === 'conflict') {
       throw new Error(
-        `Refusing to replace non-Orca command at ${initialStatus.commandPath}. Remove it and register again if it is no longer needed.`
+        `Refusing to replace non-h0x command at ${initialStatus.commandPath}. Remove it and register again if it is no longer needed.`
       )
     }
     const extractedRoot = await this.ensureLinuxAppImagePayload()
@@ -129,7 +129,7 @@ export class CliInstaller extends CliPathRegistration {
     }
     if (status.state === 'conflict') {
       throw new Error(
-        `Refusing to replace non-Orca command at ${status.commandPath}. Remove it and register again if it is no longer needed.`
+        `Refusing to replace non-h0x command at ${status.commandPath}. Remove it and register again if it is no longer needed.`
       )
     }
 
@@ -138,7 +138,7 @@ export class CliInstaller extends CliPathRegistration {
       await this.installSymlink(status)
       await this.removeLegacyLinuxCommandIfManaged(status.launcherPath)
     } else if (this.isWindowsPackagedBundledCommand(status.commandPath, status.launcherPath)) {
-      // Why: packaged Windows already ships resources/bin/orca.exe; registration only owns the PATH entry.
+      // Why: packaged Windows already ships resources/bin/h0x.exe; registration only owns the PATH entry.
     } else {
       // Why: the Windows wrapper dir is user-writable (%LOCALAPPDATA%), so mkdir here can't hit EACCES.
       await mkdir(dirname(status.commandPath), { recursive: true })
@@ -178,10 +178,10 @@ export class CliInstaller extends CliPathRegistration {
       return status
     }
     if (status.state === 'conflict') {
-      throw new Error(`Refusing to remove non-Orca command at ${status.commandPath}.`)
+      throw new Error(`Refusing to remove non-h0x command at ${status.commandPath}.`)
     }
     if (status.state === 'stale' && status.installMethod !== 'symlink') {
-      throw new Error(`Refusing to remove a command not owned by Orca at ${status.commandPath}.`)
+      throw new Error(`Refusing to remove a command not owned by h0x-ADE at ${status.commandPath}.`)
     }
 
     if (status.state === 'stale' && this.isAppImageRegistrationOwnedBySibling(status)) {

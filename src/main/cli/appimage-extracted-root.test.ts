@@ -40,7 +40,7 @@ async function makeFixture(): Promise<{
 async function writePayload(cwd: string, content = ''): Promise<void> {
   const launcherDir = join(cwd, 'squashfs-root', 'resources', 'bin')
   await mkdir(launcherDir, { recursive: true })
-  await writeFile(join(launcherDir, 'orca-ide'), content, { encoding: 'utf8', mode: 0o755 })
+  await writeFile(join(launcherDir, 'h0x'), content, { encoding: 'utf8', mode: 0o755 })
 }
 
 describe('appimage extracted root', () => {
@@ -48,7 +48,7 @@ describe('appimage extracted root', () => {
     const previous = process.env.XDG_CACHE_HOME
     process.env.XDG_CACHE_HOME = '/xdg-cache'
     try {
-      expect(getAppImageCacheRootPath('/home/u')).toBe(join('/xdg-cache', 'orca', 'appimage'))
+      expect(getAppImageCacheRootPath('/home/u')).toBe(join('/xdg-cache', 'h0x', 'appimage'))
     } finally {
       if (previous === undefined) {
         delete process.env.XDG_CACHE_HOME
@@ -63,7 +63,7 @@ describe('appimage extracted root', () => {
     process.env.XDG_CACHE_HOME = 'relative-cache'
     try {
       expect(getAppImageCacheRootPath('/home/u')).toBe(
-        join('/home/u', '.cache', 'orca', 'appimage')
+        join('/home/u', '.cache', 'h0x', 'appimage')
       )
     } finally {
       if (previous === undefined) {
@@ -177,12 +177,15 @@ describe('appimage extracted root', () => {
     'rejects a %s launcher entry',
     async (entryKind) => {
       const { appImagePath, cacheRootPath } = await makeFixture()
+      if (process.platform === 'win32' && entryKind === 'non-executable') {
+        return
+      }
 
       const result = await ensureAppImageExtractedRoot({
         appImagePath,
         cacheRootPath,
         runExtract: async (_path, cwd) => {
-          const launcherPath = join(cwd, 'squashfs-root', 'resources', 'bin', 'orca-ide')
+          const launcherPath = join(cwd, 'squashfs-root', 'resources', 'bin', 'h0x')
           if (entryKind === 'directory') {
             await mkdir(launcherPath, { recursive: true })
           } else {
@@ -207,7 +210,7 @@ describe('appimage extracted root', () => {
         appImagePath,
         cacheRootPath,
         runExtract: async (_path, cwd) => {
-          const launcherPath = join(cwd, 'squashfs-root', 'resources', 'bin', 'orca-ide')
+          const launcherPath = join(cwd, 'squashfs-root', 'resources', 'bin', 'h0x')
           await mkdir(dirname(launcherPath), { recursive: true })
           await symlink(executable, launcherPath)
         }
@@ -325,7 +328,7 @@ describe('appimage extracted root', () => {
       'a'.repeat(24),
       'resources',
       'bin',
-      'orca-ide'
+      'h0x'
     )
     const otherAppImagePath = join(root, 'Other.AppImage')
     await writeFile(otherAppImagePath, '#!/usr/bin/env bash\n', { mode: 0o755 })
@@ -349,7 +352,7 @@ describe('appimage extracted root', () => {
     expect(
       isAppImageExtractedLauncherPath(
         { appImagePath, cacheRootPath },
-        join(root, 'foreign', 'resources', 'bin', 'orca-ide')
+        join(root, 'foreign', 'resources', 'bin', 'h0x')
       )
     ).toBe(false)
   })
@@ -362,7 +365,7 @@ describe('appimage extracted root', () => {
       'b'.repeat(24),
       'resources',
       'bin',
-      'orca-ide'
+      'h0x'
     )
     publishAppImageLauncherEndpoint(cacheRootPath, 'installed', siblingLauncher)
     const options = { appImagePath, cacheRootPath }

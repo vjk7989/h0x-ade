@@ -12,8 +12,14 @@ import { extractLegacyAppImageCliWrapperTarget } from './legacy-appimage-cli-wra
 
 // Why: electron-builder's /opt directory name varies with productName sanitization, which is why
 // resources/linux/packaging/after-install.sh enumerates all three of these. A symlink into one is a
-// previous packaged Orca and is ours to reclaim; anything else stays a conflict.
-const PACKAGED_LINUX_LAUNCHER_DIRECTORIES = ['/opt/Orca', '/opt/orca-ide', '/opt/orca']
+// previous packaged h0x-ADE/Orca install and is ours to reclaim; anything else stays a conflict.
+const PACKAGED_LINUX_LAUNCHER_DIRECTORIES = [
+  '/opt/h0x-ADE',
+  '/opt/h0x',
+  '/opt/Orca',
+  '/opt/orca-ide',
+  '/opt/orca'
+]
 
 export class CliCommandInspection extends CliInstallLocation {
   protected async inspectSymlink(
@@ -36,7 +42,7 @@ export class CliCommandInspection extends CliInstallLocation {
               supported: true,
               state: 'stale',
               currentTarget: managedTarget,
-              detail: `${commandPath} contains an older Orca launcher.`
+              detail: `${commandPath} contains an older h0x-ADE launcher.`
             })
           }
         }
@@ -48,7 +54,7 @@ export class CliCommandInspection extends CliInstallLocation {
           supported: true,
           state: 'conflict',
           currentTarget: null,
-          detail: `${commandPath} exists but is not an Orca symlink.`
+          detail: `${commandPath} exists but is not an h0x symlink.`
         })
       }
 
@@ -70,8 +76,8 @@ export class CliCommandInspection extends CliInstallLocation {
         detail: isInstalled
           ? `Registered at ${commandPath}.`
           : isManagedStaleTarget
-            ? `${commandPath} points to an older Orca launcher.`
-            : `${commandPath} points to a non-Orca launcher.`
+            ? `${commandPath} points to an older h0x-ADE launcher.`
+            : `${commandPath} points to a non-h0x launcher.`
       })
     } catch (error) {
       if (isMissingError(error)) {
@@ -82,7 +88,7 @@ export class CliCommandInspection extends CliInstallLocation {
           supported: true,
           state: 'not_installed',
           currentTarget: null,
-          detail: `Register ${commandPath} to use Orca from the terminal.`
+          detail: `Register ${commandPath} to use h0x-ADE from the terminal.`
         })
       }
       throw error
@@ -105,7 +111,7 @@ export class CliCommandInspection extends CliInstallLocation {
     }
 
     if (this.platform === 'darwin') {
-      // Why: reclaim symlinks to an older Orca.app launcher, but never replace arbitrary user-owned symlinks.
+      // Why: reclaim symlinks to an older app launcher, but never replace arbitrary user-owned symlinks.
       return /(?:^|[/\\])[^/\\]+\.app[/\\]Contents[/\\]Resources[/\\]bin[/\\][^/\\]+$/.test(
         resolvedTarget
       )
@@ -143,7 +149,7 @@ export class CliCommandInspection extends CliInstallLocation {
     const siblingDevUserDataPath = `${packagedUserDataPath}-dev`
     const siblingDevLauncherDir = resolve(siblingDevUserDataPath, ...DEV_LAUNCHER_DIR)
 
-    // Why: dev builds generate launchers under the sibling `*-dev` profile; packaged Orca must reclaim that command.
+    // Why: dev builds generate launchers under the sibling `*-dev` profile; packaged h0x-ADE must reclaim that command.
     return (
       basename(siblingDevUserDataPath) === `${basename(packagedUserDataPath)}-dev` &&
       isPathInsideOrEqual(siblingDevLauncherDir, resolvedTarget)
@@ -181,7 +187,7 @@ export class CliCommandInspection extends CliInstallLocation {
           supported: true,
           state: 'conflict',
           currentTarget: null,
-          detail: `${commandPath} exists but is not an Orca launcher script.`
+          detail: `${commandPath} exists but is not an h0x launcher script.`
         })
       }
 

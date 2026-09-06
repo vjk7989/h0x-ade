@@ -10,8 +10,8 @@ import { translate } from '@/i18n/i18n'
 const CLI_AGENT_COMMANDS = [
   'orca worktree create --name auth-pr-1',
   'orca worktree create --name auth-pr-2',
-  'orca orchestration dispatch --task pr1 --to w1',
-  'orca orchestration dispatch --task pr2 --to w2'
+  'h0x orchestration dispatch --task pr1 --to w1',
+  'h0x orchestration dispatch --task pr2 --to w2'
 ]
 
 export function CliFeatureTipVisual(): JSX.Element {

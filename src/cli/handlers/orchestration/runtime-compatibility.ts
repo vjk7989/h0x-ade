@@ -1,24 +1,24 @@
 import { RuntimeClientError } from '../../runtime-client'
 
-export function resolveCompatibilityCliCommand(): 'orca' | 'orca-ide' | 'orca-dev' {
+export function resolveCompatibilityCliCommand(): 'h0x' | 'h0x-dev' {
   const configured = process.env.ORCA_CLI_COMMAND
-  if (configured === 'orca' || configured === 'orca-ide' || configured === 'orca-dev') {
+  if (configured === 'h0x' || configured === 'h0x-dev') {
     return configured
   }
-  return process.platform === 'linux' ? 'orca-ide' : 'orca'
+  return 'h0x'
 }
 
-export function resolvePackagedWindowsCompatibilityCommand(): 'orca' | 'orca-ide' | undefined {
+export function resolvePackagedWindowsCompatibilityCommand(): 'h0x' | undefined {
   if (process.env.ORCA_WINDOWS_PACKAGED_CLI_LAUNCHER !== '1') {
     return undefined
   }
   const command = process.env.ORCA_CLI_COMMAND
-  if (command === 'orca' || command === 'orca-ide') {
+  if (command === 'h0x') {
     return command
   }
   throw new RuntimeClientError(
     'invalid_argument',
-    'The packaged Orca launcher did not provide a valid resume command. No question was created.'
+    'The packaged h0x launcher did not provide a valid resume command. No question was created.'
   )
 }
 
@@ -37,6 +37,6 @@ export async function flushOrchestrationStdout(): Promise<void> {
 export function isDevCliInvocation(): boolean {
   return (
     process.env.ORCA_DEV_CLI_INVOCATION === '1' ||
-    (process.env.ORCA_USER_DATA_PATH?.includes('orca-dev') ?? false)
+    (process.env.ORCA_USER_DATA_PATH?.includes('h0x-dev') ?? false)
   )
 }

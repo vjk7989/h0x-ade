@@ -44,7 +44,7 @@ describe('dev-electron-bundle-identity', () => {
   it('leaves process.env untouched, including its object identity', () => {
     const envBefore = process.env
     const snapshot = { ...process.env }
-    patchesUnder('Orca: some-branch', 'some-branch')
+    patchesUnder('h0x-ADE: some-branch', 'some-branch')
     expect(process.env).toBe(envBefore)
     expect({ ...process.env }).toEqual(snapshot)
   })
@@ -66,7 +66,7 @@ describe('dev-electron-bundle-identity', () => {
   })
 
   it('keeps the bundle display name in step with the name safeStorage keys off', () => {
-    // Two independently hardcoded 'Orca Dev' strings: this one names the bundle (notifications,
+    // Two independently hardcoded 'h0x-ADE Dev' strings: this one names the bundle (notifications,
     // System Settings), and getDevInstanceIdentity().appName drives app.setName, which decides the
     // Keychain service name. Drift would split the two without anything else failing.
     expect(DEV_BUNDLE_DISPLAY_NAME).toBe(getDevInstanceIdentity(true, {}).appName)
@@ -81,18 +81,18 @@ describe('dev-electron-bundle-identity', () => {
     // suspicious substrings: a denylist only catches branches whose names happen to contain the
     // banned words, and would miss the likeliest regression of all — re-adding
     // `{ key: 'CFBundleName', value: title }` for an ordinary branch like "fix-login-crash".
-    expect(patchesUnder('Orca: fix-login-crash', 'fix-login-crash')).toEqual(
-      patchesUnder('Orca: perf-2', 'perf-2')
+    expect(patchesUnder('h0x-ADE: fix-login-crash', 'fix-login-crash')).toEqual(
+      patchesUnder('h0x-ADE: perf-2', 'perf-2')
     )
-    expect(patchesUnder('Orca: dev', 'main')).toEqual(
-      patchesUnder('Orca: some-worktree @ feature/x', 'feature/x')
+    expect(patchesUnder('h0x-ADE: dev', 'main')).toEqual(
+      patchesUnder('h0x-ADE: some-worktree @ feature/x', 'feature/x')
     )
   })
 
   it('leaks no branch, worktree, or title text into any patched value', () => {
     const branch = 'fix-login-crash'
-    const worktree = 'Orca-safe-storage-lock'
-    for (const patch of patchesUnder(`Orca: ${branch}`, branch)) {
+    const worktree = 'h0x-ADE-safe-storage-lock'
+    for (const patch of patchesUnder(`h0x-ADE: ${branch}`, branch)) {
       expect(patch.value).not.toContain(branch)
       expect(patch.value).not.toContain(worktree)
       expect(typeof patch.value).toBe('string')

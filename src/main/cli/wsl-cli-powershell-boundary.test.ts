@@ -49,7 +49,7 @@ describe('WSL CLI PowerShell boundary', () => {
     async () => {
       const root = await mkdtemp(join(tmpdir(), 'orca-wsl-powershell-boundary-'))
       const fixtureDir = join(root, 'fixture with spaces')
-      const bridgePath = join(fixtureDir, 'orca-wsl-bridge.ps1')
+      const bridgePath = join(fixtureDir, 'h0x-wsl-bridge.ps1')
       const targetPath = join(fixtureDir, 'argv-target.cjs')
       const wslCwd = join(root, 'WSL cwd with spaces')
 

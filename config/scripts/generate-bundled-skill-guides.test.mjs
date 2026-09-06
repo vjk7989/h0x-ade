@@ -204,8 +204,8 @@ describe('bundled skill guide generator', () => {
       const source = await readFile(path.join(projectDir, 'skill-guides', `${name}.md`), 'utf8')
 
       expect(source).toContain('ORCA_CLI_COMMAND')
-      expect(source).toContain('orca-dev')
-      expect(source).toContain('orca-ide')
+      expect(source).toContain('h0x-dev')
+      expect(source).toContain('h0x')
       expect(source).toContain('PowerShell')
       expect(source).toContain('cmd.exe')
       expect(source).toMatch(/^ORCA .+--json$/mu)

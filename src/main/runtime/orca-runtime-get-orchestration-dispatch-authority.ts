@@ -188,16 +188,16 @@ export class OrcaRuntimeWithGetOrchestrationDispatchAuthority extends OrcaRuntim
       : undefined
   }
 
-  getTerminalOrchestrationCliCommand(handle: string): 'orca' | 'orca-ide' {
+  getTerminalOrchestrationCliCommand(handle: string): 'h0x' {
     let pty: RuntimePtyWorktreeRecord | null = null
     try {
       const ptyId = this.resolveLeafForHandle(handle)?.ptyId
       pty = ptyId ? (this.ptysById.get(ptyId) ?? null) : null
     } catch {
-      return 'orca'
+      return 'h0x'
     }
     if (!pty) {
-      return 'orca'
+      return 'h0x'
     }
     return resolveTerminalOrchestrationCliCommand({
       connectionId: pty.connectionId,

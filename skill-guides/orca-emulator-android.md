@@ -26,8 +26,8 @@ streaming server.
 ## CLI executable
 
 Choose the Orca executable once: use the `ORCA_CLI_COMMAND` environment value when set;
-otherwise use `orca-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, `orca-ide` on
-Linux outside an Orca-managed terminal, and `orca` everywhere else. Never try bare
+otherwise use `h0x-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, `h0x` on
+Linux outside an h0x-ADE-managed terminal, and `orca` everywhere else. Never try bare
 `orca` first on unmanaged Linux because it normally resolves to the GNOME screen reader.
 
 In every command example — fenced blocks, tables, and prose — `ORCA` is a documentation
@@ -62,7 +62,7 @@ shell-neutral for POSIX shells, PowerShell, and cmd.exe.
 - A device that is **booted and `adb`-visible** for input/capability commands
   (an AVD that is still shutdown can be listed but must be booted first).
 
-Orca returns a clear message when the SDK is missing
+h0x-ADE returns a clear message when the SDK is missing
 (`Android SDK not found. Install Android Studio and set ANDROID_HOME.`).
 
 ## Mental model

@@ -180,7 +180,7 @@ async function launchServeMode(
       )
     }
   }
-  // Why: Linux CLI installs as `orca-ide`, but the Claude Team launcher invokes bare `orca`; drop a ~/.local/bin dispatcher (ahead of /usr/bin) so it resolves. Best-effort.
+  // Why: Linux h0x-ADE PTYs prepend a managed CLI dispatcher so Claude Team launches resolve to this app. Best-effort.
   if (process.platform === 'linux' && app.isPackaged && process.resourcesPath) {
     try {
       const dispatcher = await installLinuxBareOrcaDispatcher({

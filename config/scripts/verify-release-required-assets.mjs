@@ -11,22 +11,22 @@ export function getRequiredReleaseAssetNames(tag) {
     'latest-linux-arm64.yml',
     'latest-mac.yml',
     'latest.yml',
-    'orca-linux.AppImage',
-    'orca-linux-arm64.AppImage',
-    `orca-ide_${version}_amd64.deb`,
-    `orca-ide_${version}_arm64.deb`,
-    `orca-ide-${version}.x86_64.rpm`,
-    `orca-ide-${version}.aarch64.rpm`,
-    'orca-windows-setup.exe',
-    'orca-windows-setup.exe.blockmap',
-    `Orca-${version}-mac.zip`,
-    `Orca-${version}-mac.zip.blockmap`,
-    `Orca-${version}-arm64-mac.zip`,
-    `Orca-${version}-arm64-mac.zip.blockmap`,
-    'orca-macos-x64.dmg',
-    'orca-macos-x64.dmg.blockmap',
-    'orca-macos-arm64.dmg',
-    'orca-macos-arm64.dmg.blockmap'
+    'h0x-linux.AppImage',
+    'h0x-linux-arm64.AppImage',
+    `h0x_${version}_amd64.deb`,
+    `h0x_${version}_arm64.deb`,
+    `h0x-${version}.x86_64.rpm`,
+    `h0x-${version}.aarch64.rpm`,
+    'h0x-windows-setup.exe',
+    'h0x-windows-setup.exe.blockmap',
+    `h0x-ADE-${version}-mac.zip`,
+    `h0x-ADE-${version}-mac.zip.blockmap`,
+    `h0x-ADE-${version}-arm64-mac.zip`,
+    `h0x-ADE-${version}-arm64-mac.zip.blockmap`,
+    'h0x-macos-x64.dmg',
+    'h0x-macos-x64.dmg.blockmap',
+    'h0x-macos-arm64.dmg',
+    'h0x-macos-arm64.dmg.blockmap'
   ]
 }
 
@@ -150,7 +150,7 @@ async function main() {
   if (!token) {
     throw new Error('GH_TOKEN or GITHUB_TOKEN must be set')
   }
-  const repo = process.env.GITHUB_REPOSITORY || 'stablyai/orca'
+  const repo = process.env.GITHUB_REPOSITORY || 'vjk7989/h0x-ade'
   const result = await verifyRequiredReleaseAssets({ repo, tag, token })
   console.log(`Verified ${result.checked.length} required release assets for ${repo}@${tag}`)
 }

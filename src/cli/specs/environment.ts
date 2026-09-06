@@ -20,14 +20,14 @@ export const ENVIRONMENT_COMMAND_SPECS: CommandSpec[] = [
   {
     path: ['environment', 'add'],
     summary: 'Save a remote Orca runtime environment from a pairing code',
-    usage: 'orca environment add --name <name> --pairing-code <code> [--json]',
+    usage: 'h0x environment add --name <name> --pairing-code <code> [--json]',
     allowedFlags: [...GLOBAL_FLAGS, 'name'],
-    examples: ['orca environment add --name work-laptop --pairing-code orca://pair?code=...']
+    examples: ['h0x environment add --name work-laptop --pairing-code pavii-h0x://pair?code=...']
   },
   {
     path: ['environment', 'list'],
     summary: 'List saved Orca runtime environments',
-    usage: 'orca environment list [--json]',
+    usage: 'h0x environment list [--json]',
     allowedFlags: [...GLOBAL_FLAGS],
     notes: [
       'Answers from this machine\u2019s pairing store. --environment and --pairing-code are rejected rather than ignored, because there is no other host that could answer.'
@@ -36,14 +36,14 @@ export const ENVIRONMENT_COMMAND_SPECS: CommandSpec[] = [
   {
     path: ['environment', 'show'],
     summary: 'Show one saved Orca runtime environment',
-    usage: 'orca environment show --environment <selector> [--json]',
+    usage: 'h0x environment show --environment <selector> [--json]',
     allowedFlags: [...GLOBAL_FLAGS]
   },
   {
     path: ['environment', 'rm'],
     destructive: true,
     summary: 'Remove one saved Orca runtime environment',
-    usage: 'orca environment rm --environment <selector> [--json]',
+    usage: 'h0x environment rm --environment <selector> [--json]',
     allowedFlags: [...GLOBAL_FLAGS]
   }
 ]

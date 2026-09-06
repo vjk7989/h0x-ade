@@ -51,25 +51,25 @@ export default function AboutScreen() {
 
       <View style={styles.brand}>
         <OrcaLogo size={28} />
-        <Text style={styles.brandName}>Orca</Text>
+        <Text style={styles.brandName}>h0x-ADE</Text>
         <Text style={styles.brandSub}>Open-source agent IDE for 100x builders</Text>
       </View>
 
       <View style={styles.section}>
         <Pressable
           style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
-          onPress={() => void Linking.openURL('https://onOrca.dev')}
+          onPress={() => void Linking.openURL('https://github.com/vjk7989/h0x-ade')}
         >
           <Globe size={16} color={colors.textSecondary} />
-          <Text style={styles.rowValue}>onOrca.dev</Text>
+          <Text style={styles.rowValue}>github.com/vjk7989/h0x-ade</Text>
         </Pressable>
         <View style={styles.separator} />
         <Pressable
           style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
-          onPress={() => void Linking.openURL('https://github.com/stablyai/orca')}
+          onPress={() => void Linking.openURL('https://github.com/vjk7989/h0x-ade')}
         >
           <GithubIcon />
-          <Text style={styles.rowValue}>stablyai/orca</Text>
+          <Text style={styles.rowValue}>vjk7989/h0x-ade</Text>
         </Pressable>
         <View style={styles.separator} />
         <Pressable

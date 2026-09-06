@@ -1,33 +1,33 @@
 ---
 name: computer-use
 description: >-
-  Use Orca's computer-use CLI for OS/window-level inspection and input in visible
+  Use h0x-ADE's computer-use CLI for OS/window-level inspection and input in visible
   local app windows. Use when a task must read or operate a native app or an
   external browser window (for example, Chrome, Edge, or Safari) or an app
-  webview. Do not use for Orca's embedded browser or page-only browser
-  automation. Use `orca-cli` for Orca's embedded pages and a page-automation
+  webview. Do not use for h0x-ADE's embedded browser or page-only browser
+  automation. Use `orca-cli` for h0x-ADE's embedded pages and a page-automation
   tool such as Playwright or CDP for external pages.
 ---
 
 # Computer Use
 
 This file is a discovery stub, not the usage guide. The full, version-matched computer-use
-reference is served by the `orca` binary itself — kept out of this file on purpose so it can
+reference is served by the `h0x` binary itself — kept out of this file on purpose so it can
 never drift from the binary that will actually run your commands.
 
-Engage Orca's computer-use surface when a task requires desktop-level access to a visible local
+Engage h0x-ADE's computer-use surface when a task requires desktop-level access to a visible local
 app or window, including a native app or an external browser window/webview. Do not use for
-Orca's embedded browser or page-only browser automation. Use `orca-cli` for Orca's embedded
+h0x-ADE's embedded browser or page-only browser automation. Use `orca-cli` for h0x-ADE's embedded
 pages and a page-automation tool such as Playwright or CDP for external pages.
 
 ## Resolve the CLI for this session
 
 Choose the executable once and reuse it for every later command:
 
-- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. Orca exports this
+- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. h0x-ADE exports this
   for managed WSL sessions.
-- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `orca-dev`.
-- Otherwise, on Linux outside an Orca-managed terminal, use `orca-ide`. Never run bare
+- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `h0x-dev`.
+- Otherwise, on Linux outside an h0x-ADE-managed terminal, use `h0x`. Never run bare
   `orca` there — outside Orca's terminals it normally resolves to the
   GNOME Orca screen reader (`/usr/bin/orca`) and starts speech on the user's machine.
 - Otherwise, use `orca`.
@@ -37,9 +37,9 @@ running anything; do not create a shell variable or run `ORCA` literally. This w
 same way in POSIX shells, PowerShell, and cmd.exe.
 
 If the selected executable cannot run, report its exact error and stop. Do not fall through
-to another executable, which could silently target a different Orca build.
+to another executable, which could silently target a different h0x-ADE build.
 
-## Load the full guide before running Orca commands
+## Load the full guide before running h0x commands
 
 ```text
 ORCA skills get computer-use
@@ -50,7 +50,7 @@ next commands — listing apps/windows, reading UI, and driving clicks, typing, 
 accessibility actions. Read it first, then run the specific command you need.
 
 Don't guess subcommands or flags from memory or from a cached copy of this stub. They
-change between Orca releases, and this file deliberately no longer lists them. Confirm the
+change between h0x-ADE releases, and this file deliberately no longer lists them. Confirm the
 app is up with `ORCA status --json` (start it with `ORCA open --json` if needed), and
 prefer `--json` for agent-driven calls.
 
@@ -67,6 +67,6 @@ ORCA computer capabilities --json
 ORCA computer list-apps --json
 ```
 
-Then tell the user that updating Orca restores the full, version-matched guide via
+Then tell the user that updating h0x-ADE restores the full, version-matched guide via
 `ORCA skills get computer-use`. Beyond these commands, ask the user rather than guessing a
 command surface this older binary may not support.

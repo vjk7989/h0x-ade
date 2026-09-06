@@ -93,8 +93,8 @@ describe('electron-builder config', () => {
     const packs = (repoPath) => isPacked(join('/app', repoPath), { isDirectory: () => false })
 
     for (const devBundlePath of [
-      'out/electron-dev/1a2b3c4d5e6f/Orca: dev.app/Contents/MacOS/Electron',
-      'out/electron-dev/1a2b3c4d5e6f/orca-dev-electron-app.json'
+      'out/electron-dev/1a2b3c4d5e6f/h0x-ADE: dev.app/Contents/MacOS/Electron',
+      'out/electron-dev/1a2b3c4d5e6f/h0x-dev-electron-app.json'
     ]) {
       expect(packs(devBundlePath)).toBe(false)
     }
@@ -140,8 +140,8 @@ describe('electron-builder config', () => {
           to: 'computer-use-windows/runtime.ps1'
         }),
         expect.objectContaining({
-          from: 'native/windows-cli-launcher/.build/orca.exe',
-          to: 'bin/orca.exe'
+          from: 'native/windows-cli-launcher/.build/h0x.exe',
+          to: 'bin/h0x.exe'
         })
       ])
     )
@@ -158,10 +158,10 @@ describe('electron-builder config', () => {
   })
 
   // Why: the Windows CLI shim is delivered only via extraResources to
-  // resources/bin/orca.cmd (beside the native resources/bin/orca.exe). If the
+  // resources/bin/h0x.cmd (beside the native resources/bin/h0x.exe). If the
   // source tree is also packed into app.asar it gets extracted by
-  // asarUnpack:['resources/**'] to app.asar.unpacked/resources/win32/bin/orca.cmd,
-  // a duplicate with no adjacent orca.exe that fails to launch (#7351).
+  // asarUnpack:['resources/**'] to app.asar.unpacked/resources/win32/bin/h0x.cmd,
+  // a duplicate with no adjacent h0x.exe that fails to launch (#7351).
   it('keeps the Windows CLI shim source tree out of app.asar', () => {
     expect(electronBuilderConfig.files).toEqual(
       expect.arrayContaining(['!resources/win32{,/**/*}'])
@@ -170,8 +170,8 @@ describe('electron-builder config', () => {
     expect(electronBuilderConfig.win.extraResources).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          from: 'resources/win32/bin/orca.cmd',
-          to: 'bin/orca.cmd'
+          from: 'resources/win32/bin/h0x.cmd',
+          to: 'bin/h0x.cmd'
         })
       ])
     )
@@ -268,17 +268,17 @@ describe('electron-builder config', () => {
   })
 
   it('matches the Linux desktop entry to Electron window class', () => {
-    expect(electronBuilderConfig.linux.desktop.entry.StartupWMClass).toBe('orca')
+    expect(electronBuilderConfig.linux.desktop.entry.StartupWMClass).toBe('h0x')
   })
 
-  it('uses the release artifact set as local Linux targets without changing existing names', () => {
+  it('uses the h0x release artifact set as local Linux targets', () => {
     expect(electronBuilderConfig.linux.target).toEqual(['AppImage', 'deb', 'rpm'])
     expect(electronBuilderConfig.toolsets).toEqual({ appimage: '1.0.3' })
-    expect(electronBuilderConfig.appImage.artifactName).toBe('orca-linux.${ext}')
-    expect(electronBuilderConfig.deb.artifactName).toBe('orca-ide_${version}_${arch}.${ext}')
+    expect(electronBuilderConfig.appImage.artifactName).toBe('h0x-linux.${ext}')
+    expect(electronBuilderConfig.deb.artifactName).toBe('h0x_${version}_${arch}.${ext}')
     expect(electronBuilderConfig.rpm).toMatchObject({
-      packageName: 'orca-ide',
-      artifactName: 'orca-ide-${version}.${arch}.${ext}'
+      packageName: 'h0x',
+      artifactName: 'h0x-${version}.${arch}.${ext}'
     })
   })
 
@@ -293,9 +293,9 @@ describe('electron-builder config', () => {
   })
 
   it('validates each AppImage before electron-builder publishes it', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'orca-electron-builder-appimage-'))
+    const root = await mkdtemp(join(tmpdir(), 'h0x-electron-builder-appimage-'))
     try {
-      const appImage = join(root, 'orca-linux.AppImage')
+      const appImage = join(root, 'h0x-linux.AppImage')
       await writeFile(appImage, 'not an ELF')
       await chmod(appImage, 0o755)
 
@@ -303,7 +303,7 @@ describe('electron-builder config', () => {
         electronBuilderConfig.artifactBuildCompleted({ file: appImage, arch: 1 })
       ).toThrow(/ELF header is outside/)
       expect(() =>
-        electronBuilderConfig.artifactBuildCompleted({ file: join(root, 'orca-ide.deb') })
+        electronBuilderConfig.artifactBuildCompleted({ file: join(root, 'h0x.deb') })
       ).not.toThrow()
     } finally {
       await rm(root, { recursive: true, force: true })
@@ -316,7 +316,7 @@ describe('electron-builder config', () => {
       delete require.cache[configPath]
       process.env.ORCA_LINUX_ARM64_RELEASE = '1'
       expect(require('../electron-builder.config.cjs').appImage.artifactName).toBe(
-        'orca-linux-arm64.${ext}'
+        'h0x-linux-arm64.${ext}'
       )
     } finally {
       if (original === undefined) {
@@ -381,7 +381,7 @@ describe('electron-builder config', () => {
     }
   })
 
-  it('uses Orca native rebuild hook instead of electron-builder default rebuild', () => {
+  it('uses the native rebuild hook instead of electron-builder default rebuild', () => {
     expect(electronBuilderConfig.beforeBuild).toBe(electronBuilderNativeRebuild)
     expect(electronBuilderConfig.npmRebuild).toBe(true)
   })

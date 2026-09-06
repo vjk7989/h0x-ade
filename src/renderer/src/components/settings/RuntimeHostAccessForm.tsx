@@ -77,7 +77,7 @@ export function RuntimeHostAccessForm({
           <li>
             {translate(
               'auto.components.settings.RuntimeHostAccessForm.stepOpenShare',
-              'Open Settings → Remote Orca Servers → Share this host.'
+              'Open Settings → Remote h0x-ADE Servers → Share this host.'
             )}
           </li>
           <li>
@@ -89,7 +89,7 @@ export function RuntimeHostAccessForm({
           <li>
             {translate(
               'auto.components.settings.RuntimeHostAccessForm.stepCopyLink',
-              'Generate the link, then copy the “Pair another Orca client” link.'
+              'Generate the link, then copy the “Pair another h0x-ADE client” link.'
             )}
           </li>
         </ol>
@@ -98,7 +98,7 @@ export function RuntimeHostAccessForm({
       <div className="grid gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)]">
         <div className="space-y-2">
           <Label htmlFor="runtime-server-name">
-            {translate('auto.components.settings.RuntimeHostAccessForm.name', 'Name in Orca')}
+            {translate('auto.components.settings.RuntimeHostAccessForm.name', 'Name in h0x-ADE')}
           </Label>
           <Input
             id="runtime-server-name"
@@ -114,7 +114,7 @@ export function RuntimeHostAccessForm({
           <p className="text-xs text-muted-foreground">
             {translate(
               'auto.components.settings.RuntimeHostAccessForm.nameHelp',
-              'This only changes how the computer appears in Orca.'
+              'This only changes how the computer appears in h0x-ADE.'
             )}
           </p>
         </div>
@@ -134,14 +134,14 @@ export function RuntimeHostAccessForm({
             }}
             placeholder={translate(
               'auto.components.settings.RuntimeHostAccessForm.accessLinkPlaceholder',
-              'orca://pair?code=...'
+              'pavii-h0x://pair?code=...'
             )}
             className="min-w-0 font-mono"
           />
           <p id="runtime-server-access-link-help" className="text-xs text-muted-foreground">
             {translate(
               'auto.components.settings.RuntimeHostAccessForm.accessLinkHelp',
-              'Orca shows the destination before connecting. Credentials stay hidden.'
+              'h0x-ADE shows the destination before connecting. Credentials stay hidden.'
             )}
           </p>
           {inputError ? (

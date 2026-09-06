@@ -4,7 +4,7 @@ import { getBrowserPlatform } from './web-storage'
 export function createCliApi(): NonNullable<Partial<PreloadApi>['cli']> {
   const status = {
     platform: getBrowserPlatform(),
-    commandName: getBrowserPlatform() === 'linux' ? 'orca-ide' : 'orca',
+    commandName: 'h0x',
     commandPath: null,
     pathDirectory: null,
     pathConfigured: false,

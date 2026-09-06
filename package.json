@@ -1,12 +1,12 @@
 {
-  "name": "orca",
+  "name": "h0x",
   "version": "1.4.197",
   "description": "Next-gen IDE for parallel agentic development",
-  "homepage": "https://github.com/stablyai/orca",
-  "author": "stablyai",
+  "homepage": "https://github.com/vjk7989/h0x-ade",
+  "author": "PAVii",
   "bin": {
-    "orca": "./out/cli/index.js",
-    "orca-dev": "./config/scripts/orca-dev.mjs"
+    "h0x": "./out/cli/index.js",
+    "h0x-dev": "./config/scripts/h0x-dev.mjs"
   },
   "main": "./out/main/index.js",
   "scripts": {
@@ -80,7 +80,7 @@
     "verify:localization-coverage": "node config/scripts/audit-localization-coverage.mjs --check",
     "audit:localization": "node config/scripts/audit-localization-coverage.mjs",
     "build:cli": "tsc -p config/tsconfig.cli.json --outDir out --composite false --incremental false && node config/scripts/verify-cli-bin.mjs --fix-executable --fix-package-json && node config/scripts/install-dev-cli.mjs",
-    "test:linux-cli-contract": "node config/scripts/run-linux-cli-launch-contract-docker.mjs --appimage dist/orca-linux.AppImage",
+    "test:linux-cli-contract": "node config/scripts/run-linux-cli-launch-contract-docker.mjs --appimage dist/h0x-linux.AppImage",
     "test:repro:skills-cli-runtime": "pnpm run build:cli && pnpm run build:electron-vite && pnpm run verify:built-skills-cli",
     "build:electron-vite": "node config/scripts/run-electron-vite-build.mjs",
     "build:electron-vite:parallel": "node config/scripts/run-electron-vite-targets-in-parallel.mjs",

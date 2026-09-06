@@ -17,8 +17,8 @@ The underlying serve-sim helper captures the real simulator framebuffer (via pri
 ## CLI executable
 
 Choose the Orca executable once: use the `ORCA_CLI_COMMAND` environment value when set;
-otherwise use `orca-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, `orca-ide` on
-Linux outside an Orca-managed terminal, and `orca` everywhere else. Never try bare
+otherwise use `h0x-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, `h0x` on
+Linux outside an h0x-ADE-managed terminal, and `orca` everywhere else. Never try bare
 `orca` first on unmanaged Linux because it normally resolves to the GNOME screen reader.
 
 In every command example — fenced blocks, tables, and prose — `ORCA` is a documentation
@@ -32,7 +32,7 @@ shell-neutral for POSIX shells, PowerShell, and cmd.exe.
 - You want **camera injection** (placeholder, webcam, or file loop) for testing camera flows.
 - You need to **grant/revoke app permissions** (camera, photos, notifications, location, etc.) or read the **accessibility tree**.
 - Rotate the device, simulate memory warnings, toggle CoreAnimation debug overlays, etc.
-- You are inside an Orca worktree/terminal and want the emulator to be **workspace-scoped** (like browser tabs) with explicit targeting when needed.
+- You are inside a h0x-ADE worktree/terminal and want the emulator to be **workspace-scoped** (like browser tabs) with explicit targeting when needed.
 - The agent should use Orca's preview pane instead of external Simulator.app or raw serve-sim URLs.
 
 **When NOT to use**
@@ -57,7 +57,7 @@ An active emulator "session" for the worktree is required for most commands. Use
 
 ```text
 ┌────────────────────┐
-│ Orca worktree      │
+│ h0x-ADE worktree   │
 │  - active emulator │◄── ORCA emulator tap / type / ...
 │  - live pane (UI)  │
 └─────────┬──────────┘
@@ -82,9 +82,9 @@ Orca owns:
 - Explicit targeting with `--worktree`, `--device`, `--emulator <id>`.
 - The visual live pane (renderer uses serve-sim-client for the stream).
 
-Agents use the Orca executable chosen above (on PATH in Orca terminals) and never have to manage PIDs, state files in /tmp, or raw WS URLs themselves.
+Agents use the h0x-ADE executable chosen above (on PATH in h0x-ADE terminals) and never have to manage PIDs, state files in /tmp, or raw WS URLs themselves.
 
-**For `pnpm dev` testing:** run `pnpm build:cli` first (rebuilds the CLI + ensures the `orca-dev` shim points at _this_ worktree). Then inside the dev app use `orca-dev emulator ...` (or the direct `./config/scripts/orca-dev.mjs emulator ...` from the repo root). The orchestration preambles and dev launchers automatically select the dev command name so the CLI reaches your in-memory EmulatorBridge / runtime. Plain `orca` reaches a packaged install instead.
+**For `pnpm dev` testing:** run `pnpm build:cli` first (rebuilds the CLI + ensures the `h0x-dev` shim points at _this_ worktree). Then inside the dev app use `h0x-dev emulator ...` (or the direct `./config/scripts/h0x-dev.mjs emulator ...` from the repo root). The orchestration preambles and dev launchers automatically select the dev command name so the CLI reaches your in-memory EmulatorBridge / runtime. Plain `orca` reaches a packaged install instead.
 
 ## Common operations
 
@@ -92,7 +92,7 @@ Use `--json` for agent-friendly output. Commands are workspace-scoped by default
 
 | Goal                     | Command                                                             | Notes                                                                                                                                                                                                               |
 | ------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| List available / running | `ORCA emulator list [--worktree <sel>]`                             | Shows Orca-managed + raw serve-sim streams. Use output for explicit --device/--emulator.                                                                                                                            |
+| List available / running | `ORCA emulator list [--worktree <sel>]`                             | Shows h0x-ADE-managed + raw serve-sim streams. Use output for explicit --device/--emulator.                                                                                                                            |
 | Attach / make active     | `ORCA emulator attach "iPhone 16 Pro" [--worktree <sel>] [--focus]` | Starts helper if needed (serve-sim --detach). Sets active for unqualified commands. --focus optional (does not auto-steal UI focus by default).                                                                     |
 | Single tap               | `ORCA emulator tap <x> <y> [--device <id>]`                         | Normalized 0..1 coords. **Preferred over gesture for simple taps.**                                                                                                                                                 |
 | Multi-step gesture       | `ORCA emulator gesture '<json>'`                                    | See gestures reference (begin/move/end). Use tap for singles.                                                                                                                                                       |
@@ -164,7 +164,7 @@ After changes, re-snapshot / wait as needed (analogous to browser snapshot-inter
 
 ## Next action
 
-Confirm `ORCA status --json` and `ORCA emulator list --json`, then drive the emulator while the live view is visible in Orca.
+Confirm `ORCA status --json` and `ORCA emulator list --json`, then drive the emulator while the live view is visible in h0x-ADE.
 
 See also: orca-cli skill (terminals, worktrees, built-in browser), computer-use for desktop outside the simulator.
 

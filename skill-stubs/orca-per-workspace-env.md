@@ -1,10 +1,10 @@
 # Per-Workspace Environments
 
 This file is a discovery stub, not the usage guide. The full, version-matched per-workspace
-environment reference is served by the `orca` binary itself — kept out of this file on
+environment reference is served by the `h0x` binary itself — kept out of this file on
 purpose so it can never drift from the binary that will actually run your commands.
 
-Engage Orca whenever you set up, review, debug, or validate a per-workspace environment
+Engage h0x-ADE whenever you set up, review, debug, or validate a per-workspace environment
 recipe — the on-demand, disposable runtimes (cloud sandboxes, VMs, or local) created fresh
 for each workspace. This covers first-time setup (provider prerequisites, the reusable base
 snapshot, the coding-agent auth snapshot, credentials, and state), not just the
@@ -18,10 +18,10 @@ money without an explicit user OK.
 
 Choose the executable once and reuse it for every later command:
 
-- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. Orca exports this
+- If the `ORCA_CLI_COMMAND` environment variable is set, use its value. h0x-ADE exports this
   for managed WSL sessions.
-- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `orca-dev`.
-- Otherwise, on Linux outside an Orca-managed terminal, use `orca-ide`. Never run bare
+- Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `h0x-dev`.
+- Otherwise, on Linux outside an h0x-ADE-managed terminal, use `h0x`. Never run bare
   `orca` there — outside Orca's terminals it normally resolves to the
   GNOME Orca screen reader (`/usr/bin/orca`) and starts speech on the user's machine.
 - Otherwise, use `orca`.
@@ -31,9 +31,9 @@ running anything; do not create a shell variable or run `ORCA` literally. This w
 same way in POSIX shells, PowerShell, and cmd.exe.
 
 If the selected executable cannot run, report its exact error and stop. Do not fall through
-to another executable, which could silently target a different Orca build.
+to another executable, which could silently target a different h0x-ADE build.
 
-## Load the full guide before running Orca commands
+## Load the full guide before running h0x commands
 
 ```text
 ORCA skills get orca-per-workspace-env
@@ -45,7 +45,7 @@ next commands — provider setup, base and auth snapshots, `environmentRecipes` 
 specific command you need.
 
 Don't guess subcommands or flags from memory or from a cached copy of this stub. They
-change between Orca releases, and this file deliberately no longer lists them. Confirm the
+change between h0x-ADE releases, and this file deliberately no longer lists them. Confirm the
 app is up with `ORCA status --json` (start it with `ORCA open --json` if needed), and
 prefer `--json` for agent-driven calls.
 
@@ -64,6 +64,6 @@ ORCA vm recipe doctor <recipe-id> --repo-path <repo> --json
 The doctor command above is the free static check. Never add `--provision` without the
 user's explicit approval because it creates provider resources and may spend money.
 
-Then tell the user that updating Orca restores the full, version-matched guide via
+Then tell the user that updating h0x-ADE restores the full, version-matched guide via
 `ORCA skills get orca-per-workspace-env`. Beyond these commands, ask the user rather than
 guessing a command surface this older binary may not support.

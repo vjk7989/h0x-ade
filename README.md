@@ -1,13 +1,13 @@
 <h1 align="center">
-  <a href="https://onOrca.dev"><img src="resources/build/icon.png" alt="Orca" width="64" valign="middle" /></a> Orca
+  <a href="https://github.com/vjk7989/h0x-ade"><img src="resources/build/icon.png" alt="h0x-ADE" width="64" valign="middle" /></a> h0x-ADE
 </h1>
 
 <p align="center">
-  <a href="https://github.com/stablyai/orca"><img src="https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="GitHub stars" /></a>
-  <a href="https://github.com/stablyai/orca/releases"><img src="docs/assets/readme-downloads.svg" alt="Total downloads across all releases" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade"><img src="https://img.shields.io/github/stars/vjk7989/h0x-ade?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="GitHub stars" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade/releases"><img src="docs/assets/readme-downloads.svg" alt="Total downloads across all releases" /></a>
   <img src="https://img.shields.io/badge/license-MIT-08C?style=flat" alt="License: MIT" />
-  <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Join the Orca Discord" /></a>
-  <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="Follow Orca on X" /></a>
+  <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Join the h0x-ADE Discord" /></a>
+  <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="Follow h0x-ADE on X" /></a>
   <img src="https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-4493F8?style=flat-square" alt="Supported platforms: macOS, Windows, and Linux" />
 </p>
 
@@ -20,10 +20,10 @@
   Run Codex, ClaudeCode, OpenCode or Pi side-by-side — each in its own worktree, tracked in one place.
 </p>
 
-<h3 align="center"><a href="https://onorca.dev/download"><ins>Download Orca</ins></a></h3>
+<h3 align="center"><a href="https://github.com/vjk7989/h0x-ade/releases/latest"><ins>Download h0x-ADE</ins></a></h3>
 
 <p align="center">
-  <img src="docs/assets/readme-hero.jpg" alt="Orca desktop app running agents in parallel worktrees, with the Orca mobile companion app in the corner" width="960" />
+  <img src="docs/assets/readme-hero.jpg" alt="h0x-ADE desktop app running agents in parallel worktrees, with the mobile companion app in the corner" width="960" />
 </p>
 
 ## Features
@@ -40,7 +40,7 @@ Monitor and steer your agents from your phone — get notified when an agent fin
 
 </td>
 <td width="50%">
-  <a href="https://www.onorca.dev/docs/mobile"><picture><source srcset="docs/assets/feature-wall/mobile-companion-app-showcase.gif" type="image/gif"><img src="docs/assets/feature-wall/mobile-companion-app-showcase.jpg" alt="Orca desktop with the mobile companion app" width="100%" /></picture></a>
+  <a href="https://www.onorca.dev/docs/mobile"><picture><source srcset="docs/assets/feature-wall/mobile-companion-app-showcase.gif" type="image/gif"><img src="docs/assets/feature-wall/mobile-companion-app-showcase.jpg" alt="h0x-ADE desktop with the mobile companion app" width="100%" /></picture></a>
 </td>
 </tr>
 <tr>
@@ -90,7 +90,7 @@ Click any UI element in a real Chromium window to send its HTML, CSS, and a crop
 
 ### GitHub &amp; Linear, Native
 
-Browse PRs, issues, and project boards in-app — open a worktree from any task and review without a context switch.
+Browse PRs, issues, and project boards in-app - open a worktree from any task and review without a context switch.
 
 [Docs →](https://www.onorca.dev/docs/review/linear)
 
@@ -118,7 +118,7 @@ Run agents on a beefy remote box with full file editing, git, and terminals — 
 
 ### Annotate AI Diffs
 
-Drop comments on any diff line and ship them back to the agent — review, edit, and commit without leaving Orca.
+Drop comments on any diff line and ship them back to the agent - review, edit, and commit without leaving h0x-ADE.
 
 [Docs →](https://www.onorca.dev/docs/review/annotate-ai-diff)
 
@@ -144,15 +144,15 @@ VS Code's editor with autosave everywhere — drag files or images straight into
 <tr>
 <td width="50%" valign="middle">
 
-### Orca CLI
+### h0x CLI
 
-Agents drive Orca too — script every workflow with `orca worktree create`, `snapshot`, `click`, and `fill`.
+Agents drive h0x-ADE too - script every workflow with `h0x worktree create`, `snapshot`, `click`, and `fill`.
 
 [Docs →](https://www.onorca.dev/docs/cli/overview)
 
 </td>
 <td width="50%">
-  <a href="https://www.onorca.dev/docs/cli/overview"><picture><source srcset="docs/assets/feature-wall/orca-cli.gif" type="image/gif"><img src="docs/assets/feature-wall/orca-cli.jpg" alt="Script Orca from the CLI" width="100%" /></picture></a>
+  <a href="https://www.onorca.dev/docs/cli/overview"><picture><source srcset="docs/assets/feature-wall/orca-cli.gif" type="image/gif"><img src="docs/assets/feature-wall/orca-cli.jpg" alt="Script h0x-ADE from the CLI" width="100%" /></picture></a>
 </td>
 </tr>
 </table>
@@ -170,7 +170,7 @@ Agents drive Orca too — script every workflow with `orca worktree create`, `sn
 
 ## Supported Agents
 
-Works with **any CLI agent** — if it runs in a terminal, it runs in Orca.
+Works with **any CLI agent** - if it runs in a terminal, it runs in h0x-ADE.
 
 <p>
   <a href="https://docs.anthropic.com/claude/docs/claude-code"><kbd><img src="docs/assets/claude-logo.svg" alt="Claude Code logo" width="16" valign="middle" /> Claude Code</kbd></a> &nbsp;
@@ -211,15 +211,15 @@ Works with **any CLI agent** — if it runs in a terminal, it runs in Orca.
 
 ### Desktop — macOS, Windows, Linux
 
-- **[Download from onOrca.dev](https://onorca.dev/download)**
-- Or grab a build directly: [macOS Apple Silicon](https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg) · [macOS Intel](https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg) · [Windows (.exe)](https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe) · [Linux AppImage](https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage) · [All builds](https://github.com/stablyai/orca/releases/latest)
-- Running `orca serve` on a headless Linux server? See the [headless Linux server guide](docs/reference/headless-linux-server.md).
+- **[Download from GitHub Releases](https://github.com/vjk7989/h0x-ade/releases/latest)**
+- Or grab a build directly: [macOS Apple Silicon](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg) · [macOS Intel](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg) · [Windows (.exe)](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe) · [Linux AppImage](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage) · [All builds](https://github.com/vjk7989/h0x-ade/releases/latest)
+- Running `h0x serve` on a headless Linux server? See the [headless Linux server guide](docs/reference/headless-linux-server.md).
 
 _Or via a package manager:_
 
 ```bash
 # macOS (Homebrew)
-brew install --cask stablyai/orca/orca
+brew install --cask vjk7989/h0x-ade/h0x
 
 # Arch Linux (AUR) — or stably-orca-git to build from source
 yay -S stably-orca-bin
@@ -242,9 +242,9 @@ Pair with your desktop app to monitor and steer your agents from your phone.
 
   <img src="docs/assets/wechat-qr-group8.jpg" alt="WeChat group 8 QR code for the Orca community" width="160" />&nbsp;&nbsp;<img src="docs/assets/wechat-qr-group9.jpg" alt="WeChat group 9 QR code for the Orca community" width="160" />
 
-- **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/stablyai/orca/issues).
-- **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data Orca collects and how to opt out.
-- **Show Support:** [Star](https://github.com/stablyai/orca) this repo to follow along with our daily ships.
+- **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/vjk7989/h0x-ade/issues).
+- **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data h0x-ADE collects and how to opt out.
+- **Show Support:** [Star](https://github.com/vjk7989/h0x-ade) this repo to follow along with our daily ships.
 
 ---
 
@@ -255,12 +255,12 @@ Want to contribute or run locally? See our [CONTRIBUTING.md](.github/CONTRIBUTIN
 The relay that pairs the mobile app with a desktop host is also in this repository under
 [`cloud/`](cloud/README.md), with a separate pnpm workspace and setup guide.
 
-<a href="https://github.com/stablyai/orca/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=stablyai/orca" alt="Orca contributors" />
+<a href="https://github.com/vjk7989/h0x-ade/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vjk7989/h0x-ade" alt="h0x-ADE contributors" />
 </a>
 
 <p align="center">
-  <img src="docs/assets/star-history.png" alt="GitHub star history chart for stablyai/orca" width="880" />
+  <img src="docs/assets/star-history.png" alt="GitHub star history chart for vjk7989/h0x-ade" width="880" />
 </p>
 
 ## Signed Builds

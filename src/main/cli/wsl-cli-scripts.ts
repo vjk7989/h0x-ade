@@ -1,9 +1,11 @@
-const MANAGED_MARKER = '# Orca managed WSL CLI launcher'
-const BRIDGE_MANAGED_MARKER = '# Orca managed WSL CLI PowerShell bridge'
+const MANAGED_MARKER = '# h0x-ADE managed WSL CLI launcher'
+const BRIDGE_MANAGED_MARKER = '# h0x-ADE managed WSL CLI PowerShell bridge'
+const LEGACY_MANAGED_MARKER = '# Orca managed WSL CLI launcher'
+const LEGACY_BRIDGE_MANAGED_MARKER = '# Orca managed WSL CLI PowerShell bridge'
 
 export function buildWslLauncher(
   windowsLauncherPath: string,
-  bridgePath = '${XDG_DATA_HOME:-$HOME/.local/share}/orca/orca-wsl-bridge.ps1'
+  bridgePath = '${XDG_DATA_HOME:-$HOME/.local/share}/h0x/h0x-wsl-bridge.ps1'
 ): string {
   const encodedTarget = Buffer.from(windowsLauncherPath, 'utf8').toString('base64')
   return `#!/usr/bin/env bash
@@ -17,7 +19,7 @@ if command -v powershell.exe >/dev/null 2>&1; then
 elif [ -x /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe ]; then
   ORCA_POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
 else
-  echo "Orca WSL CLI requires Windows interop and could not find powershell.exe." >&2
+  echo "h0x-ADE WSL CLI requires Windows interop and could not find powershell.exe." >&2
   exit 1
 fi
 # Why: a shell can outlive a deleted worktree; keep explicit CLI selectors and
@@ -67,14 +69,14 @@ $exitCode = 0
 try {
   # Why: a param block prefix-binds forwarded flags such as --for in PowerShell 5.1.
   if ($args.Count -lt 1) {
-    throw 'Invalid Orca WSL CLI bridge invocation.'
+    throw 'Invalid h0x-ADE WSL CLI bridge invocation.'
   }
   [string]$OrcaLauncher = $args[0]
   [string]$WslCwd = ''
   [int]$ForwardArgStart = 1
   if ($args.Count -ge 2 -and $args[1] -eq '-WslCwd') {
     if ($args.Count -lt 3) {
-      throw 'Invalid Orca WSL CLI bridge invocation.'
+      throw 'Invalid h0x-ADE WSL CLI bridge invocation.'
     }
     $WslCwd = $args[2]
     $ForwardArgStart = 3
@@ -106,7 +108,7 @@ try {
   $StartInfo.WorkingDirectory = $LauncherDirectory
   $Process = [System.Diagnostics.Process]::Start($StartInfo)
   if ($null -eq $Process) {
-    throw 'Unable to start the Orca Windows CLI launcher.'
+    throw 'Unable to start the h0x Windows CLI launcher.'
   }
   $Process.WaitForExit()
   $exitCode = $Process.ExitCode
@@ -120,19 +122,21 @@ exit $exitCode
 }
 
 export function getBridgePathFromCommandPath(commandPath: string): string {
-  // Why: both the current Linux command and the legacy pre-rename command
-  // share one WSL bridge under ~/.local/share/orca.
-  return `${commandPath.replace(/\/\.local\/bin\/(?:orca|orca-ide)$/, '/.local/share/orca')}/orca-wsl-bridge.ps1`
+  // Why: current h0x and legacy pre-rename commands share one managed WSL bridge.
+  return `${commandPath.replace(/\/\.local\/bin\/(?:h0x|orca|orca-ide)$/, '/.local/share/h0x')}/h0x-wsl-bridge.ps1`
 }
 
 export function buildSafeReplaceGuard(path: string, managedMarker: string): string {
   const quotedPath = quoteShell(path)
   const quotedMarker = quoteShell(managedMarker)
+  const quotedLegacyMarker = quoteShell(
+    managedMarker === MANAGED_MARKER ? LEGACY_MANAGED_MARKER : LEGACY_BRIDGE_MANAGED_MARKER
+  )
   return [
     `if [ -L ${quotedPath} ]; then`,
     '  echo "__ORCA_CONFLICT__"',
     '  exit 23',
-    `elif [ -e ${quotedPath} ] && { [ ! -f ${quotedPath} ] || ! grep -Fq ${quotedMarker} ${quotedPath}; }; then`,
+    `elif [ -e ${quotedPath} ] && { [ ! -f ${quotedPath} ] || { ! grep -Fq ${quotedMarker} ${quotedPath} && ! grep -Fq ${quotedLegacyMarker} ${quotedPath}; }; }; then`,
     '  echo "__ORCA_CONFLICT__"',
     '  exit 23',
     'fi'
@@ -141,20 +145,20 @@ export function buildSafeReplaceGuard(path: string, managedMarker: string): stri
 
 export function buildRegistrationLockPrelude(commandPath: string): string {
   const lockDir = getPosixDirname(getBridgePathFromCommandPath(commandPath))
-  // Why: the per-distro queue only serializes one Orca process; flock covers
+  // Why: the per-distro queue only serializes one h0x-ADE process; flock covers
   // a second install (e.g. stable + nightly) mutating the same distro files.
   return [
     `if command -v flock >/dev/null 2>&1 && mkdir -p ${quoteShell(lockDir)} 2>/dev/null; then`,
-    `  exec 9>${quoteShell(`${lockDir}/.orca-wsl-cli.lock`)}`,
+    `  exec 9>${quoteShell(`${lockDir}/.h0x-wsl-cli.lock`)}`,
     '  flock -x -w 30 9',
     'fi'
   ].join('\n')
 }
 
 export function buildManagedLegacyRemoveCommand(quotedLegacyCommandPath: string): string {
-  // Why: remove only the Orca-managed pre-rename wrapper; user-owned `orca`
+  // Why: remove only the h0x-ADE-managed pre-rename wrapper; user-owned `orca`
   // commands and symlinks must survive.
-  return `if [ ! -L ${quotedLegacyCommandPath} ] && [ -f ${quotedLegacyCommandPath} ] && grep -Fq ${quoteShell(MANAGED_MARKER)} ${quotedLegacyCommandPath}; then rm -f ${quotedLegacyCommandPath}; fi`
+  return `if [ ! -L ${quotedLegacyCommandPath} ] && [ -f ${quotedLegacyCommandPath} ] && { grep -Fq ${quoteShell(MANAGED_MARKER)} ${quotedLegacyCommandPath} || grep -Fq ${quoteShell(LEGACY_MANAGED_MARKER)} ${quotedLegacyCommandPath}; }; then rm -f ${quotedLegacyCommandPath}; fi`
 }
 
 export function buildSafeRemoveCommand(commandPath: string, legacyCommandPath?: string): string {
@@ -197,6 +201,14 @@ export function getWslLauncherMarker(): string {
 
 export function getWslBridgeMarker(): string {
   return BRIDGE_MANAGED_MARKER
+}
+
+export function isManagedWslLauncherContent(content: string): boolean {
+  return content.includes(MANAGED_MARKER) || content.includes(LEGACY_MANAGED_MARKER)
+}
+
+export function isManagedWslBridgeContent(content: string): boolean {
+  return content.includes(BRIDGE_MANAGED_MARKER) || content.includes(LEGACY_BRIDGE_MANAGED_MARKER)
 }
 
 export function quoteShell(value: string): string {

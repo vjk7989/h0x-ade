@@ -9,16 +9,14 @@ import {
   buildWslLauncher,
   getBridgePathFromCommandPath,
   getPosixDirname,
-  getWslBridgeMarker,
-  getWslLauncherMarker,
+  isManagedWslBridgeContent,
+  isManagedWslLauncherContent,
   parseManagedLauncherTarget,
   quoteShell
 } from './wsl-cli-scripts'
 import { buildWslCliInstallCommand } from './wsl-cli-registration-command'
 import { buildWslCliStatus, readWslCliCommandFile, resolveReadyWslCliState } from './wsl-cli-status'
 
-const MANAGED_MARKER = getWslLauncherMarker()
-const BRIDGE_MANAGED_MARKER = getWslBridgeMarker()
 const LEGACY_WSL_COMMAND_NAME = 'orca'
 const WSL_COMMAND_TIMEOUT_MS = 10_000
 
@@ -93,13 +91,13 @@ export class WslCliInstaller {
     }
 
     const expected = buildWslLauncher(ready.launcherPath, ready.bridgePath)
-    const managed = content.includes(MANAGED_MARKER)
+    const managed = isManagedWslLauncherContent(content)
     const currentTarget = managed ? parseManagedLauncherTarget(content) : null
     if (managedScriptMatches(content, expected, managed)) {
       const bridgeContent = await this.readCommandFile(ready.distro, ready.bridgePath)
       const expectedBridge = buildWslBridgeScript()
       const bridgeManaged =
-        typeof bridgeContent === 'string' && bridgeContent.includes(BRIDGE_MANAGED_MARKER)
+        typeof bridgeContent === 'string' && isManagedWslBridgeContent(bridgeContent)
       if (
         typeof bridgeContent === 'string' &&
         managedScriptMatches(bridgeContent, expectedBridge, bridgeManaged)
@@ -153,7 +151,7 @@ export class WslCliInstaller {
     if (bridgeContent === null) {
       return false
     }
-    return bridgeContent === 'not_file' || !bridgeContent.includes(BRIDGE_MANAGED_MARKER)
+    return bridgeContent === 'not_file' || !isManagedWslBridgeContent(bridgeContent)
   }
 
   async repairManagedRegistration(): Promise<ManagedWslCliRepairResult> {
@@ -180,7 +178,7 @@ export class WslCliInstaller {
 
     const legacyContent = await this.readCommandFile(this.distro, legacyCommandPath)
     const legacyManaged =
-      typeof legacyContent === 'string' && legacyContent.includes(MANAGED_MARKER)
+      typeof legacyContent === 'string' && isManagedWslLauncherContent(legacyContent)
     if (!legacyManaged) {
       return { changed: false, managed: status.state === 'installed', status }
     }

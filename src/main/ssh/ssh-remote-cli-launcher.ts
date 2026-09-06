@@ -181,12 +181,12 @@ function createWindowsLauncherCompileCommand(
       '$windowsDirectory = if ($env:WINDIR) { $env:WINDIR } else { $env:SystemRoot }',
       `$compilerCandidates = @((Join-Path $windowsDirectory 'Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe'), (Join-Path $windowsDirectory 'Microsoft.NET\\Framework\\v4.0.30319\\csc.exe'))`,
       '$compiler = $compilerCandidates | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1',
-      "if (-not $compiler) { Write-Error 'Unable to find the .NET Framework C# compiler required for the Orca SSH CLI launcher.'; exit 1 }",
+      "if (-not $compiler) { Write-Error 'Unable to find the .NET Framework C# compiler required for the h0x-ADE SSH CLI launcher.'; exit 1 }",
       `& $compiler ${compilerArgs}`,
       'if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }',
-      `if (-not (Test-Path -LiteralPath ${powerShellLiteral(launcherPath)} -PathType Leaf)) { Write-Error 'The Orca SSH CLI launcher compiler produced no executable.'; exit 1 }`,
+      `if (-not (Test-Path -LiteralPath ${powerShellLiteral(launcherPath)} -PathType Leaf)) { Write-Error 'The h0x-ADE SSH CLI launcher compiler produced no executable.'; exit 1 }`,
       // Why: remove the legacy %* bridge only after a successful compile, so a
-      // host missing csc.exe keeps its existing CLI (orca.exe shadows orca.cmd).
+      // host missing csc.exe keeps its existing CLI.
       `Remove-Item -LiteralPath ${powerShellLiteral(legacyShimPath)} -Force -ErrorAction SilentlyContinue`,
       `Remove-Item -LiteralPath ${powerShellLiteral(sourcePath)} -Force`
     ].join('; ')
@@ -195,8 +195,8 @@ function createWindowsLauncherCompileCommand(
 
 export function createRemoteCliInstallPlan(env: RemoteCliInstallEnv): RemoteCliInstallPlan {
   if (isWindowsRemoteHost(env.hostPlatform)) {
-    const launcherFileName = 'orca.exe'
-    const sourceFileName = 'orca-launcher.cs'
+    const launcherFileName = 'h0x.exe'
+    const sourceFileName = 'h0x-launcher.cs'
     const launcherPath = joinRemotePath(env.hostPlatform, env.binDir, launcherFileName)
     const sourcePath = joinRemotePath(env.hostPlatform, env.binDir, sourceFileName)
     const legacyShimPath = joinRemotePath(env.hostPlatform, env.binDir, 'orca.cmd')
@@ -219,7 +219,7 @@ export function createRemoteCliInstallPlan(env: RemoteCliInstallEnv): RemoteCliI
     }
   }
 
-  const launcherPath = joinRemotePath(env.hostPlatform, env.binDir, 'orca')
+  const launcherPath = joinRemotePath(env.hostPlatform, env.binDir, 'h0x')
   return {
     launcherPath,
     files: [

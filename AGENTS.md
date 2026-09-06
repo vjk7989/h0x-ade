@@ -2,6 +2,19 @@
 
 All UI work — layout, color, typography, spacing, component selection, UX behavior — must follow [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md). Use the tokens defined in `src/renderer/src/assets/main.css` (the canonical source) and the shadcn primitives in `src/renderer/src/components/ui/`. Don't invent new color values, font sizes, or shadow tiers when a documented one already covers the role. When STYLEGUIDE.md is silent, follow the resolution order in its final section.
 
+# Deterministic Project Workflow
+
+Treat these as project-wide deterministic instructions for every task in this repository:
+
+- Use only the `D:\the-ade\orca` workspace and its project folders for reads, edits, generated artifacts, test output, scratch files, and agent handoff material unless the user explicitly approves another location. Do not place project work on `C:\` because free space is limited there.
+- Apply YAGNI: implement only the behavior required by the current task, and prefer the smallest change that preserves existing architecture and leaves room for later extension when there is concrete need.
+- Divide every requested task into the smallest practical subtasks before coding. Complete and verify each area before moving to the next one.
+- Prefer deterministic commands, fixtures, clocks, ordering, random seeds, and assertions. Avoid tests or implementation behavior that depends on timing, focus, environment order, network availability, or uncontrolled randomness.
+- Use subagents where available for non-trivial work: one to design tests and edge cases, one to run the tests, one to diagnose failures and propose a fix plan, and two for context management.
+- The first context-management subagent maintains an architecture record document covering decisions taken, important notes for the next coding agent, context, and a codebase map that points to changed areas so future agents do not have to rediscover them by opening many files.
+- The second context-management subagent prepares a handoff document when requested. It must summarize the current conversation for a fresh agent, include a "suggested skills" section, tailor the document to any user-provided focus, and reference existing artifacts such as specs, plans, ADRs, issues, commits, and diffs instead of duplicating them.
+- Continue to the next subtask only after tests for the current area pass, or after the remaining failure is documented with the exact blocker and the user has been told what could not be verified.
+
 ## Electron UI Validation
 
 Always run tests and agent-launched apps in the background with `ORCA_BACKGROUND_LAUNCH=1`.

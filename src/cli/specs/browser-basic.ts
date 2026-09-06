@@ -5,7 +5,7 @@ export const BROWSER_BASIC_COMMAND_SPECS: CommandSpec[] = [
   {
     path: ['open-url'],
     summary: 'Open a URL on the paired client that hosts this terminal',
-    usage: 'orca open-url --url <url> [--worktree <selector>] [--json]',
+    usage: 'h0x open-url --url <url> [--worktree <selector>] [--json]',
     allowedFlags: [...GLOBAL_FLAGS, 'url', 'worktree']
   },
   {

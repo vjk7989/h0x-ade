@@ -44,7 +44,7 @@ export async function buildClaudeAgentTeamsLaunchPlan(args: {
   }
   const shimBin = resolveClaudeAgentTeamsShimBin(args.baseEnv)
   if (!shimBin) {
-    // Why: without an absolute CLI path the shim would resolve a bare `orca` against the pane cwd, so degrade instead.
+    // Why: without an absolute CLI path the shim would resolve a bare `h0x` against the pane cwd, so degrade instead.
     return {
       command: addClaudeTeammateModeInProcess(args.command),
       env: { CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: '1' }
@@ -78,7 +78,7 @@ export function resolveClaudeAgentTeamsShimBin(
     return bundled
   }
   return (
-    findExecutableOnPath(process.platform === 'win32' ? 'orca-dev.cmd' : 'orca-dev', pathValue) ??
+    findExecutableOnPath(process.platform === 'win32' ? 'h0x-dev.cmd' : 'h0x-dev', pathValue) ??
     findExecutableOnPath(getOrcaCliCommandNameForPlatform(process.platform), pathValue)
   )
 }
@@ -92,13 +92,13 @@ function bundledLauncherPath(): string | null {
     return null
   }
   if (process.platform === 'darwin') {
-    return join(process.resourcesPath, 'bin', 'orca')
+    return join(process.resourcesPath, 'bin', 'h0x')
   }
   if (process.platform === 'linux') {
-    return join(process.resourcesPath, 'bin', 'orca-ide')
+    return join(process.resourcesPath, 'bin', 'h0x')
   }
   if (process.platform === 'win32') {
-    return join(process.resourcesPath, 'bin', 'orca.exe')
+    return join(process.resourcesPath, 'bin', 'h0x.exe')
   }
   return null
 }
@@ -130,21 +130,21 @@ function isExecutableFile(candidate: string): boolean {
 }
 
 // Why: an unqualified command name is resolved against the invoking pane's cwd (always on cmd.exe, and via `.`/empty
-// PATH entries on POSIX), so a stray `orca` next to the agent's files would run with the team token. Demand a
+// PATH entries on POSIX), so a stray `h0x` next to the agent's files would run with the team token. Demand a
 // fully-qualified binary instead of guessing one.
 function unixShimScript(): string {
   return [
     '#!/usr/bin/env sh',
     'set -eu',
-    'orca_bin=${ORCA_AGENT_TEAMS_SHIM_BIN:-}',
-    'case $orca_bin in',
+    'h0x_bin=${ORCA_AGENT_TEAMS_SHIM_BIN:-}',
+    'case $h0x_bin in',
     '  /*|[A-Za-z]:[\\\\/]*) ;;',
     '  *)',
-    '    echo "orca agent-teams tmux shim: ORCA_AGENT_TEAMS_SHIM_BIN must be an absolute path" >&2',
+    '    echo "h0x agent-teams tmux shim: ORCA_AGENT_TEAMS_SHIM_BIN must be an absolute path" >&2',
     '    exit 127',
     '    ;;',
     'esac',
-    'exec "$orca_bin" agent-teams-tmux "$@"',
+    'exec "$h0x_bin" agent-teams-tmux "$@"',
     ''
   ].join('\n')
 }
@@ -163,7 +163,7 @@ export function windowsClaudeAgentTeamsShimScript(): string {
     '"%ORCA_SHIM_BIN%" agent-teams-tmux %*',
     'exit /b %ERRORLEVEL%',
     ':unqualified',
-    'echo orca agent-teams tmux shim: ORCA_AGENT_TEAMS_SHIM_BIN must be an absolute path 1>&2',
+    'echo h0x agent-teams tmux shim: ORCA_AGENT_TEAMS_SHIM_BIN must be an absolute path 1>&2',
     'exit /b 127',
     ''
   ].join('\r\n')

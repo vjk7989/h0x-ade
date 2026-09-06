@@ -249,13 +249,13 @@ describe('tui agent startup plans', () => {
       allowEmptyPromptLaunch: true
     })
 
-    expect(plan?.launchCommand).toBe('orca-ide claude-teams')
+    expect(plan?.launchCommand).toBe('h0x claude-teams')
   })
 
   it('uses the plain orca shim for Claude Agent Teams on Linux SSH remotes', () => {
     // Why: the SSH relay deploys the CLI shim as `orca` (not the local-only
-    // `orca-ide` GNOME-screen-reader workaround), so a remote launch must not
-    // emit `orca-ide claude-teams` — that name is not on the remote PATH and
+    // `h0x` GNOME-screen-reader workaround), so a remote launch must not
+    // emit `h0x claude-teams` — that name is not on the remote PATH and
     // `claude-teams` is rejected by the relay's CLI switch (issue #6500).
     const plan = buildAgentStartupPlan({
       agent: 'claude-agent-teams',
@@ -266,11 +266,11 @@ describe('tui agent startup plans', () => {
       allowEmptyPromptLaunch: true
     })
 
-    expect(plan?.launchCommand).toBe('orca claude-teams')
+    expect(plan?.launchCommand).toBe('h0x claude-teams')
   })
 
-  it('keeps the Windows orca.cmd shim for Claude Agent Teams on SSH remotes', () => {
-    // Why: the Windows remote shim is also `orca.cmd`, matching the local
+  it('keeps the Windows h0x.cmd shim for Claude Agent Teams on SSH remotes', () => {
+    // Why: the Windows remote shim is also `h0x.cmd`, matching the local
     // win32 override, so remoteness must not alter the Windows command.
     const plan = buildAgentStartupPlan({
       agent: 'claude-agent-teams',
@@ -281,11 +281,11 @@ describe('tui agent startup plans', () => {
       allowEmptyPromptLaunch: true
     })
 
-    expect(plan?.launchCommand).toBe('orca.cmd claude-teams')
+    expect(plan?.launchCommand).toBe('h0x.cmd claude-teams')
   })
 
-  it('keeps the Linux orca-ide wrapper for local (non-remote) Claude Agent Teams', () => {
-    // Why: the `orca-ide` rename is still required for a local Linux desktop
+  it('keeps the Linux h0x wrapper for local (non-remote) Claude Agent Teams', () => {
+    // Why: the `h0x` rename is still required for a local Linux desktop
     // install (avoids shadowing the GNOME Orca screen reader), so an explicit
     // isRemote:false must preserve it.
     const plan = buildAgentStartupPlan({
@@ -297,7 +297,7 @@ describe('tui agent startup plans', () => {
       allowEmptyPromptLaunch: true
     })
 
-    expect(plan?.launchCommand).toBe('orca-ide claude-teams')
+    expect(plan?.launchCommand).toBe('h0x claude-teams')
   })
 
   it('launches OpenClaude as a distinct argv agent', () => {

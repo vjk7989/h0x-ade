@@ -26,21 +26,21 @@ describe('orca CLI skill guidance', () => {
       'Use Computer Use for external browser windows, webviews, or desktop UI only when the task requires OS/window-level control such as focus, menus, dialogs, coordinates, or screenshots.'
     )
     expect(description).toContain(
-      "`orca-cli` for Orca's embedded pages and a page-automation tool such as Playwright or CDP for external pages."
+      "`orca-cli` for h0x-ADE's embedded pages and a page-automation tool such as Playwright or CDP for external pages."
     )
     expect(skill).toContain(
-      'For external Chrome/Safari/webviews or Orca app chrome/settings, use the Computer Use skill/tool only when the task requires OS/window-level control'
+      'For external Chrome/Safari/webviews or h0x-ADE app chrome/settings, use the Computer Use skill/tool only when the task requires OS/window-level control'
     )
     expect(skill).toContain(
-      "Use `orca-cli` for Orca's embedded pages and a page-automation tool such as Playwright or CDP for external pages"
+      "Use `orca-cli` for h0x-ADE's embedded pages and a page-automation tool such as Playwright or CDP for external pages"
     )
   })
 
   it('keeps independent worktree lineage separate from Git base selection', () => {
     const skill = readSkill()
 
-    expect(skill).toContain('`--no-parent` only controls Orca lineage')
-    expect(skill).toContain('omit `--base-branch` so Orca uses the repo default base')
+    expect(skill).toContain('`--no-parent` only controls h0x-ADE lineage')
+    expect(skill).toContain('omit `--base-branch` so h0x-ADE uses the repo default base')
     expect(skill).toContain('Never base it on the current feature branch')
   })
 
@@ -58,7 +58,7 @@ describe('orca CLI skill guidance', () => {
     }
 
     expect(skill).toContain(
-      'Do not use `orca orchestration task-create`, `orca orchestration dispatch --inject`, or `orca orchestration check --wait` for full handoffs.'
+      'Do not use `h0x orchestration task-create`, `h0x orchestration dispatch --inject`, or `h0x orchestration check --wait` for full handoffs.'
     )
     expect(skill).toContain(
       '`task-create` is also forbidden because it records coordinator-owned tracking state'
@@ -149,9 +149,9 @@ describe('orca CLI install stub', () => {
     expect(stub).toContain('ORCA skills get orca-cli')
     // The safe CLI-resolution contract must survive in the stub, never a bare `orca`.
     expect(stub).toContain('ORCA_CLI_COMMAND')
-    expect(stub).toContain('orca-dev')
-    expect(stub).toContain('orca-ide')
-    expect(stub).toContain('GNOME Orca screen reader')
+    expect(stub).toContain('h0x-dev')
+    expect(stub).toContain('h0x')
+    expect(stub).not.toContain('orca-ide')
     expect(stub).not.toMatch(/^orca /mu)
   })
 

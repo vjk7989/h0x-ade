@@ -41,10 +41,10 @@ function itWindows(name, test) {
 
 describe('Windows CLI launcher', () => {
   it('reuses a compiled launcher that is at least as new as the C# source', () => {
-    const root = mkdtempSync(join(tmpdir(), 'orca-cli-launcher-reuse-'))
+    const root = mkdtempSync(join(tmpdir(), 'h0x-cli-launcher-reuse-'))
     try {
       const sourcePath = join(root, 'OrcaCliLauncher.cs')
-      const outputPath = join(root, '.build', 'orca.exe')
+      const outputPath = join(root, '.build', 'h0x.exe')
       mkdirSync(join(root, '.build'))
       writeFileSync(sourcePath, 'source\n')
       writeFileSync(outputPath, 'binary\n')
@@ -72,7 +72,7 @@ describe('Windows CLI launcher', () => {
     try {
       const result = spawnSync(
         process.execPath,
-        ['config/scripts/build-windows-cli-launcher.mjs', '--output', join(outputRoot, 'orca.exe')],
+        ['config/scripts/build-windows-cli-launcher.mjs', '--output', join(outputRoot, 'h0x.exe')],
         { cwd: projectRoot, encoding: 'utf8' }
       )
 
@@ -99,14 +99,14 @@ describe('Windows CLI launcher', () => {
   })
 
   itWindows('preserves a multiline argument from PowerShell through the native launcher', () => {
-    const appRoot = mkdtempSync(join(tmpdir(), 'orca cli launcher '))
+    const appRoot = mkdtempSync(join(tmpdir(), 'h0x cli launcher '))
     try {
       const resourcesPath = join(appRoot, 'resources')
-      const launcherPath = join(resourcesPath, 'bin', 'orca.exe')
+      const launcherPath = join(resourcesPath, 'bin', 'h0x.exe')
       const cliPath = join(resourcesPath, 'app.asar.unpacked', 'out', 'cli', 'index.js')
       mkdirSync(join(resourcesPath, 'bin'), { recursive: true })
       mkdirSync(dirname(cliPath), { recursive: true })
-      copyFileSync(process.execPath, join(appRoot, 'Orca.exe'))
+      copyFileSync(process.execPath, join(appRoot, 'h0x-ADE.exe'))
       writeFileSync(
         cliPath,
         `process.stdout.write(JSON.stringify({
@@ -158,10 +158,10 @@ describe('Windows CLI launcher', () => {
   })
 
   itWindows('survives an inherited environment block containing PATH and Path', () => {
-    const appRoot = mkdtempSync(join(tmpdir(), 'orca duplicate path launcher '))
+    const appRoot = mkdtempSync(join(tmpdir(), 'h0x duplicate path launcher '))
     try {
       const resourcesPath = join(appRoot, 'resources')
-      const launcherPath = join(resourcesPath, 'bin', 'orca.exe')
+      const launcherPath = join(resourcesPath, 'bin', 'h0x.exe')
       const cliPath = join(resourcesPath, 'app.asar.unpacked', 'out', 'cli', 'index.js')
       const outputPath = join(appRoot, 'child-result.json')
       const harnessSourcePath = join(
@@ -174,7 +174,7 @@ describe('Windows CLI launcher', () => {
       const harnessPath = join(appRoot, 'DuplicatePathLauncher.exe')
       mkdirSync(dirname(launcherPath), { recursive: true })
       mkdirSync(dirname(cliPath), { recursive: true })
-      copyFileSync(process.execPath, join(appRoot, 'Orca.exe'))
+      copyFileSync(process.execPath, join(appRoot, 'h0x-ADE.exe'))
       writeFileSync(
         cliPath,
         `require('node:fs').writeFileSync(process.env.ORCA_TEST_OUTPUT, JSON.stringify({

@@ -83,10 +83,10 @@ async function createMacCommandFixture() {
   const root = await mkdtemp(join(tmpdir(), 'orca-cli-command-race-'))
   createdRoots.push(root)
   const commandDirectory = join(root, 'bin')
-  const commandPath = join(commandDirectory, 'orca')
+  const commandPath = join(commandDirectory, 'h0x')
   const resourcesPath = join(root, 'Current.app', 'Contents', 'Resources')
-  const launcherPath = join(resourcesPath, 'bin', 'orca')
-  const staleLauncherPath = join(root, 'Old.app', 'Contents', 'Resources', 'bin', 'orca')
+  const launcherPath = join(resourcesPath, 'bin', 'h0x')
+  const staleLauncherPath = join(root, 'Old.app', 'Contents', 'Resources', 'bin', 'h0x')
   await mkdir(commandDirectory, { recursive: true })
   await mkdir(dirname(launcherPath), { recursive: true })
   await writeFile(launcherPath, '#!/usr/bin/env bash\n', { mode: 0o755 })
@@ -138,7 +138,7 @@ async function recoveryPath(commandDirectory: string): Promise<string> {
   if (!transactionName) {
     throw new Error('Expected a preserved CLI command transaction.')
   }
-  return join(commandDirectory, transactionName, 'orca')
+  return join(commandDirectory, transactionName, 'h0x')
 }
 
 async function rejectionFrom(operation: Promise<unknown>): Promise<Error> {
@@ -306,9 +306,9 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
     const homePath = join(root, 'home')
     const commandDirectory = join(homePath, '.local', 'bin')
     const resourcesPath = join(root, 'resources')
-    const launcherPath = join(resourcesPath, 'bin', 'orca-ide')
-    const legacyPath = join(commandDirectory, 'orca')
-    const managedLegacyTarget = join(resourcesPath, 'bin', 'orca')
+    const launcherPath = join(resourcesPath, 'bin', 'h0x')
+    const legacyPath = join(commandDirectory, 'h0x')
+    const managedLegacyTarget = join(resourcesPath, 'bin', 'h0x')
     const foreignTarget = join(root, 'foreign-orca')
     await mkdir(commandDirectory, { recursive: true })
     await mkdir(dirname(launcherPath), { recursive: true })
@@ -322,7 +322,7 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
       isPackaged: true,
       userDataPath: join(root, 'user-data'),
       resourcesPath,
-      execPath: join(root, 'orca-ide'),
+      execPath: join(root, 'h0x'),
       appPath: join(root, 'resources', 'app.asar'),
       homePath,
       processPathEnv: commandDirectory
@@ -338,9 +338,9 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
     const homePath = join(root, 'home')
     const commandDirectory = join(homePath, '.local', 'bin')
     const resourcesPath = join(root, 'resources')
-    const launcherPath = join(resourcesPath, 'bin', 'orca-ide')
-    const legacyPath = join(commandDirectory, 'orca')
-    const managedTarget = join(resourcesPath, 'bin', 'orca')
+    const launcherPath = join(resourcesPath, 'bin', 'h0x')
+    const legacyPath = join(commandDirectory, 'h0x')
+    const managedTarget = join(resourcesPath, 'bin', 'h0x')
     const foreignTarget = join(root, 'foreign-orca')
     await mkdir(commandDirectory, { recursive: true })
     await mkdir(dirname(launcherPath), { recursive: true })
@@ -374,7 +374,7 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
       isPackaged: true,
       userDataPath: join(root, 'user-data'),
       resourcesPath,
-      execPath: join(root, 'orca-ide'),
+      execPath: join(root, 'h0x'),
       appPath: join(root, 'resources', 'app.asar'),
       homePath,
       processPathEnv: commandDirectory

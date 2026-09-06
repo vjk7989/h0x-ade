@@ -135,9 +135,9 @@ shape is §7a; key points:
 - Use the VM image's package manager (`apt`/`dnf`/`apk`, per the base distro — not the provider brand).
 - Clone with the git token via `GIT_ASKPASS` (§5).
 - **Trap errors and remove the half-built sandbox** so a crash doesn't leave a paid resource running.
-- **Never snapshot a machine on which the Orca runtime has already run.** The first `orca serve` creates
+- **Never snapshot a machine on which the h0x-ADE runtime has already run.** The first `orca serve` creates
   the runtime's user-data dir, and everything in it gets baked into the image and shared by every VM
-  booted from it: the pairing keypair and device-token registry (`orca-devices.json`,
+  booted from it: the pairing keypair and device-token registry (`h0x-devices.json`,
   `orca-e2ee-keypair.json`), `agent-session-authority.key`, and the build box's logs, terminal history
   and orchestration db. Confirmed: two VMs from one such snapshot emitted **identical `deviceToken` and
   `pairedDeviceId`**. Snapshot **before** the runtime has ever run, or delete the resolved user-data
@@ -306,8 +306,8 @@ orca serve \
   --recipe-json
 ```
 
-**Binary name:** in a VM built from source (the Phase-2 flow), run it as `pnpm exec orca-dev serve …`
-from the repo root — `orca-dev` is the in-repo entrypoint and is what the §7f example uses. Plain
+**Binary name:** in a VM built from source (the Phase-2 flow), run it as `pnpm exec h0x-dev serve …`
+from the repo root — `h0x-dev` is the in-repo entrypoint and is what the §7f example uses. Plain
 `orca serve …` is the same command when the built CLI is installed on the VM's PATH. The flags/output
 are identical either way.
 
@@ -435,7 +435,7 @@ vercel sandbox exec "$name" "${vercel_args[@]}" --timeout 20m \
 recipe_json="$(vercel sandbox exec "$name" "${vercel_args[@]}" --timeout 60s \
   --env "ORCA_PORT=$port" --env "ORCA_PROJECT_ROOT=$project_root" --env "ORCA_PAIRING_ADDRESS=$pairing_ws" \
   -- bash -lc 'set -euo pipefail; cd "$ORCA_PROJECT_ROOT"; rm -f /tmp/orca-recipe.json /tmp/orca-serve.log; \
-    nohup pnpm exec orca-dev serve --port "$ORCA_PORT" --project-root "$ORCA_PROJECT_ROOT" \
+    nohup pnpm exec h0x-dev serve --port "$ORCA_PORT" --project-root "$ORCA_PROJECT_ROOT" \
       --pairing-address "$ORCA_PAIRING_ADDRESS" --recipe-json >/tmp/orca-recipe.json 2>/tmp/orca-serve.log </dev/null & \
     pid=$!; for _ in $(seq 1 80); do \
       node -e "JSON.parse(require(\"node:fs\").readFileSync(\"/tmp/orca-recipe.json\",\"utf8\"))" >/dev/null 2>&1 && { cat /tmp/orca-recipe.json; exit 0; }; \

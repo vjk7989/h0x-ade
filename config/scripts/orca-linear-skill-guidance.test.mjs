@@ -11,7 +11,7 @@ const legacyGuidePath = join(projectDir, 'skill-guides', 'linear-tickets.md')
 const canonicalStubPath = join(projectDir, 'skills', 'orca-linear', 'SKILL.md')
 const legacyStubPath = join(projectDir, 'skills', 'linear-tickets', 'SKILL.md')
 const legacyIntro =
-  '`linear-tickets` is the legacy bundled name for `orca-linear`. This copy remains complete; its CLI commands are identical to `orca-linear` and always use `orca linear ...`.'
+  '`linear-tickets` is the legacy bundled name for `orca-linear`. This copy remains complete; its CLI commands are identical to `orca-linear` and always use `h0x linear ...`.'
 
 function skillBody(skill) {
   return skill.replace(/^---\n[\s\S]*?\n---\n\n/, '')
@@ -20,7 +20,7 @@ function skillBody(skill) {
 function normalizeLegacyBody(skill) {
   return skillBody(skill).replace(
     `# Linear Tickets (Legacy Name)\n\n${legacyIntro}\n\n`,
-    '# Orca Linear\n\n'
+    '# h0x Linear\n\n'
   )
 }
 
@@ -52,7 +52,7 @@ describe('orca-linear skill guidance', () => {
     const legacy = readFileSync(legacyGuidePath, 'utf8')
 
     for (const skill of [canonical, legacy]) {
-      expect(skill).toContain('orca linear project list [--query <text>]')
+      expect(skill).toContain('h0x linear project list [--query <text>]')
       expect(skill).toContain('[--project <projectId-or-exact-name>]')
       expect(skill).toContain('Run only the command for the metadata you need')
     }
@@ -73,9 +73,9 @@ describe('orca-linear install stubs', () => {
       expect(stub).toContain(`ORCA skills get ${name}`)
       // The safe CLI-resolution contract must survive in the stub, never a bare `orca`.
       expect(stub).toContain('ORCA_CLI_COMMAND')
-      expect(stub).toContain('orca-dev')
-      expect(stub).toContain('orca-ide')
-      expect(stub).toContain('GNOME Orca screen reader')
+      expect(stub).toContain('h0x-dev')
+      expect(stub).toContain('h0x')
+      expect(stub).not.toContain('orca-ide')
       expect(stub).not.toMatch(/^orca /mu)
     })
 
@@ -100,8 +100,8 @@ describe('orca-linear install stubs', () => {
 
       // Version-sensitive command detail lives in the binary-served guide now, not here.
       // (The frontmatter description still names some commands; assert on body-only surface.)
-      expect(stub).not.toContain('orca linear search')
-      expect(stub).not.toContain('orca linear comment')
+      expect(stub).not.toContain('h0x linear search')
+      expect(stub).not.toContain('h0x linear comment')
       expect(stub.length).toBeLessThan(readFileSync(guidePath, 'utf8').length)
     })
 

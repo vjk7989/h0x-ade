@@ -424,9 +424,9 @@ describe('Codex shell launch preflight command', () => {
   }
 
   it.each([
-    { platform: 'darwin' as const, bundled: 'orca' },
-    { platform: 'linux' as const, bundled: 'orca-ide' },
-    { platform: 'win32' as const, bundled: 'orca.exe' }
+    { platform: 'darwin' as const, bundled: 'h0x' },
+    { platform: 'linux' as const, bundled: 'h0x' },
+    { platform: 'win32' as const, bundled: 'h0x.exe' }
   ])('carries the verified bundled $platform launcher as an absolute path', (config) => {
     const { userDataPath, resourcesPath } = makeCliRoot()
     const launcherPath = join(resourcesPath, 'bin', config.bundled)
@@ -446,7 +446,7 @@ describe('Codex shell launch preflight command', () => {
 
   it('carries the verified dev launcher as an absolute path', () => {
     const { userDataPath, resourcesPath } = makeCliRoot()
-    const launcherPath = join(userDataPath, 'cli', 'bin', 'orca-dev')
+    const launcherPath = join(userDataPath, 'cli', 'bin', 'h0x-dev')
     writeExecutable(launcherPath, '#!/bin/sh\nexit 0\n')
 
     expect(
@@ -463,7 +463,7 @@ describe('Codex shell launch preflight command', () => {
 
   it('carries the packaged Windows launcher for WSLENV path translation', () => {
     const { userDataPath, resourcesPath } = makeCliRoot()
-    const launcherPath = join(resourcesPath, 'bin', 'orca.exe')
+    const launcherPath = join(resourcesPath, 'bin', 'h0x.exe')
     writeExecutable(launcherPath, '#!/bin/sh\nexit 0\n')
 
     expect(
@@ -481,8 +481,8 @@ describe('Codex shell launch preflight command', () => {
 
   it('never returns an unqualified command name that a profile-rewritten PATH could hijack', () => {
     const { userDataPath, resourcesPath } = makeCliRoot()
-    writeExecutable(join(resourcesPath, 'bin', 'orca'), '#!/bin/sh\nexit 0\n')
-    writeExecutable(join(userDataPath, 'cli', 'bin', 'orca-dev'), '#!/bin/sh\nexit 0\n')
+    writeExecutable(join(resourcesPath, 'bin', 'h0x'), '#!/bin/sh\nexit 0\n')
+    writeExecutable(join(userDataPath, 'cli', 'bin', 'h0x-dev'), '#!/bin/sh\nexit 0\n')
 
     for (const isPackaged of [true, false]) {
       const command = resolveCodexShellLaunchPreflightCommand({
@@ -503,7 +503,7 @@ describe('Codex shell launch preflight command', () => {
     { label: 'the launcher path is a directory', create: 'directory' as const }
   ])('skips the preflight when $label', (config) => {
     const { userDataPath, resourcesPath } = makeCliRoot()
-    const launcherPath = join(resourcesPath, 'bin', 'orca')
+    const launcherPath = join(resourcesPath, 'bin', 'h0x')
     if (config.create === 'directory') {
       mkdirSync(launcherPath)
     }

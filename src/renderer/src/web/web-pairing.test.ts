@@ -18,15 +18,17 @@ describe('web pairing input', () => {
   }
 
   it('parses query-form pairing URLs', () => {
-    expect(parseWebPairingInput(`orca://pair?code=${encodeOffer()}`)).toEqual(offer)
+    expect(parseWebPairingInput(`pavii-h0x://pair?code=${encodeOffer()}`)).toEqual(offer)
   })
 
-  it('still parses legacy hash-form pairing URLs', () => {
-    expect(parseWebPairingInput(`orca://pair#${encodeOffer()}`)).toEqual(offer)
+  it('parses hash-form pairing URLs', () => {
+    expect(parseWebPairingInput(`pavii-h0x://pair#${encodeOffer()}`)).toEqual(offer)
   })
 
   it('preserves optional device scope metadata', () => {
-    expect(parseWebPairingInput(`orca://pair?code=${encodeOffer({ scope: 'mobile' })}`)).toEqual({
+    expect(
+      parseWebPairingInput(`pavii-h0x://pair?code=${encodeOffer({ scope: 'mobile' })}`)
+    ).toEqual({
       ...offer,
       scope: 'mobile'
     })
@@ -34,7 +36,9 @@ describe('web pairing input', () => {
 
   it('preserves optional paired device identity', () => {
     expect(
-      parseWebPairingInput(`orca://pair?code=${encodeOffer({ pairedDeviceId: 'paired-device-a' })}`)
+      parseWebPairingInput(
+        `pavii-h0x://pair?code=${encodeOffer({ pairedDeviceId: 'paired-device-a' })}`
+      )
     ).toEqual({
       ...offer,
       pairedDeviceId: 'paired-device-a'
@@ -50,18 +54,18 @@ describe('web pairing input', () => {
   })
 
   it('treats invalid device scope metadata as unknown', () => {
-    expect(parseWebPairingInput(`orca://pair?code=${encodeOffer({ scope: 'admin' })}`)).toEqual(
-      offer
-    )
+    expect(
+      parseWebPairingInput(`pavii-h0x://pair?code=${encodeOffer({ scope: 'admin' })}`)
+    ).toEqual(offer)
   })
 
-  it('rejects orca URLs outside the exact pairing route', () => {
-    expect(parseWebPairingInput(`orca://pairing?code=${encodeOffer()}`)).toBeNull()
-    expect(parseWebPairingInput(`orca://pair-extra?code=${encodeOffer()}`)).toBeNull()
+  it('rejects h0x-ADE URLs outside the exact pairing route', () => {
+    expect(parseWebPairingInput(`pavii-h0x://pairing?code=${encodeOffer()}`)).toBeNull()
+    expect(parseWebPairingInput(`pavii-h0x://pair-extra?code=${encodeOffer()}`)).toBeNull()
   })
 
   it('auto-saves scoped runtime offers during web startup', () => {
-    const input = `orca://pair?code=${encodeOffer({ scope: 'runtime' })}`
+    const input = `pavii-h0x://pair?code=${encodeOffer({ scope: 'runtime' })}`
     expect(
       decideWebPairingStartup({ initialPairingInput: input, hasStoredEnvironment: false })
     ).toEqual({
@@ -71,8 +75,8 @@ describe('web pairing input', () => {
   })
 
   it('shows the connect screen for mobile-scope and legacy unknown-scope offers', () => {
-    const mobileInput = `orca://pair?code=${encodeOffer({ scope: 'mobile' })}`
-    const legacyInput = `orca://pair?code=${encodeOffer()}`
+    const mobileInput = `pavii-h0x://pair?code=${encodeOffer({ scope: 'mobile' })}`
+    const legacyInput = `pavii-h0x://pair?code=${encodeOffer()}`
 
     expect(
       decideWebPairingStartup({ initialPairingInput: mobileInput, hasStoredEnvironment: true })

@@ -17,17 +17,17 @@ import { getBundledLauncherPath } from './bundled-cli-launcher-path'
 import { quoteShell } from './cli-install-path-format'
 
 // Why: marks a dispatcher this function wrote so repeat serve starts overwrite
-// our own file idempotently but never clobber a user's own ~/.local/bin/orca.
-const DISPATCHER_MARKER = '# orca-serve-bare-orca-dispatcher'
+// our own file idempotently but never clobber a user's own ~/.local/bin/h0x.
+const DISPATCHER_MARKER = '# h0x-serve-dispatcher'
 
 export type LinuxBareOrcaDispatcherOptions = {
-  /** Packaged app resources root; the bundled `orca-ide` launcher lives under it. */
+  /** Packaged app resources root; the bundled `h0x` launcher lives under it. */
   resourcesPath: string
   /** Test seam — defaults to the real home directory. */
   homePath?: string
   /** Trusted caller override; production requires the complete AppImage runtime identity. */
   appImagePath?: string | null
-  /** Test seam — defaults to $XDG_CACHE_HOME/orca/appimage. */
+  /** Test seam — defaults to $XDG_CACHE_HOME/h0x/appimage. */
   appImageCacheRootPath?: string
   /** Test seam — defaults to running the AppImage's own `--appimage-extract`. */
   appImageExtractRunner?: (appImagePath: string, cwd: string) => Promise<void>
@@ -41,21 +41,18 @@ export type LinuxBareOrcaDispatcherState =
 export type LinuxBareOrcaDispatcherResult = {
   state: LinuxBareOrcaDispatcherState
   dispatcherPath: string
-  /** The bundled `orca-ide` launcher the dispatcher execs. */
+  /** The bundled `h0x` launcher the dispatcher execs. */
   target: string | null
 }
 
-// Why: on Linux the CLI installs as `orca-ide`, not bare `orca`, to avoid
-// shadowing GNOME Orca's /usr/bin/orca. But the Claude Team launcher typed into
-// the initial managed terminal invokes the literal `orca claude-teams`, so a
-// headless serve box needs a bare-`orca` dispatcher on the managed-terminal PATH
-// (~/.local/bin, which patchPackagedProcessPath puts ahead of /usr/bin). It is a
+// Why: headless serve needs a managed-terminal PATH dispatcher
+// (~/.local/bin, which patchPackagedProcessPath puts ahead of system dirs). It is a
 // plain file, not a managed symlink, so CliInstaller.removeLegacyLinuxCommandIfManaged
 // never reclaims it.
 export async function installLinuxBareOrcaDispatcher(
   options: LinuxBareOrcaDispatcherOptions
 ): Promise<LinuxBareOrcaDispatcherResult> {
-  const dispatcherPath = join(options.homePath ?? homedir(), '.local', 'bin', 'orca')
+  const dispatcherPath = join(options.homePath ?? homedir(), '.local', 'bin', 'h0x')
   if (existsSync(dispatcherPath) && !(await isOwnedDispatcher(dispatcherPath))) {
     return { state: 'skipped-foreign', dispatcherPath, target: null }
   }
@@ -74,7 +71,7 @@ export async function installLinuxBareOrcaDispatcher(
     : { state: 'skipped-foreign', dispatcherPath, target: null }
 }
 
-/** Bare-`orca` script that execs the one Linux CLI launcher. */
+/** Bare `h0x` script that execs the one Linux CLI launcher. */
 export function buildBareOrcaCliScript(launcherPath: string): string {
   return `#!/usr/bin/env bash\nexec ${quoteShell(launcherPath)} "$@"\n`
 }

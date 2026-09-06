@@ -20,7 +20,7 @@ import {
   resolveAppImageStableLauncherPath
 } from './appimage-stable-launcher'
 
-const CACHE_DIR_SEGMENTS = ['orca', 'appimage'] as const
+const CACHE_DIR_SEGMENTS = ['h0x', 'appimage'] as const
 const EXTRACT_OUTPUT_DIR = 'squashfs-root'
 const MAX_GENERATION_ATTEMPTS = 2
 const EXTRACTION_STAGING_PREFIX = '.extract-'
@@ -244,7 +244,7 @@ async function publishExtractedRoot(
 function hasPayloadLauncher(rootPath: string): boolean {
   try {
     const stats = lstatSync(join(rootPath, 'resources', 'bin', LINUX_CLI_COMMAND_NAME))
-    return stats.isFile() && (stats.mode & 0o111) !== 0
+    return stats.isFile() && (process.platform === 'win32' || (stats.mode & 0o111) !== 0)
   } catch {
     return false
   }

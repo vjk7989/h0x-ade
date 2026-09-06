@@ -336,6 +336,8 @@ release smoke checks remain blocked or staged.
 - CI build job repository guards now allow `vjk7989/h0x-ade`, and dev-channel
   mac/Windows build workflows publish to `vjk7989/h0x-hourly`,
   `vjk7989/h0x-daily`, and `vjk7989/h0x-adhoc`.
+- macOS CI build workflows use GitHub-hosted `macos-15` runners in this fork so
+  ad-hoc/dev/release mac builds can be scheduled without Blacksmith runners.
 - Updater feed/runtime paths changed in `src/main/updater-prerelease-feed.ts`,
   `src/main/updater/updater-release-feed.ts`, and
   `src/main/updater/updater-setup.ts`, with related updater tests updated to the

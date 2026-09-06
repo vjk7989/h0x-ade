@@ -52,7 +52,9 @@ jobs:
           native-runtime: electron
 
       - name: Install Linux package tooling
-        run: sudo apt-get update && sudo apt-get install -y cpio rpm
+        run: >-
+          sudo apt-get update && sudo apt-get install -y
+          cpio rpm python3-gi gir1.2-atspi-2.0 at-spi2-core xclip xdotool
 
       - name: Build package inputs
         run: pnpm run build:release:parallel

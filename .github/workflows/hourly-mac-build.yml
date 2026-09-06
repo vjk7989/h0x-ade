@@ -288,7 +288,7 @@ jobs:
             --draft \
             --notes "Automated hourly macOS and Windows dev build from commit \`$short_sha\`.
 
-          Built from [\`stablyai/orca@$short_sha\`](https://github.com/stablyai/orca/commit/$SHA).
+          Built from [\`vjk7989/h0x-ade@$short_sha\`](https://github.com/vjk7989/h0x-ade/commit/$SHA).
 
           **Unvetted.** No tests ran. The macOS build is signed and notarized like a
           release, so it installs through Orca's in-app updater and opens from a manual
@@ -296,7 +296,7 @@ jobs:
 
           **Windows builds are unsigned.** They install and update normally once you
           are on one, but a signed Stable or RC build cannot install one through the
-          in-app updater — download \`orca-windows-setup.exe\` below and run it once
+          in-app updater — download \`h0x-windows-setup.exe\` below and run it once
           (SmartScreen will warn about an unknown publisher). Every later switch,
           including back to Stable, works in-app from there."
           echo "tag=$TAG" >>"$GITHUB_OUTPUT"

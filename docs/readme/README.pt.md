@@ -3,8 +3,8 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/stablyai/orca"><img src="https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="Estrelas no GitHub" /></a>
-  <a href="https://github.com/stablyai/orca/releases"><img src="../assets/readme-downloads.svg" alt="Total de downloads em todas as versões" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade"><img src="https://img.shields.io/github/stars/vjk7989/h0x-ade?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="Estrelas no GitHub" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade/releases"><img src="../assets/readme-downloads.svg" alt="Total de downloads em todas as versões" /></a>
   <img src="https://img.shields.io/badge/license-MIT-08C?style=flat" alt="Licença: MIT" />
   <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Entre no Discord do Orca" /></a>
   <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="Siga o Orca no X" /></a>
@@ -36,7 +36,7 @@
 
 Monitore e conduza seus agentes pelo celular — receba uma notificação quando um agente terminar e envie instruções de acompanhamento de qualquer lugar.
 
-[App Store para iOS](https://apps.apple.com/us/app/orca-ide/id6766130217) · [TestFlight](https://testflight.apple.com/join/YjeGMQBA) · [APK Android 0.0.47](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk) · [Docs →](https://www.onorca.dev/docs/mobile)
+[App Store para iOS](https://apps.apple.com/us/app/orca-ide/id6766130217) · [TestFlight](https://testflight.apple.com/join/YjeGMQBA) · [APK Android 0.0.47](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk) · [Docs →](https://www.onorca.dev/docs/mobile)
 
 </td>
 <td width="50%">
@@ -164,7 +164,7 @@ Agentes também controlam o Orca — automatize qualquer fluxo de trabalho com `
 - **[Prévias ricas do repositório](https://www.onorca.dev/docs/editing/markdown)** — Pré-visualize Markdown, imagens, PDFs e documentos do repositório no workspace.
 - **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)** — Deixe agentes operarem apps de desktop e UI visível quando um fluxo de trabalho precisa de interação real.
 - **[Notificações e estado de não lido](https://www.onorca.dev/docs/notifications)** — Saiba quando um agente termina ou precisa de atenção, depois marque conversas como não lidas para voltar depois.
-- **E muito, muito mais** — lançamos novidades todos os dias, então esta lista vive atrasada. O [changelog](https://github.com/stablyai/orca/releases) é a lista real de recursos.
+- **E muito, muito mais** — lançamos novidades todos os dias, então esta lista vive atrasada. O [changelog](https://github.com/vjk7989/h0x-ade/releases) é a lista real de recursos.
 
 ---
 
@@ -212,7 +212,7 @@ Funciona com **qualquer agente CLI** — se roda em um terminal, roda no Orca.
 ### Desktop — macOS, Windows, Linux
 
 - **[Baixe em onOrca.dev](https://onorca.dev/download)**
-- Ou baixe um build diretamente: [macOS Apple Silicon](https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg) · [macOS Intel](https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg) · [Windows (.exe)](https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe) · [Linux AppImage](https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage) · [Todos os builds](https://github.com/stablyai/orca/releases/latest)
+- Ou baixe um build diretamente: [macOS Apple Silicon](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg) · [macOS Intel](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg) · [Windows (.exe)](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe) · [Linux AppImage](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage) · [Todos os builds](https://github.com/vjk7989/h0x-ade/releases/latest)
 - Rodando `orca serve` em um servidor Linux headless? Veja o [guia de servidor Linux headless](../reference/headless-linux-server.md).
 
 _Ou por um gerenciador de pacotes:_
@@ -230,7 +230,7 @@ yay -S stably-orca-bin
 Conecte ao app desktop para monitorar e conduzir seus agentes pelo celular.
 
 - **iOS:** [Baixar na App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) ou [entrar no TestFlight](https://testflight.apple.com/join/YjeGMQBA)
-- **Android:** [Baixar APK 0.0.47](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk)
+- **Android:** [Baixar APK 0.0.47](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk)
 
 ---
 
@@ -238,9 +238,9 @@ Conecte ao app desktop para monitorar e conduzir seus agentes pelo celular.
 
 - **Discord:** Entre na comunidade no **[Discord](https://discord.gg/fzjDKHxv8Q)**.
 - **Twitter / X:** Siga **[@orca_build](https://x.com/orca_build)** para atualizações e anúncios.
-- **Feedback e ideias:** Lançamos rápido. Sentiu falta de algo? [Peça um novo recurso](https://github.com/stablyai/orca/issues).
+- **Feedback e ideias:** Lançamos rápido. Sentiu falta de algo? [Peça um novo recurso](https://github.com/vjk7989/h0x-ade/issues).
 - **Privacidade:** Veja a [documentação de privacidade e telemetria](https://www.onorca.dev/docs/telemetry) para saber quais dados anônimos de uso o Orca coleta e como desativar.
-- **Mostre apoio:** Dê uma [estrela](https://github.com/stablyai/orca) neste repositório para acompanhar nossos lançamentos diários.
+- **Mostre apoio:** Dê uma [estrela](https://github.com/vjk7989/h0x-ade) neste repositório para acompanhar nossos lançamentos diários.
 
 ---
 
@@ -248,7 +248,7 @@ Conecte ao app desktop para monitorar e conduzir seus agentes pelo celular.
 
 Quer contribuir ou rodar localmente? Veja nosso guia [CONTRIBUTING.md](../../.github/CONTRIBUTING.md).
 
-<a href="https://github.com/stablyai/orca/graphs/contributors">
+<a href="https://github.com/vjk7989/h0x-ade/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=stablyai/orca" alt="Contribuidores do Orca" />
 </a>
 

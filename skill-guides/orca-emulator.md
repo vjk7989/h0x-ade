@@ -1,7 +1,7 @@
 ---
 name: orca-emulator
 description: >
-  Control a mobile (iOS) emulator / simulator stream from inside Orca using the `orca` CLI.
+  Control a mobile (iOS) emulator / simulator stream from inside Orca using the `h0x` CLI.
   Use for taps, gestures, typing, hardware buttons, camera injection, permissions, accessibility tree, and more — all while seeing the live view in Orca's emulator pane.
   Prefer this over raw `npx serve-sim` or direct simctl when running agents inside Orca (the orca surface handles device scoping, helper lifecycle, and worktree context).
   Complements the orca-cli skill for terminals, worktrees, and the built-in browser.
@@ -84,7 +84,7 @@ Orca owns:
 
 Agents use the h0x-ADE executable chosen above (on PATH in h0x-ADE terminals) and never have to manage PIDs, state files in /tmp, or raw WS URLs themselves.
 
-**For `pnpm dev` testing:** run `pnpm build:cli` first (rebuilds the CLI + ensures the `h0x-dev` shim points at _this_ worktree). Then inside the dev app use `h0x-dev emulator ...` (or the direct `./config/scripts/h0x-dev.mjs emulator ...` from the repo root). The orchestration preambles and dev launchers automatically select the dev command name so the CLI reaches your in-memory EmulatorBridge / runtime. Plain `orca` reaches a packaged install instead.
+**For `pnpm dev` testing:** run `pnpm build:cli` first (rebuilds the CLI + ensures the `h0x-dev` shim points at _this_ worktree). Then inside the dev app use `h0x-dev emulator ...` (or the direct `./config/scripts/h0x-dev.mjs emulator ...` from the repo root). The orchestration preambles and dev launchers automatically select the dev command name so the CLI reaches your in-memory EmulatorBridge / runtime. Plain `h0x` reaches a packaged install instead.
 
 ## Common operations
 

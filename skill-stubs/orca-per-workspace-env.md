@@ -10,7 +10,7 @@ for each workspace. This covers first-time setup (provider prerequisites, the re
 snapshot, the coding-agent auth snapshot, credentials, and state), not just the
 per-workspace lifecycle scripts. Use it to stand up per-workspace environments, fix an
 `environmentRecipes` entry in `orca.yaml`, scaffold provider lifecycle scripts, or resolve
-an `orca vm recipe doctor` failure. Orca is a thin wrapper: you guide, detect, and scaffold;
+an `h0x vm recipe doctor` failure. Orca is a thin wrapper: you guide, detect, and scaffold;
 you never own the user's cloud account, billing, images, or credentials, and never spend
 money without an explicit user OK.
 
@@ -41,7 +41,7 @@ ORCA skills get orca-per-workspace-env
 
 That prints the complete, version-matched guide for the exact binary that will handle your
 next commands — provider setup, base and auth snapshots, `environmentRecipes` in
-`orca.yaml`, lifecycle scripts, and `orca vm recipe doctor`. Read it first, then run the
+`orca.yaml`, lifecycle scripts, and `h0x vm recipe doctor`. Read it first, then run the
 specific command you need.
 
 Don't guess subcommands or flags from memory or from a cached copy of this stub. They

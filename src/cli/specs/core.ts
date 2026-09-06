@@ -24,13 +24,13 @@ export const CORE_COMMAND_SPECS: CommandSpec[] = [
     path: ['claude-teams'],
     argumentMode: 'passthrough',
     summary: 'Start Claude Code Agent Teams in the current h0x-ADE terminal',
-    usage: 'orca claude-teams [claude args...]',
+    usage: 'h0x claude-teams [claude args...]',
     allowedFlags: [...GLOBAL_FLAGS],
     notes: [
       'Passes all following arguments through to Claude Code after enabling Agent Teams native panes.',
       'Must be run from inside an h0x-ADE terminal. Starts Claude Code Agent Teams in the current pane and opens teammates as native Orca splits.'
     ],
-    examples: ['orca claude-teams', 'orca claude-teams --resume <session-id>']
+    examples: ['h0x claude-teams', 'h0x claude-teams --resume <session-id>']
   },
   {
     path: ['repo', 'list'],
@@ -128,7 +128,7 @@ export const CORE_COMMAND_SPECS: CommandSpec[] = [
     examples: [
       'h0x worktree create --name agent-task --agent codex --prompt "hi" --json',
       'h0x worktree create --repo id:<repoId> --name related-task --json',
-      'h0x worktree create --project github:stablyai/orca --host runtime:03ef704c-b180-4b10-998d-e28fbd5de9a3 --name benchmark --json',
+      'h0x worktree create --project github:vjk7989/h0x-ade --host runtime:03ef704c-b180-4b10-998d-e28fbd5de9a3 --name benchmark --json',
       'h0x worktree create --repo id:<repoId> --name linear-task --linear-issue https://linear.app/stably/issue/STA-335/test-issue --json',
       'h0x worktree create --repo id:<repoId> --name agent-task --agent codex --prompt "hi" --json',
       'h0x worktree create --repo id:<repoId> --name folder-child --parent-worktree folder:<folderId> --json',

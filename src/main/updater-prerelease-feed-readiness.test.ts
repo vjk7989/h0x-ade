@@ -17,7 +17,7 @@ function buildAtomFeed(tags: string[]): string {
   return `<?xml version="1.0" encoding="UTF-8"?><feed>${tags
     .map(
       (tag) =>
-        `<entry><link rel="alternate" type="text/html" href="https://github.com/stablyai/orca/releases/tag/${tag}"/><title>${tag}</title></entry>`
+        `<entry><link rel="alternate" type="text/html" href="https://github.com/vjk7989/h0x-ade/releases/tag/${tag}"/><title>${tag}</title></entry>`
     )
     .join('')}</feed>`
 }
@@ -45,9 +45,9 @@ function buildWindowsManifest(version: string): string {
   return [
     `version: ${version}`,
     'files:',
-    '  - url: orca-windows-setup.exe',
+    '  - url: h0x-windows-setup.exe',
     '    sha512: test',
-    'path: orca-windows-setup.exe'
+    'path: h0x-windows-setup.exe'
   ].join('\n')
 }
 
@@ -62,7 +62,7 @@ function respondWithAtom(
   const missingAssets = new Set(missingAssetTags)
   const unavailableManifests = new Set(unavailableManifestTags)
   netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-    if (url === 'https://github.com/stablyai/orca/releases.atom') {
+    if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
       return Promise.resolve({
         ok: true,
         status: 200,
@@ -120,7 +120,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
 
     netFetchMock.mockImplementation(
       (url: string, init?: { method?: string; redirect?: string }) => {
-        if (url === 'https://github.com/stablyai/orca/releases.atom') {
+        if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
           return Promise.resolve({
             ok: true,
             status: 200,
@@ -154,7 +154,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
   it.each([301, 307, 308])('accepts a GitHub %s asset redirect as ready', async (status) => {
     setPlatformForTest('win32')
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -185,7 +185,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
   it('reports a GitHub asset request error as unavailable', async () => {
     setPlatformForTest('win32')
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -222,7 +222,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
       resolveAsset = () => resolve({ ok: false, status: 503 })
     })
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -342,7 +342,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
 
   it('reports transport failures as unavailable instead of not-ready', async () => {
     netFetchMock.mockImplementation((url: string) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -363,7 +363,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
 
   it('requires every asset referenced by the manifest files list to be reachable', async () => {
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -382,7 +382,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
               [
                 `version: ${version}`,
                 'files:',
-                '  - url: orca-windows-setup.exe',
+                '  - url: h0x-windows-setup.exe',
                 '    sha512: test',
                 `  - url: Orca-${version}-mac.zip`,
                 '    sha512: test',
@@ -395,7 +395,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
       if (init?.method === 'HEAD') {
         const latest = url.includes('/v1.4.28/')
         const unavailable = latest && url.endsWith('/Orca-1.4.28-mac.zip')
-        const missing = latest && url.endsWith('/orca-windows-setup.exe')
+        const missing = latest && url.endsWith('/h0x-windows-setup.exe')
         return Promise.resolve({
           ok: !missing && !unavailable,
           status: missing ? publishingIncident.missingWindowsAssetStatus : unavailable ? 503 : 200,
@@ -419,7 +419,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
 
   it('treats an explicit asset 404 as not-ready when another asset is unavailable', async () => {
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -435,7 +435,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
               [
                 'version: 1.4.28',
                 'files:',
-                '  - url: orca-windows-setup.exe',
+                '  - url: h0x-windows-setup.exe',
                 '    sha512: test',
                 '  - url: Orca-1.4.28-mac.zip',
                 '    sha512: test'
@@ -444,7 +444,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
         })
       }
       if (init?.method === 'HEAD') {
-        const isWindowsAsset = url.endsWith('/orca-windows-setup.exe')
+        const isWindowsAsset = url.endsWith('/h0x-windows-setup.exe')
         return Promise.resolve({
           ok: false,
           status: isWindowsAsset ? publishingIncident.missingWindowsAssetStatus : 503,
@@ -465,7 +465,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
   it('accepts absolute manifest asset URLs without rewriting them to release asset paths', async () => {
     const assetUrls: string[] = []
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -504,7 +504,7 @@ describe('fetchNewerReleaseTagsWithReadiness', () => {
 
   it('treats malformed updater manifests as not ready', async () => {
     netFetchMock.mockImplementation((url: string, init?: { method?: string }) => {
-      if (url === 'https://github.com/stablyai/orca/releases.atom') {
+      if (url === 'https://github.com/vjk7989/h0x-ade/releases.atom') {
         return Promise.resolve({
           ok: true,
           text: () => Promise.resolve(buildAtomFeed(['v1.4.28', 'v1.4.27']))

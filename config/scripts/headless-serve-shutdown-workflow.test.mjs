@@ -69,7 +69,7 @@ describe('headless serve shutdown PR gate', () => {
     expect(markerStep.run).toContain('rpm2cpio')
     expect(steps.indexOf(markerStep)).toBeGreaterThan(steps.indexOf(packageStep))
     expect(shutdownStep.run).toBe(
-      'node config/scripts/run-headless-serve-shutdown-docker.mjs --appimage dist/orca-linux.AppImage'
+      'node config/scripts/run-headless-serve-shutdown-docker.mjs --appimage dist/h0x-linux.AppImage'
     )
     expect(launcherShutdownStep.run).toContain(
       'node config/scripts/run-headless-serve-shutdown-docker.mjs'
@@ -165,7 +165,7 @@ describe('headless serve shutdown PR gate', () => {
     const managedXvfbUnits = serveUnits.filter((unit) => /^Environment=DISPLAY=/m.test(unit))
 
     expect(ownedXvfbUnits).toHaveLength(1)
-    expect(ownedXvfbUnits[0]).toMatch(/^ExecStart=.*orca-linux\.AppImage serve.*$/m)
+    expect(ownedXvfbUnits[0]).toMatch(/^ExecStart=.*h0x-linux\.AppImage serve.*$/m)
     expect(ownedXvfbUnits[0]).toMatch(/^KillMode=mixed$/m)
     expect(managedXvfbUnits).toHaveLength(1)
     expect(managedXvfbUnits[0]).not.toMatch(/^KillMode=/m)

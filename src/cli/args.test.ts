@@ -147,7 +147,7 @@ describe('parseArgs', () => {
         {
           path: ['emulator', 'permissions'],
           summary: 'Permissions',
-          usage: 'orca emulator permissions <op> <package> [permission]',
+          usage: 'h0x emulator permissions <op> <package> [permission]',
           allowedFlags: ['op', 'package', 'permission'],
           positionalArgs: ['op', 'package', 'permission']
         }
@@ -192,13 +192,13 @@ describe('command aliases', () => {
         ['worktree', 'delete']
       ],
       summary: 'Remove a worktree',
-      usage: 'orca worktree rm --worktree <selector>',
+      usage: 'h0x worktree rm --worktree <selector>',
       allowedFlags: ['worktree', 'force']
     },
     {
       path: ['repo', 'show'],
       summary: 'Show a repo',
-      usage: 'orca repo show --repo <selector>',
+      usage: 'h0x repo show --repo <selector>',
       allowedFlags: ['repo'],
       positionalArgs: ['repo']
     }
@@ -264,7 +264,7 @@ describe('validateCommandAndFlags', () => {
     {
       path: ['demo'],
       summary: 'Demo command',
-      usage: 'orca demo',
+      usage: 'h0x demo',
       allowedFlags: []
     }
   ]
@@ -307,7 +307,7 @@ describe('validateCommandAndFlags', () => {
       {
         path: ['worktree', 'rm'],
         summary: 'Remove a worktree',
-        usage: 'orca worktree rm',
+        usage: 'h0x worktree rm',
         allowedFlags: ['worktree', 'force', 'run-hooks']
       }
     ]
@@ -330,7 +330,7 @@ describe('validateCommandAndFlags', () => {
       {
         path: ['worktree', 'rm'],
         summary: 'Remove a worktree',
-        usage: 'orca worktree rm',
+        usage: 'h0x worktree rm',
         allowedFlags: []
       }
     ]
@@ -342,7 +342,7 @@ describe('validateCommandAndFlags', () => {
     } catch (error) {
       const data = (error as { data?: { suggestions: string[]; nextSteps: string[] } }).data
       expect(data?.suggestions).toContain('worktree rm')
-      expect(data?.nextSteps[0]).toContain('orca worktree rm')
+      expect(data?.nextSteps[0]).toContain('h0x worktree rm')
     }
   })
 })

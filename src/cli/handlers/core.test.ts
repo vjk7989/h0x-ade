@@ -39,7 +39,7 @@ function mockClaudeChild(): { once: (event: string, cb: (...args: unknown[]) => 
   return child
 }
 
-describe('orca claude-teams CLI handler', () => {
+describe('h0x claude-teams CLI handler', () => {
   const isWindows = process.platform === 'win32'
   let previousRunAsNode: string | undefined
   let previousPaneKey: string | undefined

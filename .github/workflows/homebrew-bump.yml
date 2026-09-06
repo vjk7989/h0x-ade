@@ -5,7 +5,7 @@ name: Homebrew Cask Bump
 #   - workflow_call → release-cut.yml finished publishing a stable tag
 #   - workflow_dispatch → manual backfill for a specific tag
 #
-# The job computes the sha256 of orca-macos-arm64.dmg + orca-macos-x64.dmg
+# The job computes the sha256 of h0x-macos-arm64.dmg + h0x-macos-x64.dmg
 # from the release, templates the channel-specific cask in this repo with the
 # new version and hashes, then PRs the result into stablyai/homebrew-orca.
 # Stable tags update Casks/orca.rb; RC tags update Casks/orca@rc.rb.
@@ -101,11 +101,11 @@ jobs:
           mkdir -p dmgs
           gh release download "$TAG" \
             --repo "${{ github.repository }}" \
-            --pattern 'orca-macos-arm64.dmg' \
-            --pattern 'orca-macos-x64.dmg' \
+            --pattern 'h0x-macos-arm64.dmg' \
+            --pattern 'h0x-macos-x64.dmg' \
             --dir dmgs
-          arm=$(sha256sum dmgs/orca-macos-arm64.dmg | awk '{print $1}')
-          intel=$(sha256sum dmgs/orca-macos-x64.dmg  | awk '{print $1}')
+          arm=$(sha256sum dmgs/h0x-macos-arm64.dmg | awk '{print $1}')
+          intel=$(sha256sum dmgs/h0x-macos-x64.dmg  | awk '{print $1}')
           echo "arm=$arm"     >>"$GITHUB_OUTPUT"
           echo "intel=$intel" >>"$GITHUB_OUTPUT"
 

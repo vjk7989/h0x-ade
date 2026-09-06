@@ -89,7 +89,7 @@ export function formatCliError(error: unknown, context: CliErrorContext = {}): s
     if (hasOrchestrationRequestId(error.data)) {
       return message
     }
-    return `${message}\nOrca is not running. Run 'orca open' first.`
+    return `${message}\nOrca is not running. Run 'h0x open' first.`
   }
   // Why: error-specific recovery must win over the generic computer fallback.
   // Classified from the whole error, not just `.code`: a hop that flattens the class leaves only the token.
@@ -113,7 +113,7 @@ export function formatCliError(error: unknown, context: CliErrorContext = {}): s
     error instanceof RuntimeRpcFailureError &&
     error.response.error.code === 'runtime_unavailable'
   ) {
-    return `${message}\nOrca is not running. Run 'orca open' first.`
+    return `${message}\nOrca is not running. Run 'h0x open' first.`
   }
   if (error instanceof RuntimeRpcFailureError) {
     return formatMessageWithNextSteps(message, nextStepsFromData(error.response.error.data))
@@ -231,7 +231,7 @@ export function formatHostList(result: { hosts: HostListEntry[] }): string {
   const kindLabel: Record<HostListEntry['kind'], string> = {
     local: 'local',
     ssh: 'ssh target',
-    environment: 'orca server'
+    environment: 'h0x server'
   }
   return result.hosts
     .map(

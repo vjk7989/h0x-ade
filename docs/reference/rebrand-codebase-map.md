@@ -140,23 +140,18 @@ Only begin after the current rebrand slice is verified. Likely feature areas:
 
 ## GitHub And Release Map
 
-Current local remote before rebrand work:
+Current local remotes:
 
-- `origin`: `https://github.com/stablyai/orca.git`
+- `origin`: `https://github.com/vjk7989/h0x-ade.git`
+- `upstream`: `https://github.com/stablyai/orca.git`
 
 Intended target:
 
 - `https://github.com/vjk7989/h0x-ade`
 
-Implementation update: the app repo now targets `vjk7989/h0x-ade` in local release
-metadata, but pushing is still blocked until the repository is accessible and tests
-pass. Keep upstream Orca available separately.
-
-When the user starts version-control setup, decide together whether to:
-
-- replace `origin` with `vjk7989/h0x-ade`
-- add `h0x-ade` as a second remote and keep upstream as `origin`
-- add upstream as `upstream` and make `origin` the fork
+Implementation update: the app repo targets `vjk7989/h0x-ade` in local release
+metadata and Git remotes. Keep upstream Orca available separately for pulling
+source updates.
 
 Release touchpoints:
 
@@ -307,3 +302,123 @@ Known remaining old-name buckets:
   updater files, old pairing schemes, and upstream issue URLs; update only when
   their runtime surface is part of a later task or their tests are moved into a
   required gate.
+
+## Remaining Rebrand Pass Notes
+
+Status: local app gates passed; website build, mac icon regeneration, and final
+release smoke checks remain blocked or staged.
+
+### Decisions
+
+- Local tooling repair comes first because Git hooks and normal verification must
+  run through `pnpm`, not only fallback Node commands.
+- Public GitHub release links may move to `vjk7989/h0x-ade` now. Website, docs,
+  privacy, telemetry, store, TestFlight, Discord, and social links stay
+  unchanged until final destinations are provided. Android APK GitHub release
+  downloads point at `vjk7989/h0x-ade` because they use the release-download
+  bucket.
+- Release asset filenames use the short `h0x-*` names. Do not invent release
+  assets or update Homebrew checksums until real assets exist.
+- `ORCA_*` environment variables and other compatibility identifiers remain in
+  place unless a later task adds migration or legacy-acceptance tests.
+- `.codebase-memory/` is local generated context and remains untracked.
+
+### Changed Areas In Current Diff
+
+- Tooling repair was done in the local Corepack cache outside the repo by adding
+  missing `pnpm.cjs` and `pnpx.cjs` shims under
+  `D:\Caches\node\corepack\v1\pnpm\12.0.0\bin`. This repaired `pnpm --version`
+  and normal `pnpm tc` execution.
+- Release and CI metadata now points at `https://github.com/vjk7989/h0x-ade` and
+  short desktop artifacts in `.github/workflows/*`, especially release cut,
+  mac build, Windows signing, Windows update survival, dev-channel, PR, and
+  Homebrew bump workflows.
+- Updater feed/runtime paths changed in `src/main/updater-prerelease-feed.ts`,
+  `src/main/updater/updater-release-feed.ts`, and
+  `src/main/updater/updater-setup.ts`, with related updater tests updated to the
+  new repo and `h0x-*` asset names. Prerelease asset readiness still accepts old
+  `stablyai/orca` absolute release-asset URLs for compatibility.
+- CLI public command text and examples were moved toward `h0x` across
+  `src/cli/specs/`, `src/cli/help.ts`, `src/cli/root-help-text-primary.ts`,
+  format/recovery helpers, handlers, selector text, launch diagnostics, and many
+  adjacent CLI tests.
+- Orchestration recovery currently normalizes recovered `orca` or `orca-ide`
+  command argv to the resolved h0x executable in
+  `src/cli/orchestration-mutation-recovery.ts`.
+- Bundled skill guidance was regenerated after updating source guides in
+  `skill-guides/`, `skill-stubs/`, and `skills/`; generated output is
+  `src/cli/bundled-skill-guides.ts`.
+- Public install/readme surfaces changed in `README.md`,
+  `docs/readme/README.*.md`, `docs/site/content/docs/install.mdx`,
+  `docs/reference/headless-linux-server.md`, and renderer recovery/download UI.
+- Mobile protocol-block and renderer mobile APK download surfaces now point to
+  the h0x-ADE release repository while App Store/TestFlight links remain
+  unchanged.
+- Local build, single-instance, release-channel, and Windows signature-check tests
+  were updated where they asserted old artifact or app names.
+- Website work is in the ignored checkout
+  `external-checkouts/fluffy-lamp`: a `h0x-ADE` product page, docs pages, sidebar
+  entry, and copied logo were added there. This is intentionally outside the main
+  app diff.
+
+### Verification So Far
+
+- `pnpm --version` now reports `12.0.0`.
+- `pnpm tc` passed after the Corepack shim repair.
+- `pnpm run check:code-quality:changed` passed: 0 new ordinary, type-aware, or
+  React Doctor findings across 124 changed files.
+- Pre-commit hook dry run passed through the repaired pnpm/Corepack path:
+  `pnpm exec lint-staged --allow-empty` reported no staged files.
+- Focused release/updater/CLI gate passed:
+  `pnpm exec vitest run --config config/vitest.config.ts config/scripts/electron-builder-config.test.mjs config/scripts/verify-release-required-assets.test.mjs src/cli/specs/bundled-guide-flags.test.ts src/cli/runtime/orchestration-recovery-command.test.ts src/main/updater-release-builds.test.ts src/main/updater-prerelease-feed.test.ts src/main/updater-prerelease-feed-readiness.test.ts src/main/updater.build-channel-selection.test.ts src/main/updater.publishing-window-feed.test.ts src/main/updater.check-failure.test.ts`
+- Focused CLI recovery/skills/orchestration gate passed: 9 files, 207 passed,
+  1 skipped.
+- Broad CLI gate passed when excluding the known Windows socket-heavy local
+  recovery test:
+  `pnpm exec vitest run --config config/vitest.config.ts src/cli --exclude src/cli/runtime/client-recovery.test.ts`
+  with 108 files passed, 1029 tests passed, 30 skipped.
+- Local build/package/update UI gate passed:
+  `pnpm exec vitest run --config config/vitest.config.ts src/main/local-builds/local-build-candidate.test.ts src/main/local-builds/local-build-compatibility-contract.test.ts mobile/src/components/HostProtocolGate.test.ts src/renderer/src/components/UpdateCard.error-card.test.tsx`
+  with 3 files passed, 30 tests passed, 1 skipped.
+- Additional release/package smoke slice passed:
+  `pnpm exec vitest run --config config/vitest.config.ts config/scripts/dev-channel-windows-workflow-contract.test.mjs config/scripts/headless-serve-shutdown-workflow.test.mjs src/main/local-builds/local-build-candidate.test.ts src/main/startup/single-instance-lock.test.ts src/shared/release-channel.test.ts src/shared/updater-windows-signature-check.test.ts src/renderer/src/components/LinuxPackageInstallRecoveryCard.test.tsx`
+  with 7 files passed, 111 tests passed, 1 skipped.
+- Public GitHub support/skill-link UI gate passed:
+  `pnpm exec vitest run --config config/vitest.config.ts src/renderer/src/components/star-nag/StarNagToastHost.test.tsx src/renderer/src/components/settings/AgentSkillSetupPanel.test.tsx src/renderer/src/components/settings/BrowserUseSkillStep.test.tsx src/renderer/src/components/settings/OrchestrationPane.test.tsx src/renderer/src/components/settings/linear-agent-skill-install-cta.test.tsx src/renderer/src/components/skills/SkillFreshnessUpdateDialog.test.tsx src/renderer/src/components/skills/skill-freshness-skipped-reason.test.ts`
+  with 7 files passed, 89 tests passed.
+
+### Current Blockers
+
+- D: drive free space is very low. Website dependency install in
+  `external-checkouts/fluffy-lamp` failed with `ERR_PNPM_ENOSPC`; the failed
+  `node_modules` was removed, but the website build remains unverified.
+- The website repo lockfile is pnpm lockfile v6 and should be installed with a
+  pnpm 8 command, for example `corepack pnpm@8.15.9 --ignore-workspace install
+  --frozen-lockfile`, after enough D: space is available.
+- `resources/build/icon.icns` still needs macOS or CI tooling to regenerate from
+  the h0x-ADE logo.
+- Full `src/cli` without exclusions is still not a reliable Windows gate because
+  `src/cli/runtime/client-recovery.test.ts` can fail with local socket `EACCES`.
+- Do not tag or release until final release-asset verification, platform
+  packaging smoke checks, Electron UI validation, website verification, and mac
+  icon regeneration are complete.
+
+### Resume Map For Future Agents
+
+- Tooling: verify with `pnpm --version`, `pnpm tc`, and
+  `pnpm run check:code-quality:changed`.
+- Link inventory: keep using
+  `docs/reference/rebrand-link-redirection-notes.md` as the checklist; do not
+  rewrite unresolved website/docs/store/community destinations.
+- Release identity: inspect `.github/workflows/`, `config/scripts/`,
+  `config/electron-builder.config.cjs`, `src/main/updater*`,
+  `src/main/updater/`, `src/shared/release-channel.ts`, and `Casks/`.
+- CLI identity: inspect `src/shared/orca-cli-command-name.ts`,
+  `src/cli/specs/`, `src/cli/format.ts`, `src/cli/computer-format.ts`,
+  `src/cli/orchestration-mutation-recovery.ts`, `src/cli/handlers/`, and
+  generated `src/cli/bundled-skill-guides.ts`.
+- Website/docs: work only in
+  `external-checkouts/fluffy-lamp`; keep it ignored by the main app repo.
+- Internal migration later: classify remaining names before editing:
+  `ORCA_*`, storage files, updater state, protocol/deep-link names, installed CLI
+  paths, plugin IDs, relay/cloud names, and historical fixtures.

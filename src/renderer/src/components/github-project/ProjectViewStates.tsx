@@ -8,7 +8,7 @@ import { GhAuthErrorHelp } from './GhAuthErrorHelp'
 import type { GitHubProjectViewSummary } from '../../../../shared/github/project-types'
 import type { GitHubProjectViewError } from '../../../../shared/github/project-result-types'
 
-const ORCA_FEATURE_REQUEST_URL = 'https://github.com/stablyai/orca/issues/new'
+const ORCA_FEATURE_REQUEST_URL = 'https://github.com/vjk7989/h0x-ade/issues/new'
 
 export function ProjectViewTabStrip({
   views,

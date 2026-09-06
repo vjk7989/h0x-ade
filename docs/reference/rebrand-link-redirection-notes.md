@@ -1,18 +1,27 @@
 # h0x-ADE Link Redirection Notes
 
-These links still point at Orca, Stably, or onorca.dev and need final h0x/PAVii
-destinations once the website and release repository are ready.
+This is the rebrand redirect checklist. Default GitHub/release destinations have
+been applied where they are active public product links; website, docs, store,
+community, privacy, telemetry, and operational endpoints still need final
+h0x/PAVii destinations.
 
-## Primary Release And Product Links
+## Applied Default GitHub And Release Mappings
 
-- `https://github.com/stablyai/orca`
-- `https://github.com/stablyai/orca/releases`
-- `https://github.com/stablyai/orca/releases/latest`
-- `https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg`
-- `https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg`
-- `https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe`
-- `https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage`
-- `https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk`
+- `https://github.com/stablyai/orca` -> `https://github.com/vjk7989/h0x-ade`
+- `https://github.com/stablyai/orca/releases` -> `https://github.com/vjk7989/h0x-ade/releases`
+- `https://github.com/stablyai/orca/releases/latest` -> `https://github.com/vjk7989/h0x-ade/releases/latest`
+- `https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg` -> `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg`
+- `https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg` -> `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg`
+- `https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe` -> `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe`
+- `https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage` -> `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage`
+- `https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk` -> `https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk`
+
+Historical issue/PR links, generic Git URL parser fixtures, and reliability
+evidence may still mention `stablyai/orca`; keep those unless the surrounding
+surface becomes user-facing product copy.
+
+## Website And Product Links Awaiting Mapping
+
 - `https://onorca.dev/`
 - `https://onorca.dev/download`
 - `https://onorca.dev/changelog`

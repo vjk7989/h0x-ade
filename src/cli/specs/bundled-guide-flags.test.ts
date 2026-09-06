@@ -10,7 +10,7 @@ type GuideInvocation = {
   snippet: string
 }
 
-// Why: guides write examples as `orca ...`, `h0x-dev ...`, or the `ORCA` placeholder.
+// Why: guides write examples as `h0x ...`, `h0x-dev ...`, or the `ORCA` placeholder.
 const CLI_INVOCATION = /(?:^|[\s`(])(?:h0x|h0x-dev|ORCA)\s+([^\n`]*)/g
 
 // Longest path first so `orchestration worker-start` never resolves as `orchestration worker`.

@@ -39,7 +39,7 @@ import { okFixture, queueFixtures } from './test-fixtures'
 
 // Why: CookieSet.value and SetCredentials.pass accept any string, empty included,
 // while name and user require a non-empty one.
-describe('orca cli cookie set and set credentials preserve an empty value', () => {
+describe('h0x cli cookie set and set credentials preserve an empty value', () => {
   beforeEach(() => {
     callMock.mockReset()
     process.exitCode = undefined

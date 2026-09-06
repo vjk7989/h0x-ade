@@ -20,7 +20,7 @@ export function orchestrationMutationRecoveryError(error: unknown): unknown {
   const dispatchId = typeof data?.dispatchId === 'string' ? data.dispatchId : undefined
   const parsedOriginalCommand = commandParts(data?.originalCommand)
   const originalCommand = parsedOriginalCommand
-    ? recoverableOrchestrationArgs(parsedOriginalCommand)
+    ? normalizeRecoveryExecutable(recoverableOrchestrationArgs(parsedOriginalCommand))
     : undefined
   const safeData = { ...data }
   delete safeData.originalCommand
@@ -155,6 +155,16 @@ function parseCommandLine(value: string): string[] | undefined {
     parts.push(part)
   }
   return parts.length > 0 ? parts : undefined
+}
+
+function normalizeRecoveryExecutable(args: string[] | undefined): string[] | undefined {
+  if (!args) {
+    return undefined
+  }
+  if (args[0] === 'orca' || args[0] === 'orca-ide') {
+    return [resolveOrchestrationCliExecutable(), ...args.slice(1)]
+  }
+  return args
 }
 
 export function renderCommand(

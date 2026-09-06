@@ -3,8 +3,8 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/stablyai/orca"><img src="https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="Estrellas en GitHub" /></a>
-  <a href="https://github.com/stablyai/orca/releases"><img src="../assets/readme-downloads.svg" alt="Descargas totales en todas las versiones" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade"><img src="https://img.shields.io/github/stars/vjk7989/h0x-ade?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="Estrellas en GitHub" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade/releases"><img src="../assets/readme-downloads.svg" alt="Descargas totales en todas las versiones" /></a>
   <img src="https://img.shields.io/badge/license-MIT-08C?style=flat" alt="Licencia: MIT" />
   <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Únete al Discord de Orca" /></a>
   <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="Sigue a Orca en X" /></a>
@@ -36,7 +36,7 @@
 
 Supervisa y dirige a tus agentes desde el teléfono — recibe una notificación cuando un agente termine y envía instrucciones de seguimiento desde cualquier lugar.
 
-[App Store de iOS](https://apps.apple.com/us/app/orca-ide/id6766130217) · [APK para Android](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk) · [Docs →](https://www.onorca.dev/docs/mobile)
+[App Store de iOS](https://apps.apple.com/us/app/orca-ide/id6766130217) · [APK para Android](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk) · [Docs →](https://www.onorca.dev/docs/mobile)
 
 </td>
 <td width="50%">
@@ -164,7 +164,7 @@ Los agentes también manejan Orca — automatiza cualquier flujo de trabajo con 
 - **[Previews ricos del repo](https://www.onorca.dev/docs/editing/markdown)** — Previsualiza Markdown, imágenes, PDFs y documentos del repo en el workspace.
 - **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)** — Deja que los agentes manejen apps de escritorio y UI visible cuando un flujo de trabajo necesita interacción real.
 - **[Notificaciones y estado de no leído](https://www.onorca.dev/docs/notifications)** — Entérate cuando un agente termine o necesite tu atención, y marca hilos como no leídos para retomarlos después.
-- **Y muchas, muchas más** — lanzamos a diario, así que esta lista siempre va atrasada. El [changelog](https://github.com/stablyai/orca/releases) es la verdadera lista de funciones.
+- **Y muchas, muchas más** — lanzamos a diario, así que esta lista siempre va atrasada. El [changelog](https://github.com/vjk7989/h0x-ade/releases) es la verdadera lista de funciones.
 
 ---
 
@@ -210,7 +210,7 @@ Funciona con **cualquier agente CLI** — si corre en una terminal, corre en Orc
 ### Escritorio — macOS, Windows, Linux
 
 - **[Descarga desde onOrca.dev](https://onorca.dev/download)**
-- O descarga un build directamente: [macOS Apple Silicon](https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg) · [macOS Intel](https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg) · [Windows (.exe)](https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe) · [Linux AppImage](https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage) · [Todos los builds](https://github.com/stablyai/orca/releases/latest)
+- O descarga un build directamente: [macOS Apple Silicon](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg) · [macOS Intel](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg) · [Windows (.exe)](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe) · [Linux AppImage](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage) · [Todos los builds](https://github.com/vjk7989/h0x-ade/releases/latest)
 
 _O mediante un gestor de paquetes:_
 
@@ -227,7 +227,7 @@ yay -S stably-orca-bin
 Vincúlala con tu app de escritorio para supervisar y dirigir a tus agentes desde el teléfono.
 
 - **iOS:** [Descargar desde App Store](https://apps.apple.com/us/app/orca-ide/id6766130217)
-- **Android:** [Descargar el APK](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk)
+- **Android:** [Descargar el APK](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk)
 
 ---
 
@@ -235,9 +235,9 @@ Vincúlala con tu app de escritorio para supervisar y dirigir a tus agentes desd
 
 - **Discord:** Únete a la comunidad en **[Discord](https://discord.gg/fzjDKHxv8Q)**.
 - **Twitter / X:** Sigue a **[@orca_build](https://x.com/orca_build)** para novedades y anuncios.
-- **Feedback e ideas:** Lanzamos rápido. ¿Te falta algo? [Pide una nueva feature](https://github.com/stablyai/orca/issues).
+- **Feedback e ideas:** Lanzamos rápido. ¿Te falta algo? [Pide una nueva feature](https://github.com/vjk7989/h0x-ade/issues).
 - **Privacidad:** Consulta la [documentación de privacidad y telemetría](https://www.onorca.dev/docs/telemetry) para saber qué datos anónimos de uso recopila Orca y cómo desactivar su envío.
-- **Muéstranos tu apoyo:** Dale una [estrella](https://github.com/stablyai/orca) a este repo para seguir nuestros lanzamientos diarios.
+- **Muéstranos tu apoyo:** Dale una [estrella](https://github.com/vjk7989/h0x-ade) a este repo para seguir nuestros lanzamientos diarios.
 
 ---
 
@@ -245,7 +245,7 @@ Vincúlala con tu app de escritorio para supervisar y dirigir a tus agentes desd
 
 ¿Quieres contribuir o ejecutar Orca localmente? Consulta nuestra guía [CONTRIBUTING.md](../../.github/CONTRIBUTING.md).
 
-<a href="https://github.com/stablyai/orca/graphs/contributors">
+<a href="https://github.com/vjk7989/h0x-ade/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=stablyai/orca" alt="Contribuidores de Orca" />
 </a>
 

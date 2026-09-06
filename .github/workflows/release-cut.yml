@@ -1692,21 +1692,21 @@ jobs:
           # Why: keep the pre-rebuild artifacts so a failed rebuild can fall
           # back to shipping them unchanged (fail-open).
           New-Item -ItemType Directory -Path prepack-backup -Force | Out-Null
-          Copy-Item 'dist/orca-windows-setup.exe' 'prepack-backup/orca-windows-setup.exe' -Force
+          Copy-Item 'dist/h0x-windows-setup.exe' 'prepack-backup/h0x-windows-setup.exe' -Force
           Copy-Item 'dist/latest.yml' 'prepack-backup/latest.yml' -Force
 
           pnpm exec electron-builder --config config/electron-builder.config.cjs --win --publish never --prepackaged "$env:GITHUB_WORKSPACE\dist\win-unpacked"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          if (-not (Test-Path 'dist/orca-windows-setup.exe')) {
-            throw 'electron-builder --prepackaged did not produce dist/orca-windows-setup.exe'
+          if (-not (Test-Path 'dist/h0x-windows-setup.exe')) {
+            throw 'electron-builder --prepackaged did not produce dist/h0x-windows-setup.exe'
           }
 
       - name: Roll back to original installer after failed rebuild
         if: matrix.platform == 'win' && github.run_attempt == 1 && steps.rebuild-nsis-signed.outcome == 'failure'
         shell: pwsh
         run: |
-          if (Test-Path 'prepack-backup/orca-windows-setup.exe') {
-            Copy-Item 'prepack-backup/orca-windows-setup.exe' 'dist/orca-windows-setup.exe' -Force
+          if (Test-Path 'prepack-backup/h0x-windows-setup.exe') {
+            Copy-Item 'prepack-backup/h0x-windows-setup.exe' 'dist/h0x-windows-setup.exe' -Force
             Copy-Item 'prepack-backup/latest.yml' 'dist/latest.yml' -Force
             Write-Warning 'Restored pre-rebuild installer; this release ships with unsigned inner binaries.'
           }
@@ -1717,7 +1717,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: orca-windows-unsigned-${{ needs.cut.outputs.tag }}
-          path: dist/orca-windows-setup.exe
+          path: dist/h0x-windows-setup.exe
           compression-level: 0
           if-no-files-found: error
 
@@ -1822,17 +1822,17 @@ jobs:
         if: matrix.platform == 'win' && github.run_attempt == 1
         shell: pwsh
         run: |
-          $signedInstaller = Get-ChildItem -Path signed-windows -Recurse -File -Filter 'orca-windows-setup.exe' | Select-Object -First 1
+          $signedInstaller = Get-ChildItem -Path signed-windows -Recurse -File -Filter 'h0x-windows-setup.exe' | Select-Object -First 1
           if ($null -eq $signedInstaller) {
             throw 'Signed Windows installer was not returned by SignPath.'
           }
 
-          Copy-Item -Path $signedInstaller.FullName -Destination 'dist/orca-windows-setup.exe' -Force
-          node config/scripts/generate-windows-blockmap.mjs 'dist/orca-windows-setup.exe' 'dist/orca-windows-setup.exe.blockmap'
+          Copy-Item -Path $signedInstaller.FullName -Destination 'dist/h0x-windows-setup.exe' -Force
+          node config/scripts/generate-windows-blockmap.mjs 'dist/h0x-windows-setup.exe' 'dist/h0x-windows-setup.exe.blockmap'
           if ($LASTEXITCODE -ne 0) { throw "blockmap generation failed with exit code $LASTEXITCODE" }
 
-          $installer = Get-Item 'dist/orca-windows-setup.exe'
-          $blockmap = Get-Item 'dist/orca-windows-setup.exe.blockmap'
+          $installer = Get-Item 'dist/h0x-windows-setup.exe'
+          $blockmap = Get-Item 'dist/h0x-windows-setup.exe.blockmap'
           $stream = [System.IO.File]::OpenRead($installer.FullName)
           try {
             $sha512 = [System.Security.Cryptography.SHA512]::Create()
@@ -1853,13 +1853,13 @@ jobs:
           $latestYml = $latestYml -replace '(?m)^    blockMapSize: \d+$', "    blockMapSize: $($blockmap.Length)"
           Set-Content -Path 'dist/latest.yml' -Value $latestYml -NoNewline
 
-          Get-Item 'dist/orca-windows-setup.exe', 'dist/orca-windows-setup.exe.blockmap', 'dist/latest.yml'
+          Get-Item 'dist/h0x-windows-setup.exe', 'dist/h0x-windows-setup.exe.blockmap', 'dist/latest.yml'
 
       - name: Verify signed Windows installer
         if: matrix.platform == 'win' && github.run_attempt == 1
         shell: pwsh
         run: |
-          $signature = Get-AuthenticodeSignature -FilePath 'dist/orca-windows-setup.exe'
+          $signature = Get-AuthenticodeSignature -FilePath 'dist/h0x-windows-setup.exe'
           if ($signature.Status -ne 'Valid') {
             throw ($signature | Format-List * | Out-String)
           }
@@ -1947,7 +1947,7 @@ jobs:
               throw "The 7za resolver returned an invalid path for the inner-binary evidence gate: $7za"
             }
             New-Item -ItemType Directory -Path inner-evidence-extract -Force | Out-Null
-            & $7za x 'dist/orca-windows-setup.exe' '-oinner-evidence-extract' -y | Out-Null
+            & $7za x 'dist/h0x-windows-setup.exe' '-oinner-evidence-extract' -y | Out-Null
 
             $root = Resolve-Path 'inner-evidence-extract'
             # Why elevate.exe is always appended: staging skips already-signed
@@ -2023,7 +2023,7 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           retry_wait_seconds: 30
-          command: gh release upload "${{ needs.cut.outputs.tag }}" "dist/orca-windows-setup.exe" "dist/orca-windows-setup.exe.blockmap" "dist/latest.yml" --clobber --repo "${{ github.repository }}"
+          command: gh release upload "${{ needs.cut.outputs.tag }}" "dist/h0x-windows-setup.exe" "dist/h0x-windows-setup.exe.blockmap" "dist/latest.yml" --clobber --repo "${{ github.repository }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

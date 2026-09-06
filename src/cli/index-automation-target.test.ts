@@ -51,7 +51,7 @@ import {
 } from './test-fixtures'
 import { pairRuntimeEnvironment, useWorktreeAwarenessEnvironment } from './index-test-harness'
 
-describe('orca cli worktree awareness', () => {
+describe('h0x cli worktree awareness', () => {
   useWorktreeAwarenessEnvironment({
     callMock,
     serveOrcaAppMock,

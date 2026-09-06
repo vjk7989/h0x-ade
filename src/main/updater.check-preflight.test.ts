@@ -442,7 +442,7 @@ describe('updater', () => {
     })
     expect(autoUpdaterMock.setFeedURL).toHaveBeenLastCalledWith({
       provider: 'generic',
-      url: 'https://github.com/stablyai/orca/releases/download/v1.4.36-rc.5'
+      url: 'https://github.com/vjk7989/h0x-ade/releases/download/v1.4.36-rc.5'
     })
     expect(
       sendMock.mock.calls

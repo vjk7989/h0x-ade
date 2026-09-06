@@ -16,14 +16,14 @@ const execFileAsync = promisify(execFile)
 function compatibility(): LocalBuildCompatibility {
   return {
     formatVersion: 1,
-    appId: 'com.stablyai.orca',
+    appId: 'tech.pavii.h0xade',
     buildId: '1.2.3-local.1-abc-arm64',
     version: '1.2.3-local.1',
     commit: 'abc',
     stateSchemaVersion: 1,
     readableStateSchemaVersions: [1],
-    daemonProtocolVersion: 28,
-    attachableDaemonProtocolVersions: [28],
+    daemonProtocolVersion: 36,
+    attachableDaemonProtocolVersions: [36],
     platform: 'darwin',
     architecture: 'arm64'
   }
@@ -48,7 +48,7 @@ async function fixture(options: { sha512?: string; url?: string } = {}) {
           size: content.length
         },
         {
-          url: 'orca-macos-arm64.dmg',
+          url: 'h0x-macos-arm64.dmg',
           sha512: Buffer.alloc(64).toString('base64'),
           size: 1
         }
@@ -167,6 +167,6 @@ describe('loadLocalBuildCandidate', () => {
       loadLocalBuildCandidate(manifestPath, 'x64', {
         readCompatibility: async () => compatibility()
       })
-    ).rejects.toThrow('exactly one x64 Orca ZIP')
+    ).rejects.toThrow('exactly one x64 h0x-ADE ZIP')
   })
 })

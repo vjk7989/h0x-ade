@@ -44,7 +44,7 @@ import { main } from './index'
 import { okFixture } from './test-fixtures'
 import { useWorktreeAwarenessEnvironment } from './index-test-harness'
 
-describe('orca cli worktree awareness', () => {
+describe('h0x cli worktree awareness', () => {
   useWorktreeAwarenessEnvironment({
     callMock,
     serveOrcaAppMock,
@@ -192,7 +192,7 @@ describe('orca cli worktree awareness', () => {
 
   it('passes dev mode to injected orchestration dispatches', async () => {
     process.env.ORCA_TERMINAL_HANDLE = 'term_sender'
-    process.env.ORCA_USER_DATA_PATH = '/tmp/orca-dev'
+    process.env.ORCA_USER_DATA_PATH = '/tmp/h0x-dev'
     callMock.mockResolvedValueOnce({
       id: 'req_dispatch',
       ok: true,

@@ -3,8 +3,8 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/stablyai/orca"><img src="https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="GitHub Star 数" /></a>
-  <a href="https://github.com/stablyai/orca/releases"><img src="../assets/readme-downloads.svg" alt="所有版本的总下载量" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade"><img src="https://img.shields.io/github/stars/vjk7989/h0x-ade?style=flat&amp;label=%E2%98%85&amp;color=08C" alt="GitHub Star 数" /></a>
+  <a href="https://github.com/vjk7989/h0x-ade/releases"><img src="../assets/readme-downloads.svg" alt="所有版本的总下载量" /></a>
   <img src="https://img.shields.io/badge/license-MIT-08C?style=flat" alt="许可证: MIT" />
   <a href="https://discord.gg/fzjDKHxv8Q"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="加入 Orca Discord" /></a>
   <a href="https://x.com/orca_build"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="在 X 上关注 Orca" /></a>
@@ -36,7 +36,7 @@
 
 用手机监控并指挥你的智能体 — 智能体完成时收到通知，随时随地发送后续指令。
 
-[iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk) · [文档 →](https://www.onorca.dev/docs/mobile)
+[iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk) · [文档 →](https://www.onorca.dev/docs/mobile)
 
 </td>
 <td width="50%">
@@ -164,7 +164,7 @@ VS Code 的编辑器，处处自动保存 — 把文件或图片直接拖入智�
 - **[丰富仓库预览](https://www.onorca.dev/docs/editing/markdown)** — 在工作区中预览 Markdown、图片、PDF 和仓库文档。
 - **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)** — 当工作流需要真实交互时，让智能体操作桌面应用和可见 UI。
 - **[通知与未读状态](https://www.onorca.dev/docs/notifications)** — 第一时间知道智能体何时完成或需要关注，并可将会话标记为未读，稍后再回来处理。
-- **还有很多很多** — 我们每天发布新功能，这个列表永远跟不上。[更新日志](https://github.com/stablyai/orca/releases)才是真正的功能列表。
+- **还有很多很多** — 我们每天发布新功能，这个列表永远跟不上。[更新日志](https://github.com/vjk7989/h0x-ade/releases)才是真正的功能列表。
 
 ---
 
@@ -210,7 +210,7 @@ VS Code 的编辑器，处处自动保存 — 把文件或图片直接拖入智�
 ### 桌面端 — macOS、Windows、Linux
 
 - **[从 onOrca.dev 下载](https://onorca.dev/download)**
-- 或直接获取安装包：[macOS Apple Silicon](https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg) · [macOS Intel](https://github.com/stablyai/orca/releases/latest/download/orca-macos-x64.dmg) · [Windows (.exe)](https://github.com/stablyai/orca/releases/latest/download/orca-windows-setup.exe) · [Linux AppImage](https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage) · [全部构建](https://github.com/stablyai/orca/releases/latest)
+- 或直接获取安装包：[macOS Apple Silicon](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg) · [macOS Intel](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg) · [Windows (.exe)](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe) · [Linux AppImage](https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage) · [全部构建](https://github.com/vjk7989/h0x-ade/releases/latest)
 
 _也可以通过包管理器安装：_
 
@@ -227,7 +227,7 @@ yay -S stably-orca-bin
 与桌面应用配对，用手机监控并指挥你的智能体。
 
 - **iOS:** [从 App Store 下载](https://apps.apple.com/us/app/orca-ide/id6766130217)
-- **Android:** [下载 APK](https://github.com/stablyai/orca/releases/download/mobile-android-v0.0.47/app-release.apk)
+- **Android:** [下载 APK](https://github.com/vjk7989/h0x-ade/releases/download/mobile-android-v0.0.47/app-release.apk)
 
 ---
 
@@ -239,9 +239,9 @@ yay -S stably-orca-bin
 
   <img src="../assets/wechat-qr-group8.jpg" alt="Orca 社区微信第 8 群二维码" width="160" />&nbsp;&nbsp;<img src="../assets/wechat-qr-group9.jpg" alt="Orca 社区微信第 9 群二维码" width="160" />
 
-- **反馈与想法:** 我们发布很快。缺少什么功能？[提交功能请求](https://github.com/stablyai/orca/issues)。
+- **反馈与想法:** 我们发布很快。缺少什么功能？[提交功能请求](https://github.com/vjk7989/h0x-ade/issues)。
 - **隐私:** 查看[隐私与遥测文档](https://www.onorca.dev/docs/telemetry)，了解 Orca 收集哪些匿名使用数据以及如何退出。
-- **支持我们:** 给这个仓库点 [Star](https://github.com/stablyai/orca)，关注我们的日常发布。
+- **支持我们:** 给这个仓库点 [Star](https://github.com/vjk7989/h0x-ade)，关注我们的日常发布。
 
 ---
 
@@ -249,7 +249,7 @@ yay -S stably-orca-bin
 
 想要贡献代码或在本地运行？请参阅我们的 [CONTRIBUTING.md](../../.github/CONTRIBUTING.md) 指南。
 
-<a href="https://github.com/stablyai/orca/graphs/contributors">
+<a href="https://github.com/vjk7989/h0x-ade/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=stablyai/orca" alt="Orca 贡献者" />
 </a>
 

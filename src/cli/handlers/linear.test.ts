@@ -34,7 +34,7 @@ vi.mock('../runtime-client', async () => {
 import { main } from '../index'
 import { okFixture, queueFixtures } from '../test-fixtures'
 
-describe('orca linear CLI handlers', () => {
+describe('h0x linear CLI handlers', () => {
   const originalEnv = { ...process.env }
 
   beforeEach(() => {

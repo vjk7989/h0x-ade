@@ -38,7 +38,7 @@ import { main } from './index'
 import { RuntimeClientError } from './runtime-client'
 import { buildWorktree, okFixture, queueFixtures, worktreeListFixture } from './test-fixtures'
 
-describe('orca cli browser page targeting', () => {
+describe('h0x cli browser page targeting', () => {
   beforeEach(() => {
     callMock.mockReset()
   })
@@ -314,7 +314,7 @@ describe('orca cli browser page targeting', () => {
   })
 })
 
-describe('orca cli browser profile management', () => {
+describe('h0x cli browser profile management', () => {
   beforeEach(() => {
     callMock.mockReset()
   })
@@ -392,7 +392,7 @@ describe('orca cli browser profile management', () => {
   })
 })
 
-describe('orca cli browser tab profiles', () => {
+describe('h0x cli browser tab profiles', () => {
   beforeEach(() => {
     callMock.mockReset()
   })
@@ -587,7 +587,7 @@ describe('orca cli browser tab profiles', () => {
   })
 })
 
-describe('orca cli browser cookies', () => {
+describe('h0x cli browser cookies', () => {
   beforeEach(() => {
     callMock.mockReset()
     process.exitCode = undefined
@@ -662,7 +662,7 @@ describe('orca cli browser cookies', () => {
   })
 })
 
-describe('orca cli browser waits and viewport flags', () => {
+describe('h0x cli browser waits and viewport flags', () => {
   beforeEach(() => {
     callMock.mockReset()
     process.exitCode = undefined

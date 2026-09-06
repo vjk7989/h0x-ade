@@ -20,7 +20,7 @@ name: Daily macOS Dev Build
 #     a ticket every daily reads as a new client and silently loses file access
 #     under Documents/Desktop/Downloads.
 #
-# Artifacts publish to stablyai/orca-daily, never to stablyai/orca: the main
+# Artifacts publish to vjk7989/h0x-daily, never to vjk7989/h0x-ade: the main
 # repo's releases atom feed exposes only its 10 newest entries, so high-volume
 # dev tags would evict every stable/RC entry and break updates for real users.
 # Separate from orca-hourly so someone riding main's hourlies never sees the
@@ -65,13 +65,13 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DAILY_REPO: stablyai/orca-daily
+  DAILY_REPO: vjk7989/h0x-daily
   # Keep ~30 days so a regression can be bisected without holding a full year.
   DAILY_RETAIN_COUNT: 30
 
 jobs:
   build-daily-mac:
-    if: github.repository == 'stablyai/orca'
+    if: github.repository == 'vjk7989/h0x-ade'
     outputs:
       tag: ${{ steps.release.outputs.tag }}
       version: ${{ steps.daily.outputs.version }}

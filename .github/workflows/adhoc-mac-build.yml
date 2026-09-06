@@ -11,8 +11,8 @@ name: Adhoc macOS + Windows Dev Build
 #   - Windows is unsigned; the published release notes explain the one-time
 #     SmartScreen/manual-install requirement.
 #
-# Artifacts publish to stablyai/orca-adhoc — separate from both orca and
-# orca-hourly. Separate from orca because the main repo's releases atom feed
+# Artifacts publish to vjk7989/h0x-adhoc — separate from both h0x-ade and
+# h0x-hourly. Separate from h0x-ade because the main repo's releases atom feed
 # exposes only its 10 newest entries. Separate from orca-hourly because a build
 # from someone's branch must never be picked up by a developer who only meant to
 # ride main; the two are different levels of "unvetted".
@@ -73,7 +73,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  ADHOC_REPO: stablyai/orca-adhoc
+  ADHOC_REPO: vjk7989/h0x-adhoc
   # Why age and not a count like hourly: this channel is low-volume and bursty, so
   # a count would either hold one week's experiments forever or evict a build
   # someone is still running after a busy afternoon. A month is well past the "few
@@ -82,7 +82,7 @@ env:
 
 jobs:
   build-adhoc-mac:
-    if: github.repository == 'stablyai/orca'
+    if: github.repository == 'vjk7989/h0x-ade'
     # Why an environment: it gives the signing/notary/App secrets somewhere to
     # live that a stale copy of this workflow on an old branch cannot reach.
     # Referencing it is a no-op until repo settings give it teeth; the intended

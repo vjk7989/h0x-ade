@@ -333,6 +333,9 @@ release smoke checks remain blocked or staged.
   short desktop artifacts in `.github/workflows/*`, especially release cut,
   mac build, Windows signing, Windows update survival, dev-channel, PR, and
   Homebrew bump workflows.
+- CI build job repository guards now allow `vjk7989/h0x-ade`, and dev-channel
+  mac/Windows build workflows publish to `vjk7989/h0x-hourly`,
+  `vjk7989/h0x-daily`, and `vjk7989/h0x-adhoc`.
 - Updater feed/runtime paths changed in `src/main/updater-prerelease-feed.ts`,
   `src/main/updater/updater-release-feed.ts`, and
   `src/main/updater/updater-setup.ts`, with related updater tests updated to the
@@ -383,6 +386,9 @@ release smoke checks remain blocked or staged.
 - Additional release/package smoke slice passed:
   `pnpm exec vitest run --config config/vitest.config.ts config/scripts/dev-channel-windows-workflow-contract.test.mjs config/scripts/headless-serve-shutdown-workflow.test.mjs src/main/local-builds/local-build-candidate.test.ts src/main/startup/single-instance-lock.test.ts src/shared/release-channel.test.ts src/shared/updater-windows-signature-check.test.ts src/renderer/src/components/LinuxPackageInstallRecoveryCard.test.tsx`
   with 7 files passed, 111 tests passed, 1 skipped.
+- CI workflow target patch passed:
+  `pnpm exec vitest run --config config/vitest.config.ts config/scripts/dev-channel-windows-workflow-contract.test.mjs config/scripts/electron-builder-config.test.mjs config/scripts/verify-release-required-assets.test.mjs src/main/updater-release-builds.test.ts src/shared/release-channel.test.ts`
+  with 5 files passed, 95 tests passed.
 - Public GitHub support/skill-link UI gate passed:
   `pnpm exec vitest run --config config/vitest.config.ts src/renderer/src/components/star-nag/StarNagToastHost.test.tsx src/renderer/src/components/settings/AgentSkillSetupPanel.test.tsx src/renderer/src/components/settings/BrowserUseSkillStep.test.tsx src/renderer/src/components/settings/OrchestrationPane.test.tsx src/renderer/src/components/settings/linear-agent-skill-install-cta.test.tsx src/renderer/src/components/skills/SkillFreshnessUpdateDialog.test.tsx src/renderer/src/components/skills/skill-freshness-skipped-reason.test.ts`
   with 7 files passed, 89 tests passed.

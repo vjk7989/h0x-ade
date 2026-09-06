@@ -338,6 +338,11 @@ release smoke checks remain blocked or staged.
   `vjk7989/h0x-daily`, and `vjk7989/h0x-adhoc`.
 - macOS CI build workflows use GitHub-hosted `macos-15` runners in this fork so
   ad-hoc/dev/release mac builds can be scheduled without Blacksmith runners.
+- GitHub Actions ad-hoc build was dispatched for commit
+  `5d49d0056ab22c51104e07d555c4fec616392405`, but run
+  `https://github.com/vjk7989/h0x-ade/actions/runs/34051838270` failed before
+  steps started because the private repo/account cannot start paid Actions
+  runners until billing or spending limit is fixed.
 - Updater feed/runtime paths changed in `src/main/updater-prerelease-feed.ts`,
   `src/main/updater/updater-release-feed.ts`, and
   `src/main/updater/updater-setup.ts`, with related updater tests updated to the
@@ -410,6 +415,8 @@ release smoke checks remain blocked or staged.
 - Do not tag or release until final release-asset verification, platform
   packaging smoke checks, Electron UI validation, website verification, and mac
   icon regeneration are complete.
+- CI/CD builds are currently blocked by GitHub billing/spending-limit status on
+  `vjk7989/h0x-ade`; rerun the ad-hoc build after fixing billing.
 
 ### Resume Map For Future Agents
 

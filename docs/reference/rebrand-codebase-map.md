@@ -159,6 +159,7 @@ Release touchpoints:
 - `.github/workflows/release-policy.yml`
 - `.github/workflows/release-ref-validation.yml`
 - `.github/workflows/release-mac-build.yml`
+- `.github/workflows/unsigned-desktop-build.yml`
 - `.github/workflows/windows-signing-rehearsal.yml`
 - `.github/workflows/win-update-*.yml`
 - `.github/workflows/mobile-*-release.yml`
@@ -170,6 +171,23 @@ Release touchpoints:
 - `config/dev-app-update.yml`
 - `Casks/h0x.rb`
 - `Casks/h0x@rc.rb`
+
+CI/CD update:
+
+- The repository is public as of 2026-09-07, so GitHub-hosted runner minutes are
+  available for build verification.
+- The signed ad-hoc/release macOS workflows still require Apple Developer ID and
+  notarization secrets: `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`,
+  `APPLE_TEAM_ID`, `CSC_LINK`, and `CSC_KEY_PASSWORD`.
+- Use `.github/workflows/unsigned-desktop-build.yml` for manual unsigned
+  desktop CI artifacts while signing credentials are pending. It builds h0x
+  Linux x64, Windows x64, and macOS x64/arm64 artifacts without publishing a
+  GitHub release.
+- Do not treat unsigned artifacts as releasable user downloads. They are for
+  smoke validation, packaging regressions, and confirming h0x artifact naming.
+- GitHub's current public hosted runner labels used here are `ubuntu-latest`,
+  `windows-2022`, `macos-15-intel` for Intel macOS, and `macos-15` for arm64
+  macOS.
 
 ## Implementation Pass 1 Notes
 

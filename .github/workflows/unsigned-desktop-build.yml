@@ -1,0 +1,217 @@
+name: Unsigned desktop builds
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit SHA to build
+        required: false
+        default: ''
+      platform:
+        description: Platform to build
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - linux
+          - windows
+          - macos
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unsigned-desktop-builds-${{ github.event.inputs.ref || github.ref_name }}-${{ github.event.inputs.platform || 'all' }}
+  cancel-in-progress: false
+
+jobs:
+  linux-x64:
+    name: linux x64
+    if: inputs.platform == 'all' || inputs.platform == 'linux'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+
+      - name: Cache electron-builder downloads
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/electron-builder
+          key: electron-builder-linux-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            electron-builder-linux-
+
+      - uses: ./.github/actions/install-node-dependencies
+        with:
+          native-runtime: electron
+
+      - name: Install Linux package tooling
+        run: sudo apt-get update && sudo apt-get install -y cpio rpm
+
+      - name: Build package inputs
+        run: pnpm run build:release:parallel
+
+      - name: Package Linux artifacts
+        env:
+          ORCA_REUSE_PREPARED_NATIVE_RUNTIME: '1'
+        run: >-
+          pnpm exec electron-builder --config config/electron-builder.config.cjs
+          --linux AppImage deb rpm --x64 --publish never
+          --config.deb.compression=gz --config.rpm.compression=gzip
+
+      - name: Verify Linux artifact names
+        run: |
+          set -euo pipefail
+          test -s dist/h0x-linux.AppImage
+          compgen -G "dist/h0x_*_amd64.deb" >/dev/null
+          compgen -G "dist/h0x-*.x86_64.rpm" >/dev/null
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: h0x-linux-x64-${{ github.sha }}
+          path: |
+            dist/h0x-linux.AppImage
+            dist/h0x_*_amd64.deb
+            dist/h0x-*.x86_64.rpm
+            dist/latest-linux.yml
+          if-no-files-found: error
+          retention-days: 14
+
+  windows-x64:
+    name: windows x64
+    if: inputs.platform == 'all' || inputs.platform == 'windows'
+    runs-on: windows-2022
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+
+      - name: Cache electron-builder downloads
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~\AppData\Local\electron\Cache
+            ~\AppData\Local\electron-builder\Cache
+          key: electron-builder-windows-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            electron-builder-windows-
+
+      - uses: ./.github/actions/install-node-dependencies
+        with:
+          native-runtime: electron
+
+      - name: Cache Windows CLI launcher
+        uses: actions/cache@v5
+        with:
+          path: native/windows-cli-launcher/.build
+          key: windows-cli-launcher-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('native/windows-cli-launcher/**', 'config/scripts/build-windows-cli-launcher.mjs') }}
+
+      - name: Build package inputs
+        env:
+          ORCA_REUSE_WINDOWS_CLI_LAUNCHER: '1'
+        run: pnpm run build:release:parallel
+
+      - name: Prepare Electron native runtime
+        run: node config/scripts/ensure-native-runtime.mjs --runtime=electron
+
+      - name: Package Windows installer
+        env:
+          ORCA_REUSE_PREPARED_NATIVE_RUNTIME: '1'
+        run: pnpm exec electron-builder --config config/electron-builder.config.cjs --win --x64 --publish never
+
+      - name: Verify Windows artifact names
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'dist/h0x-windows-setup.exe')) {
+            throw 'Missing dist/h0x-windows-setup.exe'
+          }
+          if (-not (Test-Path 'dist/latest.yml')) {
+            throw 'Missing dist/latest.yml'
+          }
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: h0x-windows-x64-${{ github.sha }}
+          path: |
+            dist/h0x-windows-setup.exe
+            dist/h0x-windows-setup.exe.blockmap
+            dist/latest.yml
+          if-no-files-found: error
+          retention-days: 14
+
+  macos:
+    name: macos ${{ matrix.arch }}
+    if: inputs.platform == 'all' || inputs.platform == 'macos'
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: macos-15-intel
+          - arch: arm64
+            runner: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+
+      - name: Cache electron-builder downloads
+        uses: actions/cache@v5
+        with:
+          path: ~/Library/Caches/electron-builder
+          key: electron-builder-macos-${{ matrix.arch }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            electron-builder-macos-${{ matrix.arch }}-
+
+      - uses: ./.github/actions/install-node-dependencies
+        with:
+          native-runtime: electron
+
+      - name: Build package inputs
+        run: pnpm run build:release:parallel
+
+      - name: Prepare Electron native runtime
+        run: node config/scripts/ensure-native-runtime.mjs --runtime=electron
+
+      - name: Package macOS artifacts
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          ORCA_REUSE_PREPARED_NATIVE_RUNTIME: '1'
+        run: >-
+          pnpm exec electron-builder --config config/electron-builder.config.cjs
+          --mac dmg zip --${{ matrix.arch }} --publish never
+
+      - name: Verify macOS artifact names
+        run: |
+          set -euo pipefail
+          test -s "dist/h0x-macos-${{ matrix.arch }}.dmg"
+          compgen -G "dist/h0x-ADE-*-mac.zip" >/dev/null
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: h0x-macos-${{ matrix.arch }}-${{ github.sha }}
+          path: |
+            dist/h0x-macos-${{ matrix.arch }}.dmg
+            dist/h0x-ADE-*-mac.zip
+            dist/h0x-ADE-*-mac.zip.blockmap
+            dist/latest-mac.yml
+          if-no-files-found: error
+          retention-days: 14

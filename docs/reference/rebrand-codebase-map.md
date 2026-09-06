@@ -196,6 +196,10 @@ CI/CD update:
     runtime packages before build inputs.
   - Run `34054072891` passed the Linux-only lane and uploaded
     `h0x-linux-x64-*`.
+  - Run `34054395433` passed all unsigned desktop lanes at commit
+    `d0bfaf751a68c1e4b3214898185031235f278b01` and uploaded
+    `h0x-windows-x64-*`, `h0x-linux-x64-*`, `h0x-macos-x64-*`, and
+    `h0x-macos-arm64-*`.
 
 ## Implementation Pass 1 Notes
 

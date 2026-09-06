@@ -188,6 +188,14 @@ CI/CD update:
 - GitHub's current public hosted runner labels used here are `ubuntu-latest`,
   `windows-2022`, `macos-15-intel` for Intel macOS, and `macos-15` for arm64
   macOS.
+- CI evidence:
+  - Run `34053487927` built and uploaded `h0x-windows-x64-*`,
+    `h0x-macos-arm64-*`, and `h0x-macos-x64-*`; its Linux lane failed before
+    packaging because the runner lacked the AT-SPI GI namespace.
+  - Commit `d9a52a8fad39c4484f1ac0b37dda3959582ea6cb` added the missing Linux
+    runtime packages before build inputs.
+  - Run `34054072891` passed the Linux-only lane and uploaded
+    `h0x-linux-x64-*`.
 
 ## Implementation Pass 1 Notes
 

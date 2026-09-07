@@ -55,6 +55,9 @@ on:
   schedule:
     - cron: '0 6 * * *'
 
+env:
+  ORCA_BACKGROUND_LAUNCH: '1'
+
 concurrency:
   group: computer-e2e-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}

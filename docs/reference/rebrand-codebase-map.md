@@ -1,8 +1,9 @@
 # Rebrand codebase map
 
-Status: initial map only. Do not treat this as approval to rebrand yet.
+Status: active durable map for the staged rebrand. Each pass still requires its
+own verification before release.
 
-Last updated: 2026-09-06.
+Last updated: 2026-09-08.
 
 Target fork/release repository: <https://github.com/vjk7989/h0x-ade>.
 
@@ -150,8 +151,8 @@ Intended target:
 - `https://github.com/vjk7989/h0x-ade`
 
 Implementation update: the app repo targets `vjk7989/h0x-ade` in local release
-metadata and Git remotes. Keep upstream Orca available separately for pulling
-source updates.
+metadata and Git remotes. Treat this as an independent fork: keep upstream Orca
+only as a read-only reference, with no automatic merge or rebase policy.
 
 Release touchpoints:
 
@@ -448,11 +449,8 @@ release smoke checks remain blocked or staged.
   the h0x-ADE logo.
 - Full `src/cli` without exclusions is still not a reliable Windows gate because
   `src/cli/runtime/client-recovery.test.ts` can fail with local socket `EACCES`.
-- Do not tag or release until final release-asset verification, platform
-  packaging smoke checks, Electron UI validation, website verification, and mac
-  icon regeneration are complete.
-- CI/CD builds are currently blocked by GitHub billing/spending-limit status on
-  `vjk7989/h0x-ade`; rerun the ad-hoc build after fixing billing.
+- Do not tag or release until final release-asset verification and unsigned
+  platform packaging checks are complete.
 
 ### Resume Map For Future Agents
 
@@ -473,3 +471,68 @@ release smoke checks remain blocked or staged.
 - Internal migration later: classify remaining names before editing:
   `ORCA_*`, storage files, updater state, protocol/deep-link names, installed CLI
   paths, plugin IDs, relay/cloud names, and historical fixtures.
+
+## Surface Rebrand Completion Pass
+
+Current branch: `codex/finish-surface-rebrand`. Final tested code SHA:
+`770cfbc102ecd3eaadcb7c37b9063c81d44450aa`; review:
+[PR #1](https://github.com/vjk7989/h0x-ade/pull/1).
+
+### Staged Slices
+
+- Display-only strings are scoped to the landing, onboarding, titlebar,
+  settings, sidebar, star-nag, and mobile surfaces already present in the
+  current diff. `h0x-ADE` is the display brand and `h0x` remains the CLI name.
+- The matching keys in `src/renderer/src/i18n/locales/` now resolve to the
+  display brand across English, Spanish, French, Japanese, Korean, and Chinese;
+  the runtime-required English catalog is updated with the same boundary.
+- `resources/logo.svg` now carries the square, accessible, self-contained asset
+  contract consumed by the rebranded renderer surfaces. The contract lives in
+  `src/renderer/src/assets/logo-asset-contract.test.ts` rather than duplicating
+  the SVG requirements here.
+- Six E2E launcher call sites now invoke the existing
+  `config/scripts/h0x-dev.mjs`: two in
+  `tests/e2e/helpers/computer-cli-driver.ts` and four across the two terminal
+  E2E specs in the current diff. This is a deterministic test-launch repair,
+  not a CLI compatibility migration.
+- New coverage is concentrated in
+  `src/renderer/src/i18n/surface-brand-contract.test.ts`,
+  `src/renderer/src/assets/logo-asset-contract.test.ts`, and
+  `tests/e2e/surface-brand.spec.ts`; adjacent component tests cover the touched
+  onboarding, sidebar, mobile, and star-nag surfaces.
+
+### Verification State And Boundary
+
+- In [PR run 34156029407](https://github.com/vjk7989/h0x-ade/actions/runs/34156029407),
+  the static-analysis jobs passed changed-code quality and every localization
+  check, typecheck passed, and the PR-routed E2E job passed.
+- The affected Node 24 shards passed: surface brand 6/6, logo 2/2, onboarding
+  18/18, sidebar 23/23, MobileHero 15/15, MobilePageToolbar 2/2,
+  WindowsFirewallNotice 7/7, and StarNag 7/7.
+- Scoped background renderer and `h0x-dev.mjs` launcher validation passed in
+  [run 34156043129](https://github.com/vjk7989/h0x-ade/actions/runs/34156043129).
+  Computer-use validation passed in
+  [manual run 34156045124](https://github.com/vjk7989/h0x-ade/actions/runs/34156045124)
+  and [PR run 34156029125](https://github.com/vjk7989/h0x-ade/actions/runs/34156029125).
+- Artifact-name/marker assertions and the Windows `h0x-ADE.exe` native smoke
+  assertion were repaired and proven to advance past those steps.
+- The full PR verify remains red only for deterministic core/fork debt outside
+  this surface milestone: missing historic tags `v1.4.178-rc.2`, `v1.4.184`,
+  and `v1.4.190`; stale core Orca/h0x tests and packaged-CLI alias assumptions;
+  and the AppImage shutdown oracle.
+- D: remains constrained after an `ENOSPC` failure, so remaining heavyweight
+  checks stay CI-first. Keep Electron validation background-only with
+  `ORCA_BACKGROUND_LAUNCH=1`.
+- No unsigned platform build, release artifact set, tag, or release has been
+  proven by this checkpoint.
+
+### Compatibility And Fork Policy
+
+- This pass deliberately excludes public API, RPC, remote-wire, storage,
+  protocol/deep-link, package-ID, updater-state, and migration changes.
+- Preserve `Orca Relay`, `ORCA_*`, internal Orca-named symbols/files, persisted
+  identifiers, and other compatibility aliases unless a later core pass adds
+  explicit migration and mixed-version coverage.
+- `vjk7989/h0x-ade` is an independent fork. The `stablyai/orca` remote is a
+  read-only source reference only; do not automatically merge, rebase, or
+  publish against it.

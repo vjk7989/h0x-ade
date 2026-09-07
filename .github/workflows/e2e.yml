@@ -6,6 +6,9 @@ run-name: E2E ${{ inputs.ref || github.ref }}
 permissions:
   contents: read
 
+env:
+  ORCA_BACKGROUND_LAUNCH: '1'
+
 on:
   workflow_call:
     inputs:

@@ -67,6 +67,9 @@ describe('headless serve shutdown PR gate', () => {
     expect(packageStep.run).toContain('--linux AppImage deb rpm --x64 --publish never')
     expect(markerStep.run).toContain('dpkg-deb --fsys-tarfile')
     expect(markerStep.run).toContain('rpm2cpio')
+    expect(markerStep.run).toContain('deb="dist/h0x_${version}_amd64.deb"')
+    expect(markerStep.run).toContain('rpm="dist/h0x-${version}.x86_64.rpm"')
+    expect(markerStep.run).toContain('./opt/h0x-ADE/resources/package-type')
     expect(steps.indexOf(markerStep)).toBeGreaterThan(steps.indexOf(packageStep))
     expect(shutdownStep.run).toBe(
       'node config/scripts/run-headless-serve-shutdown-docker.mjs --appimage dist/h0x-linux.AppImage'

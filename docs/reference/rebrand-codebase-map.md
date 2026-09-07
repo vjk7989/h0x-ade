@@ -679,3 +679,19 @@ state.
 - The prior [PR run 34167939315](https://github.com/vjk7989/h0x-ade/actions/runs/34167939315)
   exposed only a lint failure in the new pinned-history helper/tests; it was
   diagnosed and minimally corrected by `a83c179f18` before the full green run.
+
+## v1.4.199 Final Gate — Completed Slice
+
+Commit `0c1d3f1225` sets the package version to `1.4.199` and regenerates the
+corresponding deterministic `resources/skills/release-mapping.json` row. This
+records a verified release candidate only; the PR is not yet recorded as merged
+and `v1.4.199` is not yet recorded as published.
+
+- [PR Checks run 34168794036](https://github.com/vjk7989/h0x-ade/actions/runs/34168794036)
+  passed the complete gate: all eight Node 24 shards, typecheck, static analysis,
+  specialized lanes, cross-version compatibility, and Windows/Linux packaging.
+- [Skill update round trip run 34168793795](https://github.com/vjk7989/h0x-ade/actions/runs/34168793795)
+  passed all 13 matrix cells.
+- [Computer-use E2E run 34168793801](https://github.com/vjk7989/h0x-ade/actions/runs/34168793801)
+  passed, and [PR LoC run 34168793838](https://github.com/vjk7989/h0x-ade/actions/runs/34168793838)
+  passed for the same candidate.

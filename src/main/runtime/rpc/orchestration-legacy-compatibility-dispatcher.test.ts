@@ -354,7 +354,7 @@ describe('legacy compatibility through RpcDispatcher', () => {
       }
     })
     expect((coordinatorCheck as { result: { formatted: string } }).result.formatted).toContain(
-      `orca orchestration reply --id ${firstId}`
+      `h0x orchestration reply --id ${firstId}`
     )
   })
 

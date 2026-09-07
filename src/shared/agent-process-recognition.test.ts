@@ -297,16 +297,23 @@ describe('agent process recognition', () => {
     })
   })
 
-  it('recognizes only the agent subcommand of the generic Orca CLI', () => {
-    expect(recognizeAgentProcessFromCommandLine('h0x claude-teams')).toEqual({
-      agent: 'claude-agent-teams',
-      processName: 'orca'
-    })
-    expect(recognizeAgentProcessFromCommandLine('orca status')).toBeNull()
-    expect(recognizeAgentProcessFromCommandLine('h0x-dev terminal list')).toBeNull()
+  it('recognizes only the agent subcommand of current and legacy h0x-ADE CLIs', () => {
+    for (const command of ['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide']) {
+      expect(recognizeAgentProcessFromCommandLine(`${command} claude-teams`)).toEqual({
+        agent: 'claude-agent-teams',
+        processName: command
+      })
+      expect(recognizeAgentProcessFromCommandLine(`${command} status`)).toBeNull()
+      expect(recognizeAgentProcessFromCommandLine(`${command} terminal list`)).toBeNull()
+      expect(recognizeAgentProcessFromCommandLine(command)).toBeNull()
+    }
     expect(recognizeAgentProcessFromCommandLine('node /usr/local/bin/h0x claude-teams')).toEqual({
       agent: 'claude-agent-teams',
-      processName: 'orca'
+      processName: 'h0x'
+    })
+    expect(recognizeAgentProcessFromCommandLine('node /usr/local/bin/orca-ide claude-teams')).toEqual({
+      agent: 'claude-agent-teams',
+      processName: 'orca-ide'
     })
     expect(recognizeAgentProcessFromCommandLine('node /usr/local/bin/h0x status')).toBeNull()
   })

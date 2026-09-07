@@ -34,6 +34,12 @@ describe('orchestration runtime compatibility', () => {
     }
   )
 
+  it('omits packaged Windows compatibility outside its launcher', () => {
+    vi.stubEnv('ORCA_WINDOWS_PACKAGED_CLI_LAUNCHER', '0')
+    vi.stubEnv('ORCA_CLI_COMMAND', 'orca')
+    expect(resolvePackagedWindowsCompatibilityCommand()).toBeUndefined()
+  })
+
   it.each(['h0x-dev', 'orca-dev', 'other', ''])(
     'rejects the packaged Windows %s launcher',
     (command) => {
@@ -50,6 +56,14 @@ describe('orchestration runtime compatibility', () => {
     (userDataPath) => {
       vi.stubEnv('ORCA_USER_DATA_PATH', userDataPath)
       expect(isDevCliInvocation()).toBe(true)
+    }
+  )
+
+  it.each(['/home/test/.config/h0x-ADE', '/home/test/.config/orca'])(
+    'does not classify an ordinary profile at %s as development',
+    (userDataPath) => {
+      vi.stubEnv('ORCA_USER_DATA_PATH', userDataPath)
+      expect(isDevCliInvocation()).toBe(false)
     }
   )
 })

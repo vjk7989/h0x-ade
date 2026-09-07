@@ -90,6 +90,18 @@ describe('packaged Windows legacy ask protocol', () => {
     expect(log).toHaveBeenCalledWith('yes')
     expect(process.exitCode).toBeUndefined()
   })
+
+  it.each(['h0x-dev', 'orca-dev', 'other', ''])(
+    'rejects the packaged Windows %j launcher before creating a question',
+    async (command) => {
+      process.env.ORCA_CLI_COMMAND = command
+
+      await expect(invokeAsk(new Map([['question', 'Proceed?']]))).rejects.toMatchObject({
+        code: 'invalid_argument'
+      })
+      expect(callMock).not.toHaveBeenCalled()
+    }
+  )
 })
 
 function invokeAsk(flags: Map<string, string | boolean>): Promise<void> {

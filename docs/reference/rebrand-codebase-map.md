@@ -569,3 +569,22 @@ Branch `codex/core-rebrand-ci-debt`; review:
   red on the next stale canonical-output/test-fixture slice; those failures are
   not evidence that this compatibility slice regressed. Packaging failures in
   the same run remain separately tracked CI debt.
+
+## Core Compatibility Cleanup — Slice 2
+
+Commit `dab5199a1f` aligns 12 runtime/SSH/renderer test files with the canonical
+`h0x` commands already emitted by production. It changes assertions and command
+filters only; legacy inputs covered by slice 1 remain accepted, and no SSH,
+folder-workspace, RPC, or remote-wire behavior changes.
+
+- The 12 changed canonical-output files passed their focused gate.
+- At head `dab5199a1f`, [PR run 34161877979](https://github.com/vjk7989/h0x-ade/actions/runs/34161877979)
+  passed `typecheck`, `static analysis`, and Node 24 shard 2/8. Static analysis
+  includes lint, type-aware and changed-code quality, skill freshness, and all
+  localization checks.
+- The other seven Node 24 shards remain red with 47 failures assigned to the
+  next slices: packaged CLI/installer fixtures and legacy cleanup semantics;
+  visible branding/localization expectations; skill and fork-specific CI
+  contracts; and development/app/relay identity expectations. The Linux
+  AppImage shutdown and Windows packaged-CLI smoke failures remain separate
+  packaging debt.

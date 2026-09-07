@@ -650,3 +650,32 @@ contracts without adding a packaged or global legacy `orca` executable.
   its exact size was 374,251,224 bytes. The ignored
   `external-checkouts/fluffy-lamp` checkout was preserved because it contains
   uncommitted work.
+
+## Historical CI Compatibility — Completed Slice
+
+Commits `2b104b2218` and `a83c179f18` make the fork's historical compatibility
+fixtures deterministic without importing upstream history into persistent fork
+state.
+
+- `config/pinned-upstream-history.json` pins the annotated-tag object and peeled
+  commit IDs for `v1.4.178-rc.2`, `v1.4.184`, and `v1.4.190`.
+  `config/scripts/prepare-pinned-upstream-history.mjs` fetches only those exact
+  public upstream tag refs into temporary CI refs, verifies both IDs, and
+  cleans the temporary refs after use. Missing or moved refs fail closed.
+- The PR cross-version lane and skill-update round-trip workflow run that helper
+  before consuming historical fixtures. Upstream `stablyai/orca` is an immutable,
+  read-only fixture source for these jobs only: no upstream workflow dispatch,
+  merge, rebase, persistent ref, or push is permitted, and every persistent
+  GitHub operation remains scoped to `vjk7989/h0x-ade`.
+- `.github/workflows/track-community-prs.yaml` now guards the upstream-only
+  community-project job so it skips outside `stablyai/orca`; the fork no longer
+  requires `BUFO_BOT_PRIVATE_KEY` for that workflow.
+- [PR Checks run 34168137863](https://github.com/vjk7989/h0x-ade/actions/runs/34168137863)
+  passed all eight Node 24 shards, typecheck, static analysis, specialized
+  lanes, all 40 cross-version tests, and Linux/Windows packaging.
+- [Skill update round trip run 34168137706](https://github.com/vjk7989/h0x-ade/actions/runs/34168137706)
+  passed all 13 matrix cells. [Computer-use E2E run 34168137522](https://github.com/vjk7989/h0x-ade/actions/runs/34168137522)
+  also passed.
+- The prior [PR run 34167939315](https://github.com/vjk7989/h0x-ade/actions/runs/34167939315)
+  exposed only a lint failure in the new pinned-history helper/tests; it was
+  diagnosed and minimally corrected by `a83c179f18` before the full green run.

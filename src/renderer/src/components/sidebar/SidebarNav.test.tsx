@@ -316,7 +316,7 @@ describe('SidebarNav', () => {
     })
 
     expect(queryButtonByText(container, '自动化')).not.toBeNull()
-    expect(queryButtonByText(container, 'h0x-ADE Mobile')).not.toBeNull()
+    expect(queryButtonByText(container, 'h0x-ADE 手机端')).not.toBeNull()
   })
 
   it('updates labels when pseudo-localization is enabled after mount', async () => {

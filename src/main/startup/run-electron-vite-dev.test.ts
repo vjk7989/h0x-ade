@@ -281,7 +281,7 @@ describe('run-electron-vite-dev', () => {
     expect(envSnapshot.worktreeName).toBe('payment-ui')
     expect(envSnapshot.repoRoot).toBe(resolve('.'))
     expect(envSnapshot.badgeLabel).toBeNull()
-    expect(envSnapshot.dockTitle).toBe('Orca: feature/billing-shell')
+    expect(envSnapshot.dockTitle).toBe('h0x-ADE: feature/billing-shell')
     expect(envSnapshot.stableName).toBeNull()
     expect(envSnapshot.electronExecPath).toBeNull()
 
@@ -324,7 +324,7 @@ describe('run-electron-vite-dev', () => {
 
       const trackedPids = trackPidFile(pidFile)
       const devWrapper = readFileSync(join(userDataPath, 'cli', 'bin', 'h0x-dev'), 'utf8')
-      const publicAliasWrapper = readFileSync(join(userDataPath, 'cli', 'bin', 'orca'), 'utf8')
+      const publicAliasWrapper = readFileSync(join(userDataPath, 'cli', 'bin', 'h0x'), 'utf8')
       expect(publicAliasWrapper).toBe(devWrapper)
       expect(publicAliasWrapper).toContain('ORCA_USER_DATA_PATH')
       expect(publicAliasWrapper).toContain('out/cli/index.js')

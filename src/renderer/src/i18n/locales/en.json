@@ -17049,7 +17049,7 @@
       "launchPromptNotDelivered": "Not delivered — check the terminal",
       "orchestrationPaused": {
         "label": "Orchestration paused",
-        "message": "Structured Chat blocks terminal prompts and sends. Orchestration messages remain queued; switch to Terminal, then check the Orca inbox with",
+        "message": "Structured Chat blocks terminal prompts and sends. Orchestration messages remain queued; switch to Terminal, then check the h0x-ADE inbox with",
         "command": "h0x orchestration check"
       },
       "structuredSessionCloseFailed": "Could not close this chat session",

@@ -1,9 +1,9 @@
 ---
 name: orca-cli
 description: >-
-  Use the public `h0x` CLI to operate h0x-ADE-managed worktrees, folder contexts,
-  terminals, repos, automations, artifacts, skill sharing, worktree comments, and the browser
-  embedded inside the h0x-ADE app. Use when the user says "$orca-cli", "use h0x cli",
+  Use the `h0x` CLI to operate h0x-ADE-managed worktrees, folder contexts,
+  terminals, repos, automations, artifacts, skill sharing, worktree comments, and h0x-ADE's
+  embedded browser. Use when the user says "$orca-cli", "use h0x cli",
   "h0x-ADE worktree", "child worktree", "cardStatus", "spawn codex/claude in a worktree",
   "read/wait/send h0x-ADE terminal", "terminal send", "full handoff", "handover",
   "give this to another agent", "another worktree", "h0x-ADE browser", "h0x artifacts",

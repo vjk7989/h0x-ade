@@ -18,12 +18,12 @@ const builderConfig = require('../../../config/electron-builder.config.cjs') as 
   win?: { extraResources?: { from?: string; to?: string }[] }
 }
 const linuxLauncherAsset = new URL('../../../resources/linux/bin/h0x', import.meta.url)
-const darwinLauncherAsset = new URL('../../../resources/darwin/bin/orca', import.meta.url)
+const darwinLauncherAsset = new URL('../../../resources/darwin/bin/h0x', import.meta.url)
 const unixLauncherFixtures = [
   {
     name: 'Linux',
     asset: linuxLauncherAsset,
-    appDir: ['Orca'],
+    appDir: ['h0x-ADE'],
     launcher: ['resources', 'bin', 'h0x'],
     executable: ['h0x'],
     cli: ['resources', 'app.asar.unpacked', 'out', 'cli', 'index.js']
@@ -31,9 +31,9 @@ const unixLauncherFixtures = [
   {
     name: 'macOS',
     asset: darwinLauncherAsset,
-    appDir: ['Orca.app'],
+    appDir: ['h0x-ADE.app'],
     launcher: ['Contents', 'Resources', 'bin', 'h0x'],
-    executable: ['Contents', 'MacOS', 'Orca'],
+    executable: ['Contents', 'MacOS', 'h0x-ADE'],
     cli: ['Contents', 'Resources', 'app.asar.unpacked', 'out', 'cli', 'index.js']
   }
 ] as const

@@ -35,7 +35,7 @@ describe('CliInstaller', () => {
     'refuses to replace an unknown symlink at the command path',
     async () => {
       const fixture = await makeFixture()
-      const installPath = join(fixture.root, 'bin', 'orca')
+      const installPath = join(fixture.root, 'bin', 'h0x')
       const existingTarget = '/tmp/not-orca'
       await mkdir(join(fixture.root, 'bin'), { recursive: true })
       await symlink(existingTarget, installPath)
@@ -44,7 +44,7 @@ describe('CliInstaller', () => {
         platform: 'darwin',
         isPackaged: false,
         userDataPath: fixture.userDataPath,
-        execPath: '/Applications/Orca.app/Contents/MacOS/Orca',
+        execPath: '/Applications/h0x-ADE.app/Contents/MacOS/h0x-ADE',
         appPath: fixture.appPath,
         commandPathOverride: installPath
       })
@@ -53,7 +53,7 @@ describe('CliInstaller', () => {
         state: 'conflict',
         supported: true
       })
-      await expect(installer.install()).rejects.toThrow('Refusing to replace non-Orca command')
+      await expect(installer.install()).rejects.toThrow('Refusing to replace non-h0x command')
       await expect(readlink(installPath)).resolves.toBe(existingTarget)
     }
   )
@@ -65,10 +65,10 @@ describe('CliInstaller', () => {
     async () => {
       const fixture = await makeFixture()
       const commandDir = join(fixture.root, 'bin')
-      const installPath = join(commandDir, 'orca')
+      const installPath = join(commandDir, 'h0x')
       const resourcesPath = join(fixture.root, 'Current.app', 'Contents', 'Resources')
-      const launcherPath = join(resourcesPath, 'bin', 'orca')
-      const oldLauncherPath = join(fixture.root, 'Old.app', 'Contents', 'Resources', 'bin', 'orca')
+      const launcherPath = join(resourcesPath, 'bin', 'h0x')
+      const oldLauncherPath = join(fixture.root, 'Old.app', 'Contents', 'Resources', 'bin', 'h0x')
       await mkdir(commandDir, { recursive: true })
       await mkdir(join(resourcesPath, 'bin'), { recursive: true })
       await writeFile(launcherPath, '#!/usr/bin/env bash\n', 'utf8')
@@ -99,9 +99,9 @@ describe('CliInstaller', () => {
     async () => {
       const fixture = await makeFixture()
       const commandDir = join(fixture.root, 'bin')
-      const installPath = join(commandDir, 'orca')
+      const installPath = join(commandDir, 'h0x')
       const resourcesPath = join(fixture.root, 'Current.app', 'Contents', 'Resources')
-      const launcherPath = join(resourcesPath, 'bin', 'orca')
+      const launcherPath = join(resourcesPath, 'bin', 'h0x')
       const oldCliPath = join(fixture.root, 'OldWorktree', 'out', 'cli', 'index.js')
       await mkdir(commandDir, { recursive: true })
       await mkdir(join(resourcesPath, 'bin'), { recursive: true })
@@ -145,7 +145,7 @@ describe('CliInstaller', () => {
     async () => {
       const fixture = await makeFixture()
       const commandDir = join(fixture.root, 'bin')
-      const installPath = join(commandDir, 'orca')
+      const installPath = join(commandDir, 'h0x')
       const resourcesPath = await createPackagedMacLauncher(fixture.root)
       await mkdir(commandDir, { recursive: true })
       await writeFile(
@@ -166,7 +166,7 @@ describe('CliInstaller', () => {
         state: 'conflict',
         currentTarget: null
       })
-      await expect(installer.install()).rejects.toThrow('Refusing to replace non-Orca command')
+      await expect(installer.install()).rejects.toThrow('Refusing to replace non-h0x command')
       await expect(readFile(installPath, 'utf8')).resolves.toContain('/tmp/not-orca')
     }
   )
@@ -177,13 +177,13 @@ describe('CliInstaller', () => {
     'replaces stale sibling dev launcher symlinks from packaged installs',
     async () => {
       const fixture = await makeFixture()
-      for (const devLauncherName of ['orca', 'orca-dev']) {
+      for (const devLauncherName of ['h0x', 'h0x-dev']) {
         const caseRoot = join(fixture.root, devLauncherName)
         const commandDir = join(caseRoot, 'bin')
-        const installPath = join(commandDir, 'orca')
-        const userDataPath = join(caseRoot, 'orca')
+        const installPath = join(commandDir, 'h0x')
+        const userDataPath = join(caseRoot, 'h0x-ADE')
         const resourcesPath = join(caseRoot, 'Current.app', 'Contents', 'Resources')
-        const launcherPath = join(resourcesPath, 'bin', 'orca')
+        const launcherPath = join(resourcesPath, 'bin', 'h0x')
         const devLauncherPath = join(`${userDataPath}-dev`, 'cli', 'bin', devLauncherName)
         await mkdir(commandDir, { recursive: true })
         await mkdir(join(resourcesPath, 'bin'), { recursive: true })

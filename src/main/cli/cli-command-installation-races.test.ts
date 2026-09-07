@@ -194,7 +194,7 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
       }
     })
 
-    await expect(installer.install()).rejects.toThrow('Refusing to replace non-Orca command')
+    await expect(installer.install()).rejects.toThrow('Refusing to replace non-h0x command')
     await expect(readlink(fixture.commandPath)).resolves.toBe(foreignTarget)
     expect(
       (await readdir(fixture.commandDirectory)).some((name) => name.startsWith('.orca-cli-'))
@@ -225,7 +225,7 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
       }
     })
 
-    await expect(installer.install()).rejects.toThrow('Refusing to replace non-Orca command')
+    await expect(installer.install()).rejects.toThrow('Refusing to replace non-h0x command')
     await expect(readFile(fixture.commandPath, 'utf8')).resolves.toBe(
       'foreign command written into the inspected inode'
     )
@@ -247,7 +247,7 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
       }
     })
 
-    await expect(installer.remove()).rejects.toThrow('Refusing to remove non-Orca command')
+    await expect(installer.remove()).rejects.toThrow('Refusing to remove non-h0x command')
     await expect(readlink(fixture.commandPath)).resolves.toBe(foreignTarget)
   })
 
@@ -307,8 +307,8 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
     const commandDirectory = join(homePath, '.local', 'bin')
     const resourcesPath = join(root, 'resources')
     const launcherPath = join(resourcesPath, 'bin', 'h0x')
-    const legacyPath = join(commandDirectory, 'h0x')
-    const managedLegacyTarget = join(resourcesPath, 'bin', 'h0x')
+    const legacyPath = join(commandDirectory, 'orca')
+    const managedLegacyTarget = join(resourcesPath, 'bin', 'orca')
     const foreignTarget = join(root, 'foreign-orca')
     await mkdir(commandDirectory, { recursive: true })
     await mkdir(dirname(launcherPath), { recursive: true })
@@ -339,8 +339,8 @@ describe.skipIf(process.platform === 'win32')('CLI command filesystem races', ()
     const commandDirectory = join(homePath, '.local', 'bin')
     const resourcesPath = join(root, 'resources')
     const launcherPath = join(resourcesPath, 'bin', 'h0x')
-    const legacyPath = join(commandDirectory, 'h0x')
-    const managedTarget = join(resourcesPath, 'bin', 'h0x')
+    const legacyPath = join(commandDirectory, 'orca')
+    const managedTarget = join(resourcesPath, 'bin', 'orca')
     const foreignTarget = join(root, 'foreign-orca')
     await mkdir(commandDirectory, { recursive: true })
     await mkdir(dirname(launcherPath), { recursive: true })

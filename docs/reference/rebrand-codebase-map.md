@@ -449,11 +449,8 @@ release smoke checks remain blocked or staged.
   the h0x-ADE logo.
 - Full `src/cli` without exclusions is still not a reliable Windows gate because
   `src/cli/runtime/client-recovery.test.ts` can fail with local socket `EACCES`.
-- Do not tag or release until final release-asset verification, platform
-  packaging smoke checks, Electron UI validation, website verification, and mac
-  icon regeneration are complete.
-- CI/CD builds are currently blocked by GitHub billing/spending-limit status on
-  `vjk7989/h0x-ade`; rerun the ad-hoc build after fixing billing.
+- Do not tag or release until final release-asset verification and unsigned
+  platform packaging checks are complete.
 
 ### Resume Map For Future Agents
 
@@ -477,7 +474,9 @@ release smoke checks remain blocked or staged.
 
 ## Surface Rebrand Completion Pass
 
-Current branch: `codex/finish-surface-rebrand`.
+Current branch: `codex/finish-surface-rebrand`. Final tested code SHA:
+`770cfbc102ecd3eaadcb7c37b9063c81d44450aa`; review:
+[PR #1](https://github.com/vjk7989/h0x-ade/pull/1).
 
 ### Staged Slices
 
@@ -504,18 +503,28 @@ Current branch: `codex/finish-surface-rebrand`.
 
 ### Verification State And Boundary
 
-- Verified locally so far: the dependency-free surface brand contract and
-  targeted Git diff checks. Do not infer that dependency-backed unit,
-  component, typecheck, Electron, packaging, or release gates passed for this
-  branch.
-- D: remains constrained after an `ENOSPC` failure. Remaining dependency-backed
-  and hidden-renderer checks are CI-first; use
-  `.github/workflows/unsigned-desktop-build.yml` and the CI runs recorded in
-  **GitHub And Release Map** as pipeline references rather than copying their
-  details here.
-- Keep Electron validation background-only with
-  `ORCA_BACKGROUND_LAUNCH=1`; the new hidden-renderer E2E contract remains to be
-  proven on a runner with dependencies and sufficient disk.
+- In [PR run 34156029407](https://github.com/vjk7989/h0x-ade/actions/runs/34156029407),
+  the static-analysis jobs passed changed-code quality and every localization
+  check, typecheck passed, and the PR-routed E2E job passed.
+- The affected Node 24 shards passed: surface brand 6/6, logo 2/2, onboarding
+  18/18, sidebar 23/23, MobileHero 15/15, MobilePageToolbar 2/2,
+  WindowsFirewallNotice 7/7, and StarNag 7/7.
+- Scoped background renderer and `h0x-dev.mjs` launcher validation passed in
+  [run 34156043129](https://github.com/vjk7989/h0x-ade/actions/runs/34156043129).
+  Computer-use validation passed in
+  [manual run 34156045124](https://github.com/vjk7989/h0x-ade/actions/runs/34156045124)
+  and [PR run 34156029125](https://github.com/vjk7989/h0x-ade/actions/runs/34156029125).
+- Artifact-name/marker assertions and the Windows `h0x-ADE.exe` native smoke
+  assertion were repaired and proven to advance past those steps.
+- The full PR verify remains red only for deterministic core/fork debt outside
+  this surface milestone: missing historic tags `v1.4.178-rc.2`, `v1.4.184`,
+  and `v1.4.190`; stale core Orca/h0x tests and packaged-CLI alias assumptions;
+  and the AppImage shutdown oracle.
+- D: remains constrained after an `ENOSPC` failure, so remaining heavyweight
+  checks stay CI-first. Keep Electron validation background-only with
+  `ORCA_BACKGROUND_LAUNCH=1`.
+- No unsigned platform build, release artifact set, tag, or release has been
+  proven by this checkpoint.
 
 ### Compatibility And Fork Policy
 

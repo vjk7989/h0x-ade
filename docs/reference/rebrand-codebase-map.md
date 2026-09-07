@@ -180,11 +180,14 @@ CI/CD update:
   notarization secrets: `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`,
   `APPLE_TEAM_ID`, `CSC_LINK`, and `CSC_KEY_PASSWORD`.
 - Use `.github/workflows/unsigned-desktop-build.yml` for manual unsigned
-  desktop CI artifacts while signing credentials are pending. It builds h0x
-  Linux x64, Windows x64, and macOS x64/arm64 artifacts without publishing a
-  GitHub release.
-- Do not treat unsigned artifacts as releasable user downloads. They are for
-  smoke validation, packaging regressions, and confirming h0x artifact naming.
+  desktop CI artifacts. It builds h0x Linux x64, Windows x64, and macOS
+  x64/arm64 artifacts without Apple or Windows signing secrets.
+- Use `.github/workflows/publish-unsigned-desktop-release.yml` to publish the
+  artifacts from a successful unsigned build run to `vjk7989/h0x-ade` releases.
+  This is the current public distribution path: users download unsigned apps and
+  self-sign/clear quarantine on macOS when needed.
+- Signed and notarized macOS releases remain optional future polish, not a
+  blocker for public unsigned distribution.
 - GitHub's current public hosted runner labels used here are `ubuntu-latest`,
   `windows-2022`, `macos-15-intel` for Intel macOS, and `macos-15` for arm64
   macOS.
@@ -200,6 +203,9 @@ CI/CD update:
     `d0bfaf751a68c1e4b3214898185031235f278b01` and uploaded
     `h0x-windows-x64-*`, `h0x-linux-x64-*`, `h0x-macos-x64-*`, and
     `h0x-macos-arm64-*`.
+  - Run `34055076344` passed all unsigned desktop lanes at commit
+    `a0a48bab375068639702cba12238ef0c40d72022` and uploaded current-tip
+    Windows, Linux, macOS x64, and macOS arm64 artifacts.
 
 ## Implementation Pass 1 Notes
 

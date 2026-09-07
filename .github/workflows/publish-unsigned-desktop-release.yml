@@ -1,0 +1,187 @@
+name: Publish unsigned desktop release
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Successful Unsigned desktop builds run ID to publish
+        required: true
+        type: string
+      tag:
+        description: Release tag to create or update
+        required: true
+        type: string
+      title:
+        description: Release title
+        required: false
+        default: ''
+        type: string
+      prerelease:
+        description: Mark the release as a prerelease
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: publish-unsigned-desktop-release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'vjk7989/h0x-ade'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout release metadata
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Verify source build succeeded
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.run_id }}
+        run: |
+          set -euo pipefail
+          conclusion="$(gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion --jq .conclusion)"
+          if [[ "$conclusion" != "success" ]]; then
+            echo "::error::Unsigned desktop build run $RUN_ID concluded '$conclusion', not success."
+            exit 1
+          fi
+          head_sha="$(gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --json headSha --jq .headSha)"
+          echo "head_sha=$head_sha" >>"$GITHUB_OUTPUT"
+
+      - name: Download unsigned artifacts
+        uses: actions/download-artifact@v7
+        with:
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+          path: unsigned-artifacts
+
+      - name: Stage release assets
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          find unsigned-artifacts -type f -print0 | while IFS= read -r -d '' file; do
+            name="$(basename "$file")"
+            case "$name" in
+              h0x-windows-setup.exe|h0x-windows-setup.exe.blockmap|latest.yml|\
+              h0x-linux.AppImage|h0x_*_amd64.deb|h0x-*.x86_64.rpm|latest-linux.yml|\
+              h0x-macos-x64.dmg|h0x-macos-arm64.dmg|h0x-ADE-*-mac.zip|h0x-ADE-*-mac.zip.blockmap|latest-mac.yml)
+                cp "$file" "release-assets/$name"
+                ;;
+            esac
+          done
+
+          required=(
+            h0x-windows-setup.exe
+            h0x-linux.AppImage
+            h0x-macos-x64.dmg
+            h0x-macos-arm64.dmg
+            latest.yml
+            latest-linux.yml
+            latest-mac.yml
+          )
+          for asset in "${required[@]}"; do
+            if [[ ! -s "release-assets/$asset" ]]; then
+              echo "::error::Missing release asset $asset from run ${{ inputs.run_id }}."
+              exit 1
+            fi
+          done
+
+          echo "Release assets:"
+          ls -lh release-assets
+          (cd release-assets && sha256sum * > checksums.txt)
+
+      - name: Write unsigned release notes
+        env:
+          RUN_ID: ${{ inputs.run_id }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          {
+            printf 'Unsigned h0x-ADE desktop build published from GitHub Actions run `%s`.\n\n' "$RUN_ID"
+            printf 'These installers are built by CI from this repository, but they are not signed with Apple Developer ID or a Windows code-signing certificate yet.\n\n'
+            printf 'Windows may show a SmartScreen unknown-publisher warning on first install.\n\n'
+            printf 'macOS may report the app as damaged or from an unidentified developer. To install and self-sign after copying the app into Applications:\n\n'
+            printf '```bash\n'
+            printf 'xattr -dr com.apple.quarantine /Applications/h0x-ADE.app\n'
+            printf 'codesign --force --deep --sign - /Applications/h0x-ADE.app\n'
+            printf '```\n\n'
+            printf 'Linux AppImage/DEB/RPM assets are included for x64 Linux.\n\n'
+            printf 'Download the asset for your platform from this release, or use latest-release download URLs such as:\n\n'
+            printf -- '- `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-windows-setup.exe`\n'
+            printf -- '- `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-arm64.dmg`\n'
+            printf -- '- `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-macos-x64.dmg`\n'
+            printf -- '- `https://github.com/vjk7989/h0x-ade/releases/latest/download/h0x-linux.AppImage`\n'
+          } > release-notes.md
+
+      - name: Publish draft release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          TITLE: ${{ inputs.title }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          set -euo pipefail
+          title="${TITLE:-h0x-ADE $TAG unsigned desktop build}"
+          prerelease_args=()
+          if [[ "$PRERELEASE" == "true" ]]; then
+            prerelease_args=(--prerelease)
+          fi
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release edit "$TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --draft=true \
+              --title "$title" \
+              --notes-file release-notes.md \
+              "${prerelease_args[@]}"
+          else
+            gh release create "$TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "${{ steps.source.outputs.head_sha }}" \
+              --draft \
+              --title "$title" \
+              --notes-file release-notes.md \
+              "${prerelease_args[@]}"
+          fi
+
+          gh release upload "$TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --clobber
+
+      - name: Verify uploaded assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          assets="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')"
+          required=(
+            h0x-windows-setup.exe
+            h0x-linux.AppImage
+            h0x-macos-x64.dmg
+            h0x-macos-arm64.dmg
+            latest.yml
+            latest-linux.yml
+            latest-mac.yml
+            checksums.txt
+          )
+          for asset in "${required[@]}"; do
+            if ! grep -qx "$asset" <<<"$assets"; then
+              echo "::error::Published release $TAG is missing $asset."
+              exit 1
+            fi
+          done
+
+      - name: Publish verified release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false

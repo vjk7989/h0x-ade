@@ -27,7 +27,7 @@ describe('packaged Windows legacy ask protocol', () => {
     restoreEnv('ORCA_TERMINAL_HANDLE', originalTerminalHandle)
   })
 
-  it.each(['h0x'] as const)(
+  it.each(['h0x', 'orca', 'orca-ide'] as const)(
     'commits with the %s launcher and exits 75 before resume',
     async (command) => {
       process.env.ORCA_CLI_COMMAND = command

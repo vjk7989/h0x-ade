@@ -125,7 +125,7 @@ describe('orchestration mutation recovery', () => {
     expect(result.message).toContain('literal $(do-not-run)')
   })
 
-  it('parses legacy command text without losing quoted arguments', () => {
+  it('parses legacy command text without changing its executable or quoted arguments', () => {
     const result = orchestrationMutationRecoveryError(
       new RuntimeClientError('runtime_timeout', 'request timed out', {
         orchestrationRequestId: 'request_4',
@@ -137,7 +137,7 @@ describe('orchestration mutation recovery', () => {
     expect(
       (result.data as { recovery?: { retryCommand?: string[] } }).recovery?.retryCommand
     ).toEqual([
-      'h0x',
+      'orca-ide',
       'orchestration',
       'worker-stop',
       '--dispatch',
@@ -148,6 +148,41 @@ describe('orchestration mutation recovery', () => {
       'request_4'
     ])
   })
+
+  it.each(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide'])(
+    'preserves the explicit %s executable in recovery commands',
+    (executable) => {
+      const result = orchestrationMutationRecoveryError(
+        new RuntimeClientError('runtime_timeout', 'request timed out', {
+          orchestrationRequestId: 'request_cli_identity',
+          originalCommand: [executable, 'orchestration', 'worker-start', '--task', 'task_1']
+        })
+      ) as RuntimeClientError
+
+      expect(
+        (result.data as { recovery?: { queryCommand?: string[]; retryCommand?: string[] } })
+          .recovery
+      ).toMatchObject({
+        queryCommand: [
+          executable,
+          'orchestration',
+          'request-show',
+          '--request',
+          'request_cli_identity',
+          '--json'
+        ],
+        retryCommand: [
+          executable,
+          'orchestration',
+          'worker-start',
+          '--task',
+          'task_1',
+          '--retry-request',
+          'request_cli_identity'
+        ]
+      })
+    }
+  )
 
   it.each([
     [

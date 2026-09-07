@@ -76,7 +76,7 @@ const TUI_AGENT_CONFIG_SOURCE: Record<TuiAgent, TuiAgentConfigSource> = {
   'claude-agent-teams': {
     // Why: a h0x-ADE-provided launch mode, not a separate binary; detection follows the h0x CLI.
     detectCmd: 'h0x',
-    detectCmdAliases: ['h0x-dev'],
+    detectCmdAliases: ['h0x-dev', 'orca', 'orca-dev', 'orca-ide'],
     // Why: require Claude too so fresh installs (h0x shim always present) don't report Agent Teams without an agent CLI.
     detectRequiredCommands: ['claude'],
     // Why: Windows/WSL use Claude's in-process Agent Teams fallback, not this Orca native-pane/tmux-shim wrapper.

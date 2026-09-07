@@ -27,16 +27,18 @@ const shape = option('shape')
 // generated shell command and pass them to Node through the environment.
 const source = option('source') ?? process.env.SKILL_UPDATE_SOURCE
 const ref = option('ref') ?? process.env.SKILL_UPDATE_REF
+const historicalRef = option('historical-ref')
 if (
   !cliVersion ||
   (autocrlf !== 'true' && autocrlf !== 'false') ||
   (shape !== 'symlink' && shape !== 'copy') ||
   !source ||
   !ref ||
+  !historicalRef ||
   !/^[^/\s]+\/[^/\s]+$/.test(source)
 ) {
   throw new Error(
-    'Usage: verify-skill-update-roundtrip.mjs --cli=<version> --autocrlf=true|false --shape=symlink|copy --source=<owner/repo> --ref=<git-ref>'
+    'Usage: verify-skill-update-roundtrip.mjs --cli=<version> --autocrlf=true|false --shape=symlink|copy --source=<owner/repo> --ref=<git-ref> --historical-ref=<git-ref>'
   )
 }
 
@@ -163,11 +165,16 @@ function execSkills(args) {
 try {
   const targetHistorical = historicalRelease(targetName)
   const controlHistorical = historicalRelease(controlName)
+  if (targetHistorical.tag !== controlHistorical.tag) {
+    throw new Error(
+      `Historical skill releases diverged: ${targetName}=${targetHistorical.tag}, ${controlName}=${controlHistorical.tag}`
+    )
+  }
   await installFakeAgentCommands()
   await mkdir(path.join(home, '.codex'), { recursive: true })
   await mkdir(path.join(home, '.claude'), { recursive: true })
-  await seedPlacement(targetName, targetHistorical.tag)
-  await seedPlacement(controlName, controlHistorical.tag)
+  await seedPlacement(targetName, historicalRef)
+  await seedPlacement(controlName, historicalRef)
   const targetProvider = path.join(home, '.claude', 'skills', targetName)
   const controlCanonical = path.join(home, '.agents', 'skills', controlName)
   const controlProvider = path.join(home, '.claude', 'skills', controlName)

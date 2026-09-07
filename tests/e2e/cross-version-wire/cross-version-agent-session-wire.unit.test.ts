@@ -389,7 +389,7 @@ describe('cross-version structured agent sessions', () => {
   it(
     'skews current code against a real published release',
     () => {
-      expect(baselineRef).toMatch(/^v?\d/)
+      expect(baselineRef).toMatch(/^(?:v?\d|refs\/h0x-ci\/upstream-tags\/v\d)/)
       expect(baseline.revision).toMatch(/^[0-9a-f]{40}$/)
       expect(baseline.revision).not.toBe(current.revision)
       // The anti-vacuous oracle for the source scan: a scan that found nothing

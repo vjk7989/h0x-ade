@@ -14,7 +14,8 @@ type Schema = { parse: (value: unknown) => Record<string, unknown> }
 
 // This contract needs a release from before client placement shipped; a rolling
 // stable baseline eventually contains every additive feature under test.
-const LEGACY_BROWSER_PLACEMENT_RELEASE_REF = 'v1.4.184'
+const LEGACY_BROWSER_PLACEMENT_RELEASE_REF =
+  process.env.ORCA_CROSS_VERSION_BROWSER_PLACEMENT_REF ?? 'v1.4.184'
 
 // v1.4.185 moved the tab-create schema and renamed it. Keeping both locations
 // avoids coupling an intentional legacy-baseline bump to that unrelated refactor.
@@ -69,7 +70,7 @@ beforeAll(async () => {
 
 describe('cross-version browser placement', () => {
   it('loads a real stable release without client-host capabilities', () => {
-    expect(baselineRef).toMatch(/^v\d/)
+    expect(baselineRef).toMatch(/^(?:v\d|refs\/h0x-ci\/upstream-tags\/v\d)/)
     expect(baselineRevision).toMatch(/^[0-9a-f]{40}$/)
     expect(baselineProtocol).not.toHaveProperty('BROWSER_CLIENT_HOST_RUNTIME_CAPABILITY')
     expect(baselineProtocol).not.toHaveProperty('BROWSER_NETWORK_TUNNEL_RUNTIME_CAPABILITY')

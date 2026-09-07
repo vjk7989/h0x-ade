@@ -291,6 +291,16 @@ describe('per-job path classification', () => {
     )
   })
 
+  it('runs cross-version wire checks when pinned upstream history changes', () => {
+    for (const file of [
+      'config/pinned-upstream-history.json',
+      'config/scripts/prepare-pinned-upstream-history.mjs',
+      'config/scripts/pinned-upstream-history.test.mjs'
+    ]) {
+      expectClassification([file], { 'cross-version-wire': true })
+    }
+  })
+
   it('runs workflow-self-change and lockfile diffs as force-all', () => {
     const result = classifyPrJobs(['.github/workflows/pr.yml'])
     expect(result.should_run).toBe(true)

@@ -11,6 +11,10 @@ on:
       - 'resources/skills/**'
       - 'config/scripts/verify-skill-update-roundtrip.mjs'
       - 'config/scripts/skill-update-roundtrip-workflow.test.mjs'
+      - 'config/scripts/prepare-pinned-upstream-history.mjs'
+      - 'config/scripts/pinned-upstream-history.test.mjs'
+      - 'config/scripts/pinned-upstream-history-workflows.test.mjs'
+      - 'config/pinned-upstream-history.json'
       - 'src/main/skills/skill-freshness-eligibility.ts'
       - 'src/shared/skill-freshness.ts'
       - '.github/workflows/skill-update-roundtrip.yml'
@@ -45,13 +49,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          # Historical skill snapshots need tags, but only their blobs are read.
-          fetch-depth: 0
+          fetch-depth: 1
+          fetch-tags: false
           filter: blob:none
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
           node-version-file: package.json
+      - name: Prepare pinned upstream skill history
+        id: pinned-history
+        run: >-
+          node config/scripts/prepare-pinned-upstream-history.mjs
+          --ids=skill_roundtrip
       - name: Verify targeted update convergence and copy behavior
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -62,3 +71,4 @@ jobs:
           --cli=${{ matrix.skills-cli }}
           --autocrlf=${{ matrix.autocrlf }}
           --shape=${{ matrix.shape }}
+          --historical-ref=${{ steps.pinned-history.outputs.skill_roundtrip }}

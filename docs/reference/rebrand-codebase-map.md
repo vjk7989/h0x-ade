@@ -603,3 +603,26 @@ analysis; this slice does not claim a new global legacy command.
 - Nine remaining unit failures belong to the next UI, skill, development
   identity, and account-branding slice. Windows packaged-CLI smoke remains
   separate later packaging debt.
+
+## Fork Brand Contracts — Completed Slice
+
+Commits `260e0f0fe3` and `880e9debf5` align fork-owned visible, generated, and
+CI contracts without renaming retained compatibility identifiers.
+
+- The Orca CLI skill description is 1012 characters and its source changes were
+  regenerated into `src/cli/bundled-skill-guides.ts`,
+  `resources/skills/current-manifest.json`, and
+  `resources/skills/snapshot-registry.json`.
+- NativeChat's visible paused-orchestration copy is covered by the six-locale
+  `h0x-ADE` surface-brand contract. Account/onboarding expectations point to the
+  fork while `Orca Relay` and internal compatibility names remain unchanged.
+- Development identity assertions use `h0x-ADE`; release workflow contracts use
+  this fork's GitHub-hosted macOS runner and `vjk7989/h0x-ade` repository and
+  channel destinations.
+- [PR Checks run 34164875243, attempt 2](https://github.com/vjk7989/h0x-ade/actions/runs/34164875243/attempts/2)
+  passed typecheck, static analysis, and all eight Node 24 shards. Attempt 1's
+  skill-install-lock failure was transient: the same check passed on the
+  immediate rerun and the preceding run with no source change.
+- Packaging is the next slice: Windows must select the packaged `h0x.exe`, and
+  Linux must use canonical h0x usage text while satisfying the AppImage signal
+  shutdown oracle.

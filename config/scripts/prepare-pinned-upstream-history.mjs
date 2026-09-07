@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { appendFileSync, readFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
 import { resolve } from 'node:path'
 
 const MANIFEST_PATH = 'config/pinned-upstream-history.json'
@@ -124,7 +123,7 @@ function option(name) {
   return process.argv.find((value) => value.startsWith(`--${name}=`))?.slice(name.length + 3)
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename)) {
   const ids = (option('ids') ?? '').split(',').filter(Boolean)
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'))
   const outputs = preparePinnedUpstreamHistory({ manifest, ids })

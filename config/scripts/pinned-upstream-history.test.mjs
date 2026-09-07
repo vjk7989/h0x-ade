@@ -21,13 +21,21 @@ function fakeGit({ remoteTag = skill.tagObjectSha, remoteCommit = skill.peeledCo
       local = skill.tagObjectSha
       return ''
     }
-    if (args[0] === 'cat-file') return 'tag'
+    if (args[0] === 'cat-file') {
+      return 'tag'
+    }
     if (args[0] === 'rev-parse' && args.includes('--verify')) {
-      if (local === null) throw new Error('missing ref')
+      if (local === null) {
+        throw new Error('missing ref')
+      }
       return local
     }
-    if (args[0] === 'rev-parse' && args[1].endsWith('^{commit}')) return skill.peeledCommitSha
-    if (args[0] === 'rev-parse') return local ?? skill.tagObjectSha
+    if (args[0] === 'rev-parse' && args[1].endsWith('^{commit}')) {
+      return skill.peeledCommitSha
+    }
+    if (args[0] === 'rev-parse') {
+      return local ?? skill.tagObjectSha
+    }
     throw new Error(`Unexpected git call: ${args.join(' ')}`)
   }
   return { calls, runGit }

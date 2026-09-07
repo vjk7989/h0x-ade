@@ -474,7 +474,7 @@
                 }
               },
               "steps": {
-                "description": "Enable agents to manage and coordinate Orca workspaces to execute larger tasks.",
+                "description": "Enable agents to manage and coordinate h0x-ADE workspaces to execute larger tasks.",
                 "name": "Orchestration",
                 "subtitle": "Orchestration"
               },
@@ -662,7 +662,7 @@
           "984338477a": "theme",
           "a5e5da02f7": "integrations",
           "c47e1bd149": "agent",
-          "ff92d15436": "Orca will notify you know when agents are done or need help."
+          "ff92d15436": "h0x-ADE will notify you know when agents are done or need help."
         },
         "ThemeStep": {
           "ad19e5c916": "Importing…"
@@ -1087,7 +1087,7 @@
           "2df8f79aa5": "Show Orca in the titlebar.",
           "42554f615f": "Choose the font used by the Orca interface.",
           "4de76f6902": "Control what appears in the application titlebar.",
-          "5db6ba961f": "Show the Orca Mobile button at the top of the left sidebar.",
+          "5db6ba961f": "Show the h0x-ADE Mobile button at the top of the left sidebar.",
           "622e1c3465": "Scale the entire application interface.",
           "661942ab7f": "Show the Tasks button at the top of the left sidebar.",
           "6a272ca553": "Titlebar",
@@ -1307,7 +1307,7 @@
           "63d5e4ae1e": "Regenerate the QR code and scan it from the Orca mobile app.",
           "668016be7a": "on your computer and phone.",
           "87985ba6f5": "In this Network Interface menu, choose the Tailscale address, usually a 100.x.y.z IP.",
-          "9fc5d203ff": "Orca Mobile connects directly to this computer. To use it away from the same LAN, put your computer and phone on the same private overlay network, then generate the QR code with that network address selected.",
+          "9fc5d203ff": "h0x-ADE Mobile connects directly to this computer. To use it away from the same LAN, put your computer and phone on the same private overlay network, then generate the QR code with that network address selected.",
           "a9db5d771d": "Refresh network interfaces",
           "c541f67790": "Generate QR Code",
           "d536b5e20d": "Choose which network address to advertise in the QR code. Use your LAN address for same-network pairing, or an overlay network address (Tailscale, ZeroTier) for cross-network access."

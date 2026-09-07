@@ -96,7 +96,7 @@ export function WindowsFirewallNotice({
           toast.success(
             translate(
               'auto.components.mobile.WindowsFirewallNotice.repair-success',
-              'Windows Firewall now allows Orca Mobile on private networks'
+              'Windows Firewall now allows h0x-ADE Mobile on private networks'
             )
           )
           return
@@ -151,7 +151,7 @@ export function WindowsFirewallNotice({
                 : blockingRuleDetected
                   ? translate(
                       'auto.components.mobile.WindowsFirewallNotice.blocked-title',
-                      'Windows may be blocking Orca Mobile'
+                      'Windows may be blocking h0x-ADE Mobile'
                     )
                   : translate(
                       'auto.components.mobile.WindowsFirewallNotice.missing-title',
@@ -162,17 +162,17 @@ export function WindowsFirewallNotice({
               {networkIsPublic
                 ? translate(
                     'auto.components.mobile.WindowsFirewallNotice.public-description',
-                    'Change this trusted Wi-Fi network to Private before allowing Orca Mobile connections.'
+                    'Change this trusted Wi-Fi network to Private before allowing h0x-ADE Mobile connections.'
                   )
                 : blockingRuleDetected
                   ? translate(
                       'auto.components.mobile.WindowsFirewallNotice.blocked-description',
-                      'An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this Orca app, then allows port {{port}} on Private networks.',
+                      'An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this h0x-ADE app, then allows port {{port}} on Private networks.',
                       { port: firewallStatus.port }
                     )
                   : translate(
                       'auto.components.mobile.WindowsFirewallNotice.missing-description',
-                      'Windows may block the pairing server. Add a rule for this Orca app and TCP port {{port}} on Private networks.',
+                      'Windows may block the pairing server. Add a rule for this h0x-ADE app and TCP port {{port}} on Private networks.',
                       { port: firewallStatus.port }
                     )}
             </p>

@@ -1,8 +1,9 @@
 # Rebrand codebase map
 
-Status: initial map only. Do not treat this as approval to rebrand yet.
+Status: active durable map for the staged rebrand. Each pass still requires its
+own verification before release.
 
-Last updated: 2026-09-06.
+Last updated: 2026-09-08.
 
 Target fork/release repository: <https://github.com/vjk7989/h0x-ade>.
 
@@ -150,8 +151,8 @@ Intended target:
 - `https://github.com/vjk7989/h0x-ade`
 
 Implementation update: the app repo targets `vjk7989/h0x-ade` in local release
-metadata and Git remotes. Keep upstream Orca available separately for pulling
-source updates.
+metadata and Git remotes. Treat this as an independent fork: keep upstream Orca
+only as a read-only reference, with no automatic merge or rebase policy.
 
 Release touchpoints:
 
@@ -473,3 +474,56 @@ release smoke checks remain blocked or staged.
 - Internal migration later: classify remaining names before editing:
   `ORCA_*`, storage files, updater state, protocol/deep-link names, installed CLI
   paths, plugin IDs, relay/cloud names, and historical fixtures.
+
+## Surface Rebrand Completion Pass
+
+Current branch: `codex/finish-surface-rebrand`.
+
+### Staged Slices
+
+- Display-only strings are scoped to the landing, onboarding, titlebar,
+  settings, sidebar, star-nag, and mobile surfaces already present in the
+  current diff. `h0x-ADE` is the display brand and `h0x` remains the CLI name.
+- The matching keys in `src/renderer/src/i18n/locales/` now resolve to the
+  display brand across English, Spanish, French, Japanese, Korean, and Chinese;
+  the runtime-required English catalog is updated with the same boundary.
+- `resources/logo.svg` now carries the square, accessible, self-contained asset
+  contract consumed by the rebranded renderer surfaces. The contract lives in
+  `src/renderer/src/assets/logo-asset-contract.test.ts` rather than duplicating
+  the SVG requirements here.
+- Six E2E launcher call sites now invoke the existing
+  `config/scripts/h0x-dev.mjs`: two in
+  `tests/e2e/helpers/computer-cli-driver.ts` and four across the two terminal
+  E2E specs in the current diff. This is a deterministic test-launch repair,
+  not a CLI compatibility migration.
+- New coverage is concentrated in
+  `src/renderer/src/i18n/surface-brand-contract.test.ts`,
+  `src/renderer/src/assets/logo-asset-contract.test.ts`, and
+  `tests/e2e/surface-brand.spec.ts`; adjacent component tests cover the touched
+  onboarding, sidebar, mobile, and star-nag surfaces.
+
+### Verification State And Boundary
+
+- Verified locally so far: the dependency-free surface brand contract and
+  targeted Git diff checks. Do not infer that dependency-backed unit,
+  component, typecheck, Electron, packaging, or release gates passed for this
+  branch.
+- D: remains constrained after an `ENOSPC` failure. Remaining dependency-backed
+  and hidden-renderer checks are CI-first; use
+  `.github/workflows/unsigned-desktop-build.yml` and the CI runs recorded in
+  **GitHub And Release Map** as pipeline references rather than copying their
+  details here.
+- Keep Electron validation background-only with
+  `ORCA_BACKGROUND_LAUNCH=1`; the new hidden-renderer E2E contract remains to be
+  proven on a runner with dependencies and sufficient disk.
+
+### Compatibility And Fork Policy
+
+- This pass deliberately excludes public API, RPC, remote-wire, storage,
+  protocol/deep-link, package-ID, updater-state, and migration changes.
+- Preserve `Orca Relay`, `ORCA_*`, internal Orca-named symbols/files, persisted
+  identifiers, and other compatibility aliases unless a later core pass adds
+  explicit migration and mixed-version coverage.
+- `vjk7989/h0x-ade` is an independent fork. The `stablyai/orca` remote is a
+  read-only source reference only; do not automatically merge, rebase, or
+  publish against it.

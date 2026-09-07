@@ -101,7 +101,7 @@ test('CLI text plus Enter waits for a slow agent composer before submitting', as
       [
         path.join(repoRoot, 'tests', 'tools', 'repro-terminal-send-submit.mjs'),
         '--cli',
-        path.join(repoRoot, 'config', 'scripts', 'orca-dev.mjs'),
+        path.join(repoRoot, 'config', 'scripts', 'h0x-dev.mjs'),
         '--worktree',
         testRepoPath,
         '--terminal',
@@ -156,7 +156,7 @@ test('CLI reports a swallowed Enter without submitting a second Enter', async ({
       [
         path.join(repoRoot, 'tests', 'tools', 'repro-terminal-send-submit.mjs'),
         '--cli',
-        path.join(repoRoot, 'config', 'scripts', 'orca-dev.mjs'),
+        path.join(repoRoot, 'config', 'scripts', 'h0x-dev.mjs'),
         '--worktree',
         testRepoPath,
         '--terminal',
@@ -214,7 +214,7 @@ test('CLI does not write prompt bytes into an active permission dialog', async (
       [
         path.join(repoRoot, 'tests', 'tools', 'repro-terminal-send-submit.mjs'),
         '--cli',
-        path.join(repoRoot, 'config', 'scripts', 'orca-dev.mjs'),
+        path.join(repoRoot, 'config', 'scripts', 'h0x-dev.mjs'),
         '--worktree',
         testRepoPath,
         '--terminal',

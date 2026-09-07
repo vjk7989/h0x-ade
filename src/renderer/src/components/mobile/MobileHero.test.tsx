@@ -155,6 +155,15 @@ describe('HeroFlow height', () => {
     expect(screen.getByText('Step 1 of 2').closest('.mp-flow-screen')).toHaveAttribute('inert')
   })
 
+  it('uses the h0x-ADE display brand across install and pairing steps', () => {
+    renderFlow(0)
+
+    expect(
+      screen.getByText('Scan the QR with your phone or open the install link to grab h0x-ADE Mobile.')
+    ).toBeInTheDocument()
+    expect(screen.getByText(/Open h0x-ADE Mobile, tap/)).toBeInTheDocument()
+  })
+
   it('opens the APK install guide without duplicating its troubleshooting steps', async () => {
     const user = userEvent.setup()
     const onOpenAndroidInstallGuide = vi.fn()
@@ -250,6 +259,7 @@ describe('HeroFlow height', () => {
     })
 
     expect(screen.getByRole('alert')).toHaveTextContent('couldn’t be rendered as a QR code')
+    expect(screen.getByRole('alert')).toHaveTextContent('Copy it into h0x-ADE Mobile instead')
     expect(screen.getByRole('button', { name: /Copy pairing code/ })).toBeEnabled()
   })
 

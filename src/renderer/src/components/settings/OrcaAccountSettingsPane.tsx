@@ -24,13 +24,13 @@ function accountStatusCopy(
   if (state === 'unconfigured') {
     return translate(
       'auto.components.settings.orcaAccount.unavailable',
-      'Orca sign-in is unavailable in this build.'
+      'h0x-ADE sign-in is unavailable in this build.'
     )
   }
   if (state === 'local') {
     return translate(
       'auto.components.settings.orcaAccount.signedOut',
-      'Sign in to extend Orca with cloud features, including Artifacts and Orca Relay.'
+      'Sign in to extend h0x-ADE with cloud features, including Artifacts and Orca Relay.'
     )
   }
   return translate('auto.components.settings.orcaAccount.checking', 'Checking account status…')
@@ -93,7 +93,7 @@ export function OrcaAccountSettingsPane(): React.JSX.Element {
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-sm font-medium">
                 {authStatus?.cloud?.displayName?.trim() ||
-                  translate('auto.components.settings.orcaAccount.account', 'Orca account')}
+                  translate('auto.components.settings.orcaAccount.account', 'h0x-ADE account')}
               </p>
               {connected ? (
                 <Badge variant="outline" className="text-[11px] text-muted-foreground">
@@ -127,7 +127,7 @@ export function OrcaAccountSettingsPane(): React.JSX.Element {
                 ? translate('auto.components.settings.orcaAccount.signingIn', 'Signing in…')
                 : authStatus?.state === 'reconnect-required'
                   ? translate('auto.components.settings.orcaAccount.signInAgain', 'Sign in again')
-                  : translate('auto.components.settings.orcaAccount.signIn', 'Sign in to Orca')}
+                  : translate('auto.components.settings.orcaAccount.signIn', 'Sign in to h0x-ADE')}
             </Button>
           )}
         </div>
@@ -150,7 +150,7 @@ export function OrcaAccountSettingsPane(): React.JSX.Element {
                 )}
                 description={translate(
                   'auto.components.settings.orcaAccount.artifactsDescription',
-                  'Publish HTML and Markdown files, then manage every shared link from Orca.'
+                  'Publish HTML and Markdown files, then manage every shared link from h0x-ADE.'
                 )}
               />
               <AccountBenefit
@@ -159,7 +159,7 @@ export function OrcaAccountSettingsPane(): React.JSX.Element {
                 title={translate('auto.components.settings.orcaAccount.relayTitle', 'Orca Relay')}
                 description={translate(
                   'auto.components.settings.orcaAccount.relayDescription',
-                  'Connect Orca Mobile to this desktop across cellular or any Wi-Fi.'
+                  'Connect h0x-ADE Mobile to this desktop across cellular or any Wi-Fi.'
                 )}
               />
             </div>

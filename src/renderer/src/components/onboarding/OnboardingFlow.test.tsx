@@ -220,6 +220,9 @@ describe('OnboardingFlow', () => {
 
     expect(html).toContain('role="dialog"')
     expect(html).toContain('aria-modal="true"')
+    expect(html).toContain('aria-label="h0x-ADE onboarding"')
+    expect(html).toContain('>h0x-ADE</span>')
+    expect(html).toContain('h0x-ADE works with every CLI agent')
     expect(html).toContain('data-onboarding-modal="true"')
     expect(html).toContain('h-[calc(100vh-2rem)]')
     expect(html).toContain('rounded-xl')

@@ -3,6 +3,7 @@ import { parse } from 'yaml'
 import { describe, expect, it } from 'vitest'
 
 const workflow = parse(readFileSync('.github/workflows/pr.yml', 'utf8'))
+const packagedCliSmoke = readFileSync('config/scripts/smoke-packaged-cli.mjs', 'utf8')
 
 describe('packaged skills CLI PR gates', () => {
   it('builds and executes the Windows packaged CLI', () => {
@@ -28,5 +29,15 @@ describe('packaged skills CLI PR gates', () => {
     )
     expect(aggregateStep.env.PACKAGE_WINDOWS).toBe('${{ needs.package_windows.result }}')
     expect(aggregateStep.run).toContain('"$PACKAGE_WINDOWS"')
+  })
+
+  it('selects only canonical packaged CLI launchers', () => {
+    expect(packagedCliSmoke).toContain("return 'dist/mac-arm64/h0x-ADE.app'")
+    expect(packagedCliSmoke).toContain(
+      "return join(appDir, 'Contents', 'Resources', 'bin', 'h0x')"
+    )
+    expect(packagedCliSmoke).toContain("return join(appDir, 'resources', 'bin', 'h0x.exe')")
+    expect(packagedCliSmoke).toContain("return join(appDir, 'resources', 'bin', 'h0x')")
+    expect(packagedCliSmoke).not.toMatch(/return join\([^\n]+, 'bin', 'orca(?:\.exe)?'\)/)
   })
 })

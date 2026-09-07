@@ -28,7 +28,8 @@ import {
 // Why: a cold CI run extracts the baseline checkout before the first journey.
 const SUITE_TIMEOUT_MS = 180_000
 // Last stable release before SnapshotStart began publishing terminal mode metadata.
-const TERMINAL_MODE_METADATA_LEGACY_REF = 'v1.4.190'
+const TERMINAL_MODE_METADATA_LEGACY_REF =
+  process.env.ORCA_CROSS_VERSION_TERMINAL_METADATA_REF ?? 'v1.4.190'
 
 /**
  * The frames one journey must produce, named rather than numbered so a diff reads
@@ -153,7 +154,7 @@ describe('cross-version remote terminal wire', () => {
   it(
     'skews current code against a real published release',
     () => {
-      expect(baselineRef).toMatch(/^v?\d/)
+      expect(baselineRef).toMatch(/^(?:v?\d|refs\/h0x-ci\/upstream-tags\/v\d)/)
       expect(baseline.revision).toMatch(/^[0-9a-f]{40}$/)
       expect(baseline.revision).not.toBe(current.revision)
     },

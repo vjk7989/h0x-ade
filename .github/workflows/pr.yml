@@ -627,18 +627,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Why fetch-depth 0: the harness extracts the newest release tag to skew
-      # current code against it. The default shallow clone has no tags, which is
-      # why this cannot ride along in the sharded `test` job.
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          # Why blob:none: full history is needed for the merge-base diff, but historical
-          # file contents are not. Blobs are ~89% of this repo's pack, and Git fetches the
-          # few this job actually reads on demand.
+          # Short historical commits and collision fixtures need fork ancestry;
+          # upstream tag identity is still supplied only by the pinned helper below.
           fetch-depth: 0
+          fetch-tags: false
           filter: blob:none
           persist-credentials: false
+
+      - name: Prepare pinned upstream compatibility history
+        id: pinned-history
+        run: >-
+          node config/scripts/prepare-pinned-upstream-history.mjs
+          --ids=browser_placement,stable_wire_baseline
 
       - uses: ./.github/actions/install-node-dependencies
         with:
@@ -647,6 +650,10 @@ jobs:
       # A path filter that matches nothing exits 1 ("No test files found"), so this
       # lane cannot report success while running zero tests.
       - name: Old/new client and server compatibility journeys
+        env:
+          ORCA_CROSS_VERSION_BASELINE_REF: ${{ steps.pinned-history.outputs.stable_wire_baseline }}
+          ORCA_CROSS_VERSION_BROWSER_PLACEMENT_REF: ${{ steps.pinned-history.outputs.browser_placement }}
+          ORCA_CROSS_VERSION_TERMINAL_METADATA_REF: ${{ steps.pinned-history.outputs.stable_wire_baseline }}
         run: >-
           pnpm exec vitest run --config config/vitest.config.ts
           tests/e2e/cross-version-wire/release-checkout.unit.test.ts

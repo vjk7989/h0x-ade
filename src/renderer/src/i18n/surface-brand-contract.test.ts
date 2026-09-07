@@ -63,6 +63,7 @@ const H0X_ADE_SURFACE_KEYS = [
   'auto.components.settings.mobile.settings.search.1de96ec8a6',
   'auto.components.settings.mobile.settings.search.682293cadf',
   'auto.components.star.nag.StarNagToastHost.body',
+  'components.native-chat.orchestrationPaused.message',
   'auto.hooks.useSettingsNavigationMetadata.cd50cec5d7',
   'auto.hooks.useSettingsNavigationMetadata.linearDescription',
   'auto.hooks.useSettingsNavigationMetadata.5f32ac08f3',

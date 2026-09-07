@@ -16,9 +16,9 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const CHANNEL_REPOS = {
-  hourly: 'orca-hourly',
-  daily: 'orca-daily',
-  adhoc: 'orca-adhoc'
+  hourly: 'h0x-hourly',
+  daily: 'h0x-daily',
+  adhoc: 'h0x-adhoc'
 }
 
 const CHANNEL_VERSION_ENV = {

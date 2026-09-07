@@ -141,7 +141,9 @@ export const CheckParams = z
     ack: OptionalString,
     compatibilityAck: OptionalString,
     compatibilityQuestionAck: OptionalString,
-    compatibilityCliCommand: z.enum(['h0x', 'h0x-dev']).optional(),
+    compatibilityCliCommand: z
+      .enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide'])
+      .optional(),
     run: OptionalString,
     wait: OptionalBoolean,
     timeoutMs: OptionalFiniteNumber
@@ -241,8 +243,10 @@ export const AskParams = z
     timeoutMs: OptionalFiniteNumber,
     from: OptionalString,
     run: OptionalString,
-    compatibilityCliCommand: z.enum(['h0x', 'h0x-dev']).optional(),
-    compatibilityWindowsCommand: z.enum(['h0x']).optional()
+    compatibilityCliCommand: z
+      .enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide'])
+      .optional(),
+    compatibilityWindowsCommand: z.enum(['h0x', 'orca', 'orca-ide']).optional()
   })
   .superRefine((params, ctx) => {
     if ((params.question ? 1 : 0) + (params.resume ? 1 : 0) !== 1) {

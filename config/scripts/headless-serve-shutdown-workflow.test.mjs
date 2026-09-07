@@ -11,6 +11,10 @@ const shutdownDockerRunner = readFileSync(
   'utf8'
 )
 const shutdownDockerfile = readFileSync('config/docker/headless-serve-shutdown/Dockerfile', 'utf8')
+const linuxCliContractRunner = readFileSync(
+  'config/scripts/run-linux-cli-launch-contract-docker.mjs',
+  'utf8'
+)
 const desktopStartupOracle = readFileSync(
   'config/docker/headless-serve-shutdown/run-appimage-desktop-startup-case.sh',
   'utf8'
@@ -133,6 +137,27 @@ describe('headless serve shutdown PR gate', () => {
     expect(extractionCall).toBeGreaterThan(startupCall)
     expect(signalLoop).toBeGreaterThan(startupCall)
     expect(shutdownDockerRunner).toContain("'/usr/local/bin/run-appimage-desktop-startup-case'")
+  })
+
+  it('requires canonical registered CLI help before exercising both signal paths', () => {
+    expect(signalCase).toContain("*'Usage: h0x <command>'*")
+    expect(signalCase).not.toContain('Usage: orca <command>')
+    expect(signalCase).toContain('kill -s "$signal_name" "$signal_target_pid"')
+    expect(signalCase).toContain('--arg signalDelivery "$signal_delivery"')
+    expect(signalCase).toContain('--argjson registeredCliVerified "$registered_cli_verified"')
+    expect(shutdownDockerRunner).toContain("for (const signal of ['INT', 'TERM'])")
+    expect(shutdownDockerRunner).toContain('failedSignals.push(`${signal}:${result.status}`)')
+    expect(shutdownDockerRunner).toContain('Shutdown oracle failed: ${failedSignals.join(\', \')}')
+  })
+
+  it('uses canonical h0x output in every packaged Linux CLI oracle', () => {
+    expect(linuxCliContractRunner).toContain("expectOutput: 'Usage: h0x <command>'")
+    expect(linuxCliContractRunner.match(/expectOutput: 'Usage: h0x skills'/g)).toHaveLength(2)
+    expect(linuxCliContractRunner).toContain(
+      'expectOutput: "Orca is not running. Run \'h0x open\' first."'
+    )
+    expect(linuxCliContractRunner).not.toContain('Usage: orca')
+    expect(linuxCliContractRunner).not.toContain("Run 'orca open' first.")
   })
 
   it('preserves startup logs when the launcher exits before its marker', () => {

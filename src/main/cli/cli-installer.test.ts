@@ -64,7 +64,7 @@ describe('CliInstaller', () => {
         platform: 'darwin',
         isPackaged: false,
         userDataPath: fixture.userDataPath,
-        execPath: '/Applications/Orca.app/Contents/MacOS/Orca',
+        execPath: '/Applications/h0x-ADE.app/Contents/MacOS/h0x-ADE',
         appPath: fixture.appPath,
         commandPathOverride: installPath,
         processPathEnv: join(fixture.root, 'bin')
@@ -145,7 +145,7 @@ describe('CliInstaller', () => {
       expect(installed.launcherPath).toBe(join(fixture.userDataPath, 'cli', 'bin', 'h0x-dev'))
       await expect(readlink(installed.commandPath as string)).resolves.toBe(installed.launcherPath)
       await expect(
-        readFile(join(fixture.userDataPath, 'cli', 'bin', 'h0x'), 'utf8')
+        readFile(join(fixture.userDataPath, 'cli', 'bin', 'orca'), 'utf8')
       ).resolves.toBe(await readFile(installed.launcherPath as string, 'utf8'))
     }
   )
@@ -311,8 +311,8 @@ describe('CliInstaller', () => {
       const commandDir = join(homePath, '.local', 'bin')
       const resourcesPath = join(fixture.root, 'resources')
       const launcherPath = join(resourcesPath, 'bin', 'h0x')
-      const oldLauncherPath = join(resourcesPath, 'bin', 'h0x')
-      const legacyCommandPath = join(commandDir, 'h0x')
+      const oldLauncherPath = join(resourcesPath, 'bin', 'orca')
+      const legacyCommandPath = join(commandDir, 'orca')
       await mkdir(commandDir, { recursive: true })
       await mkdir(join(resourcesPath, 'bin'), { recursive: true })
       await writeFile(launcherPath, '#!/usr/bin/env bash\n', 'utf8')
@@ -341,7 +341,7 @@ describe('CliInstaller', () => {
       const fixture = await makeFixture()
       const homePath = join(fixture.root, 'home')
       const commandDir = join(homePath, '.local', 'bin')
-      const legacyCommandPath = join(commandDir, 'h0x')
+      const legacyCommandPath = join(commandDir, 'orca')
       const appImagePath = join(fixture.root, 'Orca.AppImage')
       const cacheRootPath = join(fixture.root, 'cache')
       await mkdir(commandDir, { recursive: true })
@@ -350,7 +350,7 @@ describe('CliInstaller', () => {
         mode: 0o755
       })
       const extractedRoot = resolveAppImageExtractedRoot({ appImagePath, cacheRootPath })!
-      await symlink(join(dirname(extractedRoot.payloadLauncherPath), 'h0x'), legacyCommandPath)
+      await symlink(join(dirname(extractedRoot.payloadLauncherPath), 'orca'), legacyCommandPath)
 
       const installer = new CliInstaller({
         platform: 'linux',
@@ -376,7 +376,7 @@ describe('CliInstaller', () => {
       const fixture = await makeFixture()
       const homePath = join(fixture.root, 'home')
       const commandDir = join(homePath, '.local', 'bin')
-      const legacyCommandPath = join(commandDir, 'h0x')
+      const legacyCommandPath = join(commandDir, 'orca')
       const appImagePath = join(fixture.root, 'Orca.AppImage')
       const foreignAppImagePath = join(fixture.root, 'Other.AppImage')
       const cacheRootPath = join(fixture.root, 'cache')
@@ -436,7 +436,7 @@ describe('CliInstaller', () => {
         platform: 'darwin',
         isPackaged: false,
         userDataPath: fixture.userDataPath,
-        execPath: '/Applications/Orca.app/Contents/MacOS/Orca',
+        execPath: '/Applications/h0x-ADE.app/Contents/MacOS/h0x-ADE',
         appPath: fixture.appPath,
         commandPathOverride: installPath,
         privilegedRunner: async (command: string) => {

@@ -145,15 +145,15 @@ describe.skipIf(process.platform === 'win32')('AppImage CLI ownership', () => {
     })
 
     await expect(installer.getStatus()).resolves.toMatchObject({ state: 'conflict' })
-    await expect(installer.install()).rejects.toThrow('Refusing to replace non-Orca command')
+    await expect(installer.install()).rejects.toThrow('Refusing to replace non-h0x command')
     await expect(readlink(fixture.commandPath)).resolves.toBe(foreignTarget)
     expect(extract).not.toHaveBeenCalled()
   })
 
   it('leaves a foreign legacy resources/bin/orca symlink untouched', async () => {
     const fixture = await makeFixture()
-    const legacyCommandPath = join(fixture.commandDirectory, 'h0x')
-    const foreignTarget = join(fixture.root, 'foreign', 'resources', 'bin', 'h0x')
+    const legacyCommandPath = join(fixture.commandDirectory, 'orca')
+    const foreignTarget = join(fixture.root, 'foreign', 'resources', 'bin', 'orca')
     await symlink(foreignTarget, legacyCommandPath)
 
     await expect(new CliInstaller(installerOptions(fixture)).install()).resolves.toMatchObject({
@@ -251,7 +251,7 @@ describe.skipIf(process.platform === 'win32')('AppImage CLI ownership', () => {
     }
 
     await expect(new RacedInstaller(installerOptions(fixture)).install()).rejects.toThrow(
-      'Refusing to replace non-Orca command'
+      'Refusing to replace non-h0x command'
     )
     await expect(readlink(fixture.commandPath)).resolves.toBe(foreignTarget)
     expect((await readdir(fixture.commandDirectory)).some((name) => name.includes('.orca-'))).toBe(

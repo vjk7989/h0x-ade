@@ -17,6 +17,13 @@ export type LegacySendParams = {
   payload?: string
 }
 
+export type LegacyCompatibilityCliCommand =
+  | 'h0x'
+  | 'h0x-dev'
+  | 'orca'
+  | 'orca-dev'
+  | 'orca-ide'
+
 export type LegacyCheckParams = {
   terminal?: string
   run?: string
@@ -30,7 +37,7 @@ export type LegacyCheckParams = {
   timeoutMs?: number
   compatibilityAck?: string
   compatibilityQuestionAck?: string
-  compatibilityCliCommand?: 'h0x' | 'h0x-dev'
+  compatibilityCliCommand?: LegacyCompatibilityCliCommand
 }
 
 export type LegacyAskParams = {
@@ -41,8 +48,8 @@ export type LegacyAskParams = {
   resume?: string
   options?: string
   timeoutMs?: number
-  compatibilityCliCommand?: 'h0x' | 'h0x-dev'
-  compatibilityWindowsCommand?: 'h0x'
+  compatibilityCliCommand?: LegacyCompatibilityCliCommand
+  compatibilityWindowsCommand?: 'h0x' | 'orca' | 'orca-ide'
 }
 
 export type LegacyReplyParams = {
@@ -162,7 +169,7 @@ export function parseLegacyOptions(raw: string | undefined): string[] {
 export function supportedLegacyHints(
   message: MessageRow,
   principal: LegacyCompatibilityPrincipalRow,
-  cliCommand: 'h0x' | 'h0x-dev'
+  cliCommand: LegacyCompatibilityCliCommand
 ): string[] {
   if (
     principal.role !== 'coordinator' ||

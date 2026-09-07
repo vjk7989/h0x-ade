@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "stablyai/orca",
+    "url": "https://github.com/stablyai/orca.git"
+  },
+  "refs": [
+    {
+      "id": "skill_roundtrip",
+      "tag": "v1.4.178-rc.2",
+      "tagObjectSha": "ffe3aa9defdd041d21624468ffd2917b13b98d3a",
+      "peeledCommitSha": "00f0c44a23c84f19975fe73fa172bd8ef81f5903"
+    },
+    {
+      "id": "browser_placement",
+      "tag": "v1.4.184",
+      "tagObjectSha": "284a244a12dfe266f62c103cc6b1b1d13203e0b4",
+      "peeledCommitSha": "2307f2ebbe1c1e737c0b12d920bb0a208332db2c"
+    },
+    {
+      "id": "stable_wire_baseline",
+      "tag": "v1.4.190",
+      "tagObjectSha": "43268cadff07d513a73181741090ece06a364fd6",
+      "peeledCommitSha": "6e4f817101daa18d82824b69243d9079baa9c416"
+    }
+  ]
+}

@@ -106,6 +106,9 @@ const ORCAD_BROWSER_PREFIXES = [
 ]
 
 const CROSS_VERSION_WIRE_PREFIXES = [
+  'config/pinned-upstream-history.json',
+  'config/scripts/prepare-pinned-upstream-history',
+  'config/scripts/pinned-upstream-history',
   'tests/e2e/cross-version-wire/',
   'src/shared/protocol-version',
   'src/shared/terminal-stream-protocol',

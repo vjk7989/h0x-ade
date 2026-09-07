@@ -330,7 +330,7 @@ describe('Electron runtime package contract', () => {
     )
     expect(releaseMacWorkflow.on.workflow_dispatch.inputs.tag.required).toBe(true)
     expect(releaseMacWorkflow.on.workflow_dispatch.inputs.release_run_id.required).toBe(true)
-    expect(buildMacJob['runs-on']).toBe('blacksmith-6vcpu-macos-15')
+    expect(buildMacJob['runs-on']).toBe('macos-15')
     expect(checkoutStep.with.ref).toBe('refs/tags/${{ inputs.tag }}')
     expect(publishStep.with.command).toContain('ORCA_MAC_RELEASE=1')
     expect(publishStep.with.command).toContain('electron-builder')

@@ -25,6 +25,7 @@ import {
   type ReleaseCheckout
 } from './release-checkout'
 const temporaryRoots: string[] = []
+const PINNED_BASELINE_REF = process.env.ORCA_CROSS_VERSION_BASELINE_REF ?? 'v1.4.190'
 
 const COMPRESSED_LOCK_OPTIONS: CheckoutLockOptions = {
   realpath: false,
@@ -274,9 +275,9 @@ describe('release checkout materialization', () => {
       }
     }
     const checkouts = await Promise.all([
-      materializeReleaseCheckout('v1.4.190', options),
-      materializeReleaseCheckout('v1.4.190', options),
-      materializeReleaseCheckout('v1.4.190', options)
+      materializeReleaseCheckout(PINNED_BASELINE_REF, options),
+      materializeReleaseCheckout(PINNED_BASELINE_REF, options),
+      materializeReleaseCheckout(PINNED_BASELINE_REF, options)
     ])
 
     expect(publications).toBe(1)
@@ -287,7 +288,7 @@ describe('release checkout materialization', () => {
 
   it('loads a baseline module whose source imports another checkout-root file', async () => {
     const cacheRoot = temporaryCacheRoot()
-    const checkout = await materializeReleaseCheckout('v1.4.190', { cacheRoot })
+    const checkout = await materializeReleaseCheckout(PINNED_BASELINE_REF, { cacheRoot })
     const protocol = await importReleaseCheckoutModule(checkout, '/src/shared/protocol-version.ts')
 
     expect(protocol.REMOTE_SERVER_UPDATE_CAPABILITY).toBe('updater.remote-control.v1')
@@ -334,7 +335,7 @@ describe('release checkout materialization', () => {
   it('causally single-flights a rival process before publishing an in-use checkout', async () => {
     const cacheRoot = temporaryCacheRoot()
     const scratch = temporaryCacheRoot()
-    const published = await materializeReleaseCheckout('v1.4.190', {
+    const published = await materializeReleaseCheckout(PINNED_BASELINE_REF, {
       cacheRoot,
       testHooks: { populateStaging: populateMinimalStaging }
     })
@@ -359,7 +360,7 @@ describe('release checkout materialization', () => {
     const stagingReady = new Promise<CheckoutStagingContext>((resolveStaging) => {
       acknowledgeStaging = resolveStaging
     })
-    const publisher = materializeReleaseCheckout('v1.4.190', {
+    const publisher = materializeReleaseCheckout(PINNED_BASELINE_REF, {
       cacheRoot,
       testHooks: {
         lockOptions: COMPRESSED_LOCK_OPTIONS,
@@ -373,7 +374,7 @@ describe('release checkout materialization', () => {
     const active = await stagingReady
     const rival = startMaterializerChild(scratch, 'heartbeat-rival', {
       cacheRoot,
-      ref: 'v1.4.190',
+      ref: PINNED_BASELINE_REF,
       resultPath,
       attemptMarker,
       acquiredMarker,
@@ -418,7 +419,7 @@ describe('release checkout materialization', () => {
     const stagingMarker = join(scratch, 'crashed-staging')
     const crashed = startMaterializerChild(scratch, 'crashing-publisher', {
       cacheRoot,
-      ref: 'v1.4.190',
+      ref: PINNED_BASELINE_REF,
       stagingMarker,
       hangAfterStaging: true,
       lockOptions: COMPRESSED_LOCK_OPTIONS
@@ -440,7 +441,7 @@ describe('release checkout materialization', () => {
 
       const unrelated = join(crashedContext.staging, '..', '.staging-unrelated-live-owner')
       mkdirSync(unrelated)
-      const recovered = await materializeReleaseCheckout('v1.4.190', {
+      const recovered = await materializeReleaseCheckout(PINNED_BASELINE_REF, {
         cacheRoot,
         testHooks: {
           lockOptions: COMPRESSED_LOCK_OPTIONS,
@@ -461,14 +462,14 @@ describe('release checkout materialization', () => {
   it('never stamps an incomplete tree produced through the injectable test seam', async () => {
     const cacheRoot = temporaryCacheRoot()
     await expect(
-      materializeReleaseCheckout('v1.4.190', {
+      materializeReleaseCheckout(PINNED_BASELINE_REF, {
         cacheRoot,
         testHooks: { populateStaging: async () => undefined }
       })
     ).rejects.toThrow(/missing the terminal stream protocol/)
 
     let populated = 0
-    const recovered = await materializeReleaseCheckout('v1.4.190', {
+    const recovered = await materializeReleaseCheckout(PINNED_BASELINE_REF, {
       cacheRoot,
       testHooks: {
         populateStaging: async (context) => {

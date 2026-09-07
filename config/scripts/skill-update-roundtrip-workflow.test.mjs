@@ -13,6 +13,10 @@ const expectedPaths = [
   'resources/skills/**',
   'config/scripts/verify-skill-update-roundtrip.mjs',
   'config/scripts/skill-update-roundtrip-workflow.test.mjs',
+  'config/scripts/prepare-pinned-upstream-history.mjs',
+  'config/scripts/pinned-upstream-history.test.mjs',
+  'config/scripts/pinned-upstream-history-workflows.test.mjs',
+  'config/pinned-upstream-history.json',
   'src/main/skills/skill-freshness-eligibility.ts',
   'src/shared/skill-freshness.ts',
   '.github/workflows/skill-update-roundtrip.yml'

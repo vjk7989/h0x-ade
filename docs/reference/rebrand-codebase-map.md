@@ -626,3 +626,27 @@ CI contracts without renaming retained compatibility identifiers.
 - Packaging is the next slice: Windows must select the packaged `h0x.exe`, and
   Linux must use canonical h0x usage text while satisfying the AppImage signal
   shutdown oracle.
+
+## Packaging Smoke Contracts — Completed Slice
+
+Commit `5110f33bfd` completes the canonical packaged-launch and Linux shutdown
+contracts without adding a packaged or global legacy `orca` executable.
+
+- Packaged CLI smoke selects `resources/bin/h0x.exe` on Windows and
+  `resources/bin/h0x` on Linux; macOS packaging targets `h0x-ADE.app` and its
+  canonical h0x launcher.
+- Linux CLI launch and AppImage readiness oracles now expect canonical h0x usage
+  text. The AppImage INT and TERM cases each reached actual signal delivery,
+  reported `signalDelivery` with a PID and `registeredCliVerified: true`, and
+  completed with no listener, surviving process, or filesystem residue.
+- [PR Checks run 34166367530](https://github.com/vjk7989/h0x-ade/actions/runs/34166367530)
+  passed all eight Node 24 shards, typecheck, static analysis, Windows packaged
+  CLI smoke, Linux packaged CLI smoke, the Linux CLI launch contract, and both
+  AppImage registered-CLI signal cases.
+- [Computer-use E2E run 34166367389](https://github.com/vjk7989/h0x-ade/actions/runs/34166367389)
+  passed for the same slice.
+- To recover constrained D: space, the reproducible ignored cache
+  `D:\the-ade\orca\.git\orca-cache\electron` was removed after inventorying;
+  its exact size was 374,251,224 bytes. The ignored
+  `external-checkouts/fluffy-lamp` checkout was preserved because it contains
+  uncommitted work.

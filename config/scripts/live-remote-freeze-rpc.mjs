@@ -12,7 +12,7 @@ export function appendOrcaRpcOutput(output, chunk, bytes, limit = MAX_ORCA_RPC_O
   }
 }
 
-export function resolveOrcaCliCommand({ env = process.env, platform = process.platform } = {}) {
+export function resolveOrcaCliCommand({ env = process.env, platform: _platform = process.platform } = {}) {
   if (env.ORCA_CLI_COMMAND?.trim()) {
     return env.ORCA_CLI_COMMAND.trim()
   }

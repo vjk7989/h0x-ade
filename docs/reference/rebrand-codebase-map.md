@@ -389,9 +389,9 @@ release smoke checks remain blocked or staged.
   `src/cli/specs/`, `src/cli/help.ts`, `src/cli/root-help-text-primary.ts`,
   format/recovery helpers, handlers, selector text, launch diagnostics, and many
   adjacent CLI tests.
-- Orchestration recovery currently normalizes recovered `orca` or `orca-ide`
-  command argv to the resolved h0x executable in
-  `src/cli/orchestration-mutation-recovery.ts`.
+- Orchestration recovery preserves the executable from the recorded original
+  command, including legacy `orca`, `orca-dev`, and `orca-ide` identities; only
+  commands without a recorded executable use the canonical h0x default.
 - Bundled skill guidance was regenerated after updating source guides in
   `skill-guides/`, `skill-stubs/`, and `skills/`; generated output is
   `src/cli/bundled-skill-guides.ts`.
@@ -543,3 +543,29 @@ Current branch: `codex/finish-surface-rebrand`. Final tested code SHA:
 - `vjk7989/h0x-ade` is an independent fork. The `stablyai/orca` remote is a
   read-only source reference only; do not automatically merge, rebase, or
   publish against it.
+
+## Core Compatibility Cleanup — Slice 1
+
+Branch `codex/core-rebrand-ci-debt`; review:
+[PR #3](https://github.com/vjk7989/h0x-ade/pull/3). Slice commits are
+`83e02fbc95`, `5367be13a5`, and `986db506a8`.
+
+- Canonical output remains `h0x`/`h0x-dev`. RPC and CLI compatibility inputs
+  now also accept legacy `orca`, `orca-dev`, and `orca-ide`; the restricted
+  packaged-Windows resume allowlist accepts `h0x`, `orca`, and `orca-ide`.
+- Mutation recovery preserves the exact recorded executable in original,
+  inspection, and keyed-retry commands. It does not rewrite a legacy command to
+  h0x, expose credentials, or change the remote-wire shape.
+- Claude Agent Teams detection launches canonically through `h0x` while probing
+  `h0x-dev`, `orca`, `orca-dev`, and `orca-ide` as backward-compatible aliases.
+  Claude remains required, aliases are deduplicated, and Windows/WSL detection
+  remains disabled for this native-pane mode.
+- Focused compatibility tests pass for the runtime compatibility resolver,
+  Windows ask handoff, orchestration schemas, mutation recovery, TUI config and
+  detection, process recognition, SSH fallback, and legacy dispatcher paths.
+- At SHA `986db506a8`, [PR run 34161066785](https://github.com/vjk7989/h0x-ade/actions/runs/34161066785)
+  passed the `typecheck` and `static analysis` jobs, including changed-code
+  quality, skill, and localization checks. All eight full Node 24 shards remain
+  red on the next stale canonical-output/test-fixture slice; those failures are
+  not evidence that this compatibility slice regressed. Packaging failures in
+  the same run remain separately tracked CI debt.

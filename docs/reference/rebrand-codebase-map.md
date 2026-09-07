@@ -588,3 +588,18 @@ folder-workspace, RPC, or remote-wire behavior changes.
   contracts; and development/app/relay identity expectations. The Linux
   AppImage shutdown and Windows packaged-CLI smoke failures remain separate
   packaging debt.
+
+## Core Compatibility Cleanup — Slice 3a
+
+Commit `615d5f37cb` repairs packaged CLI test fixtures and restores the intended
+distinction between canonical h0x assets and legacy Orca cleanup/ownership
+cases. The changed production and test-support files clear typecheck and static
+analysis; this slice does not claim a new global legacy command.
+
+- In [PR Checks run 34163026331](https://github.com/vjk7989/h0x-ade/actions/runs/34163026331),
+  all six changed suites passed: macOS command paths 14/14, AppImage ownership
+  9/9, packaged assets 14/14, command conflicts 5/5, installer behavior 10/10,
+  and installation races 8/8.
+- Nine remaining unit failures belong to the next UI, skill, development
+  identity, and account-branding slice. Windows packaged-CLI smoke remains
+  separate later packaging debt.

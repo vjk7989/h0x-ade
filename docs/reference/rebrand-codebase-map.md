@@ -523,8 +523,15 @@ Current branch: `codex/finish-surface-rebrand`. Final tested code SHA:
 - D: remains constrained after an `ENOSPC` failure, so remaining heavyweight
   checks stay CI-first. Keep Electron validation background-only with
   `ORCA_BACKGROUND_LAUNCH=1`.
-- No unsigned platform build, release artifact set, tag, or release has been
-  proven by this checkpoint.
+- [Unsigned build run 34156752360](https://github.com/vjk7989/h0x-ade/actions/runs/34156752360)
+  passed Windows x64, Linux x64, macOS x64, and macOS arm64 from merge SHA
+  `99771ecfdf4000bba13c9d00840a9cd8371e191d`;
+  [publish run 34157333798](https://github.com/vjk7989/h0x-ade/actions/runs/34157333798)
+  then succeeded.
+- Public release [v1.4.198](https://github.com/vjk7989/h0x-ade/releases/tag/v1.4.198)
+  targets that SHA with 15 verified assets: `checksums.txt`, `latest.yml`,
+  `latest-linux.yml`, `latest-mac.yml`, Windows installer and blockmap, Linux
+  AppImage/DEB/RPM, and macOS x64/arm64 DMGs plus ZIPs/blockmaps.
 
 ### Compatibility And Fork Policy
 

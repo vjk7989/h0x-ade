@@ -31,7 +31,7 @@ describe('computer-use skill guidance', () => {
       /\s+/gu,
       ' '
     )
-    expect(orcaCli).toContain('browser embedded inside the h0x-ADE app')
+    expect(orcaCli).toContain("h0x-ADE's embedded browser")
   })
 
   it('keeps web-app targeting on the computer-use surface', () => {

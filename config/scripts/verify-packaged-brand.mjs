@@ -152,34 +152,44 @@ export function verifyLinuxPackage(appDir, packageRoot) {
   }
 }
 
+export function inspectWindowsApp(exePath, iconPath) {
+  const script = [
+    'Add-Type -AssemblyName System.Drawing',
+    'function Get-BitmapHash($bitmap) {',
+    '  $stream=[IO.MemoryStream]::new()',
+    '  $sha=[Security.Cryptography.SHA256]::Create()',
+    '  try { $bitmap.Save($stream,[Drawing.Imaging.ImageFormat]::Png); return [Convert]::ToBase64String($sha.ComputeHash($stream.ToArray())) }',
+    '  finally { $sha.Dispose(); $stream.Dispose(); $bitmap.Dispose() }',
+    '}',
+    '$v=(Get-Item -LiteralPath $env:H0X_PACKAGED_EXE_PATH).VersionInfo',
+    '$icon=[Drawing.Icon]::ExtractAssociatedIcon($env:H0X_PACKAGED_EXE_PATH)',
+    '$embedded=Get-BitmapHash ($icon.ToBitmap()); $icon.Dispose()',
+    '$canonical=Get-BitmapHash ([Drawing.Bitmap]::new($env:H0X_CANONICAL_ICON_PATH))',
+    '@{ProductName=$v.ProductName;FileDescription=$v.FileDescription;IconMatches=($embedded -eq $canonical)}|ConvertTo-Json -Compress'
+  ].join('\n')
+  return JSON.parse(
+    execFileSync('powershell.exe', ['-NoProfile', '-Command', script], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        H0X_PACKAGED_EXE_PATH: exePath,
+        H0X_CANONICAL_ICON_PATH: iconPath
+      }
+    })
+  )
+}
+
 export function verifyWindowsApp(appDir) {
   const exePath = join(appDir, `${PRODUCT}.exe`)
   requireFile(exePath, 'Windows launcher')
   requireFile(join(appDir, 'resources', 'bin', `${CLI}.exe`), 'Windows CLI')
-  const iconPath = resolve('resources/build/icon.ico')
-  requireFile(iconPath, 'generated Windows icon')
+  const iconPath = resolve('resources/build/linux-icons/32x32.png')
+  requireFile(iconPath, 'generated canonical Windows icon frame')
   requireFile(SOURCE_ICON, 'canonical Windows tile source')
   if (process.platform !== 'win32') {
     return
   }
-  const script = [
-    'Add-Type -AssemblyName System.Drawing',
-    'function Get-IconHash($icon) {',
-    '  $bitmap=$icon.ToBitmap(); $stream=[IO.MemoryStream]::new()',
-    '  $sha=[Security.Cryptography.SHA256]::Create()',
-    '  try { $bitmap.Save($stream,[Drawing.Imaging.ImageFormat]::Png); return [Convert]::ToBase64String($sha.ComputeHash($stream.ToArray())) }',
-    '  finally { $sha.Dispose(); $stream.Dispose(); $bitmap.Dispose(); $icon.Dispose() }',
-    '}',
-    '$v=(Get-Item -LiteralPath $args[0]).VersionInfo',
-    '$embedded=Get-IconHash ([Drawing.Icon]::ExtractAssociatedIcon($args[0]))',
-    '$canonical=Get-IconHash ([Drawing.Icon]::new($args[1]))',
-    '@{ProductName=$v.ProductName;FileDescription=$v.FileDescription;IconMatches=($embedded -eq $canonical)}|ConvertTo-Json -Compress'
-  ].join('\n')
-  const version = JSON.parse(
-    execFileSync('powershell.exe', ['-NoProfile', '-Command', script, exePath, iconPath], {
-      encoding: 'utf8'
-    })
-  )
+  const version = inspectWindowsApp(exePath, iconPath)
   if (version.ProductName !== PRODUCT || version.FileDescription !== PRODUCT) {
     fail(`Windows VersionInfo must identify ${PRODUCT}`)
   }

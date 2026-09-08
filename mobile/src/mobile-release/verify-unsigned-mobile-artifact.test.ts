@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import {
   checksumLine,
   expectedArtifactName,
+  parseAndroidManifestSchemes,
   verifyUnsignedApkResult,
   verifySourceConfig,
   verifyAndroidInspection,
@@ -156,6 +157,14 @@ describe('unsigned mobile artifact verifier', () => {
         stderr: ''
       })
     ).toThrow(/Unable to prove/)
+  })
+
+  it('reads URL schemes from current and legacy aapt2 xmltree output', () => {
+    expect(
+      parseAndroidManifestSchemes(
+        'A: scheme(0x01010027)="pavii-h0x" (Raw: "pavii-h0x")\nA: android:scheme="exp+h0x-mobile"'
+      )
+    ).toEqual(['pavii-h0x', 'exp+h0x-mobile'])
   })
 
   it('builds Android with signing disabled and verifies the packaged signature', () => {

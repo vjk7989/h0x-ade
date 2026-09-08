@@ -156,6 +156,10 @@ function parseAndroidBadging(text) {
   }
 }
 
+export function parseAndroidManifestSchemes(text) {
+  return [...text.matchAll(/A: (?:android:)?scheme[^=]*="([^"]+)"/g)].map((match) => match[1])
+}
+
 function inspectAndroid(artifact) {
   const aapt = process.env.AAPT2 || process.env.AAPT || 'aapt2'
   const badging = execFileSync(aapt, ['dump', 'badging', artifact], { encoding: 'utf8' })
@@ -173,9 +177,7 @@ function inspectAndroid(artifact) {
       encoding: 'utf8'
     })
   )
-  const schemes = [...manifest.matchAll(/A: android:scheme[^=]*="([^"]+)"/g)].map(
-    (match) => match[1]
-  )
+  const schemes = parseAndroidManifestSchemes(manifest)
   return {
     ...parseAndroidBadging(badging),
     schemes: [...new Set(schemes)].sort().join(','),

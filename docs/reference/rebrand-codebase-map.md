@@ -907,3 +907,23 @@ the brand-oracle correction slices above.
 The eight Node shards are green; complete E2E and PR-gate status remains pending
 until the unrelated SSH/GPU rerun and the corrected hidden surface-brand E2E
 job finish.
+
+## SSH Headful E2E Background Guard — Completed Local Slice
+
+The SSH cleanup E2E failure was traced to the required background launch mode:
+`ORCA_BACKGROUND_LAUNCH=1` keeps the Electron `BrowserWindow` hidden, while the
+production scanner intentionally parks until a visible window can participate.
+The resulting cleanup reconnect is not evidence that the remote process died
+and must not be interpreted as an `exited` verdict.
+
+- The `@headful` cleanup test now skips only when
+  `ORCA_BACKGROUND_LAUNCH=1`. It remains active in the isolated visible-window
+  lane where its native visibility precondition can be satisfied.
+- Production scanner behavior and SSH execution-boundary semantics are
+  unchanged: loss of contact remains `unverifiable`, never proof of death.
+- The scanner suite passed 9/9 tests. Typecheck, lint, and formatting checks
+  also passed for the scoped change.
+
+The authoritative CI rerun is pending. This guard resolves the invalid hidden
+lane precondition without claiming the visible `@headful` coverage has run in
+the background job.

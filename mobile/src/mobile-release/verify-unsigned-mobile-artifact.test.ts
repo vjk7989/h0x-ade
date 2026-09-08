@@ -130,6 +130,8 @@ describe('unsigned mobile artifact verifier', () => {
   })
 
   it('builds Android with signing disabled and verifies the packaged signature', () => {
+    expect(workflow).toContain("- 'mobile/**'")
+    expect(workflow).toContain('github.event.pull_request.head.sha || inputs.ref || github.ref')
     expect(workflow).toContain('--init-script ../scripts/unsigned-android-release.gradle')
     expect(workflow).toContain('export APKSIGNER=')
     expect(unsignedGradle).toContain('buildTypes.release.signingConfig = null')

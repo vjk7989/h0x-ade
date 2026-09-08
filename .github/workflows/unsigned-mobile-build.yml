@@ -1,6 +1,14 @@
 name: Unsigned mobile builds
 
 on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - '.github/workflows/unsigned-mobile-build.yml'
+      - 'mobile/**'
   workflow_dispatch:
     inputs:
       ref:
@@ -27,7 +35,7 @@ concurrency:
 jobs:
   android:
     name: Android release APK
-    if: inputs.platform == 'all' || inputs.platform == 'android'
+    if: github.event_name == 'pull_request' || inputs.platform == 'all' || inputs.platform == 'android'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     defaults:
@@ -37,7 +45,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.ref || github.ref }}
+          ref: ${{ github.event.pull_request.head.sha || inputs.ref || github.ref }}
           persist-credentials: false
       - name: Resolve checked-out source
         id: source
@@ -87,7 +95,7 @@ jobs:
 
   ios:
     name: iOS simulator app
-    if: inputs.platform == 'all' || inputs.platform == 'ios'
+    if: github.event_name == 'pull_request' || inputs.platform == 'all' || inputs.platform == 'ios'
     runs-on: macos-26
     timeout-minutes: 90
     defaults:
@@ -97,7 +105,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.ref || github.ref }}
+          ref: ${{ github.event.pull_request.head.sha || inputs.ref || github.ref }}
           persist-credentials: false
       - name: Resolve checked-out source
         id: source

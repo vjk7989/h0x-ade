@@ -793,8 +793,9 @@ implied by the focused green evidence above.
 
 ## Unsigned Mobile Artifacts — Completed Local Slice
 
-- `.github/workflows/unsigned-mobile-build.yml` is a manual-only, ref-selectable
-  workflow for an Android release APK and an unsigned iOS simulator `.app` zip.
+- `.github/workflows/unsigned-mobile-build.yml` is a ref-selectable manual
+  workflow and a path-scoped PR gate for an Android release APK and an unsigned
+  iOS simulator `.app` zip. PR runs check out the exact pull-request head SHA.
   It uses JDK 17/Temurin for Android and Xcode 26.5 with code signing disabled
   for iOS; neither job publishes a release or changes repository state. Each
   job resolves `git rev-parse HEAD` after checkout and includes that SHA in the

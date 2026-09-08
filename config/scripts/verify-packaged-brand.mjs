@@ -141,7 +141,7 @@ export function verifyLinuxPackage(appDir, packageRoot) {
       fail(`Linux desktop entry is missing ${line}`)
     }
   }
-  if (!/^Exec=h0x(?:\s|$)/m.test(desktop)) {
+  if (!desktop.split(/\r?\n/).includes('Exec=/opt/h0x-ADE/h0x %U')) {
     fail('Linux desktop entry does not launch h0x')
   }
   for (const size of [16, 24, 32, 48, 64, 96, 128, 256, 512]) {
@@ -174,7 +174,7 @@ export function verifyWindowsApp(appDir) {
     '$embedded=Get-IconHash ([Drawing.Icon]::ExtractAssociatedIcon($args[0]))',
     '$canonical=Get-IconHash ([Drawing.Icon]::new($args[1]))',
     '@{ProductName=$v.ProductName;FileDescription=$v.FileDescription;IconMatches=($embedded -eq $canonical)}|ConvertTo-Json -Compress'
-  ].join('; ')
+  ].join('\n')
   const version = JSON.parse(
     execFileSync('powershell.exe', ['-NoProfile', '-Command', script, exePath, iconPath], {
       encoding: 'utf8'

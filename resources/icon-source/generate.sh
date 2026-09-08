@@ -5,29 +5,33 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
-ICON_SOURCE="$SCRIPT_DIR/icon.icon"
 BUILD_DIR="$PROJECT_DIR/resources/build"
 TMP_DIR=$(mktemp -d)
 
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-echo "Compiling icon from $ICON_SOURCE..."
+echo "Compiling icon from the canonical PNG..."
 
 node "$PROJECT_DIR/config/scripts/generate-h0x-brand-assets.mjs"
 
-# Generate .icns using actool (requires Xcode)
-xcrun actool \
-  --compile "$TMP_DIR" \
-  --platform macosx \
-  --minimum-deployment-target 10.12 \
-  --app-icon icon \
-  --output-partial-info-plist "$TMP_DIR/partial.plist" \
-  "$ICON_SOURCE" >/dev/null
-
-if [ ! -f "$TMP_DIR/icon.icns" ]; then
-  echo "Error: actool failed to produce icon.icns" >&2
-  exit 1
-fi
+ICONSET="$TMP_DIR/icon.iconset"
+mkdir -p "$ICONSET"
+SOURCE_PNG="$BUILD_DIR/icon.png"
+for spec in \
+  '16 icon_16x16.png' \
+  '32 icon_16x16@2x.png' \
+  '32 icon_32x32.png' \
+  '64 icon_32x32@2x.png' \
+  '128 icon_128x128.png' \
+  '256 icon_128x128@2x.png' \
+  '256 icon_256x256.png' \
+  '512 icon_256x256@2x.png' \
+  '512 icon_512x512.png' \
+  '1024 icon_512x512@2x.png'; do
+  read -r size name <<< "$spec"
+  sips -z "$size" "$size" "$SOURCE_PNG" --out "$ICONSET/$name" >/dev/null
+done
+iconutil -c icns "$ICONSET" -o "$TMP_DIR/icon.icns"
 
 cp "$TMP_DIR/icon.icns" "$BUILD_DIR/icon.icns"
 

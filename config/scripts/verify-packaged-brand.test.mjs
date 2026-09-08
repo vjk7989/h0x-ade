@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { parse } from 'yaml'
 import {
   parseUpdateManifest,
+  verifyLinuxPackage,
   verifyUpdateManifest,
   writeAndVerifyChecksums
 } from './verify-packaged-brand.mjs'
@@ -115,5 +116,39 @@ describe('packaged brand verifier', () => {
     expect(commands).toContain('--entrypoint appimage')
     expect(commands).toContain('run-linux-cli-launch-contract-docker.mjs')
     expect(commands).toContain('smoke-packaged-cli.mjs --app-dir=dist/linux-unpacked')
+  })
+
+  it('accepts only the canonical installed Linux desktop launcher', () => {
+    const root = fixture()
+    const appDir = join(root, 'app')
+    const packageRoot = join(root, 'package')
+    mkdirSync(join(appDir, 'resources', 'bin'), { recursive: true })
+    writeFileSync(join(appDir, 'h0x'), 'launcher')
+    writeFileSync(join(appDir, 'resources', 'bin', 'h0x'), 'cli')
+    const applications = join(packageRoot, 'usr', 'share', 'applications')
+    mkdirSync(applications, { recursive: true })
+    for (const size of [16, 24, 32, 48, 64, 96, 128, 256, 512]) {
+      const icons = join(packageRoot, 'usr', 'share', 'icons', 'hicolor', `${size}x${size}`, 'apps')
+      mkdirSync(icons, { recursive: true })
+      writeFileSync(join(icons, 'h0x.png'), 'icon')
+    }
+    const desktop = join(applications, 'h0x.desktop')
+    const prefix = 'Name=h0x-ADE\nIcon=h0x\nStartupWMClass=h0x\n'
+    writeFileSync(desktop, `${prefix}Exec=/opt/h0x-ADE/h0x %U\n`)
+    expect(() => verifyLinuxPackage(appDir, packageRoot)).not.toThrow()
+    for (const stale of ['Exec=h0x %U', 'Exec=/opt/Orca/orca-ide %U']) {
+      writeFileSync(desktop, `${prefix}${stale}\n`)
+      expect(() => verifyLinuxPackage(appDir, packageRoot)).toThrow(/does not launch h0x/)
+    }
+  })
+
+  it('keeps the Windows inspector parseable and generates a standard macOS iconset', () => {
+    const verifier = readFileSync('config/scripts/verify-packaged-brand.mjs', 'utf8')
+    expect(verifier).toContain("].join('\\n')")
+    expect(verifier).not.toContain("].join('; ')")
+    const generator = readFileSync('resources/icon-source/generate.sh', 'utf8')
+    expect(generator).toContain('icon_512x512@2x.png')
+    expect(generator).toContain('iconutil -c icns')
+    expect(generator).not.toContain('xcrun actool')
   })
 })

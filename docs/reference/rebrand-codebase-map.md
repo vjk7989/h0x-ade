@@ -821,12 +821,21 @@ implied by the focused green evidence above.
   brand, asset, artifact-name, and checksum drift. `.github/workflows/mobile.yml`
   includes the manual workflow path so these verifier tests run when that
   workflow changes.
+- [Unsigned mobile run 34281836192](https://github.com/vjk7989/h0x-ade/actions/runs/34281836192)
+  passed the iOS simulator lane and uploaded
+  `h0x-ade-mobile-ios-simulator-8f234c6c5c140f90d69a3d4dab670f4abf42b318`
+  (23,825,281 bytes). Android compiled its APK, but the verifier rejected the
+  typed scheme value emitted by `aapt2`.
+- The Android scheme parser now captures the effective first quoted value after
+  an optional type prefix. It fails closed on Raw-only output and on effective
+  value/Raw mismatches instead of accepting ambiguous diagnostics. The focused
+  mobile verifier suite passed 17/17 tests; an authoritative Android rerun is
+  still required.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 
-The workflow and verifier are locally validated. Actual Android and iOS
-artifacts remain pending until the manual workflow is dispatched for the exact
-release commit and its uploaded files are inspected.
+The iOS simulator artifact is established for the desktop release commit.
+Android packaging verification and artifact upload remain pending its rerun.
 
 ## Historical VM Rollback Fixture Pin — Completed Local Slice
 

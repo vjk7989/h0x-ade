@@ -157,7 +157,13 @@ function parseAndroidBadging(text) {
 }
 
 export function parseAndroidManifestSchemes(text) {
-  return [...text.matchAll(/A: (?:android:)?scheme[^=]*="([^"]+)"/g)].map((match) => match[1])
+  return text.split(/\r?\n/).flatMap((line) => {
+    const value =
+      /^\s*A:\s+(?:android:)?scheme(?:\([^)]*\))?\s*=\s*(?:\(type [^)]+\))?"([^"]+)"/.exec(
+        line
+      )?.[1]
+    return value ? [value] : []
+  })
 }
 
 function inspectAndroid(artifact) {

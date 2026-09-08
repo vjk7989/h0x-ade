@@ -162,9 +162,19 @@ describe('unsigned mobile artifact verifier', () => {
   it('reads URL schemes from current and legacy aapt2 xmltree output', () => {
     expect(
       parseAndroidManifestSchemes(
-        'A: scheme(0x01010027)="pavii-h0x" (Raw: "pavii-h0x")\nA: android:scheme="exp+h0x-mobile"'
+        [
+          'A: scheme(0x01010027)="pavii-h0x" (Raw: "pavii-h0x")',
+          '  A: android:scheme(0x01010027)=(type 0x03)"exp+h0x-mobile" (Raw: "exp+h0x-mobile")',
+          'A: android:scheme="tech.pavii.h0xade.mobile"'
+        ].join('\n')
       )
-    ).toEqual(['pavii-h0x', 'exp+h0x-mobile'])
+    ).toEqual(['pavii-h0x', 'exp+h0x-mobile', 'tech.pavii.h0xade.mobile'])
+    expect(
+      parseAndroidManifestSchemes(
+        'A: android:scheme(0x01010027)=(type 0x03)"evil" (Raw: "pavii-h0x")\n' +
+          'A: android:scheme(0x01010027)=@0x7f120001 (Raw: "pavii-h0x")'
+      )
+    ).toEqual(['evil'])
   })
 
   it('builds Android with signing disabled and verifies the packaged signature', () => {

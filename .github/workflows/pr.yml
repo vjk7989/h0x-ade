@@ -181,6 +181,8 @@ jobs:
             echo "VM runtime persistence is unchanged."
             exit 0
           fi
+          node config/scripts/prepare-pinned-upstream-history.mjs \
+            --ids=vm_runtime_baseline,vm_runtime_affected
           node config/scripts/run-ephemeral-vm-runtime-store-rollback-repro.mjs \
             config/scripts/ephemeral-vm-runtime-store-cross-version.test.ts
 

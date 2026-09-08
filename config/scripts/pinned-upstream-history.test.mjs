@@ -7,6 +7,7 @@ import {
 
 const manifest = JSON.parse(readFileSync('config/pinned-upstream-history.json', 'utf8'))
 const skill = manifest.refs[0]
+const baseline = manifest.commits[0]
 
 function fakeGit({ remoteTag = skill.tagObjectSha, remoteCommit = skill.peeledCommitSha } = {}) {
   const calls = []
@@ -41,6 +42,32 @@ function fakeGit({ remoteTag = skill.tagObjectSha, remoteCommit = skill.peeledCo
   return { calls, runGit }
 }
 
+function fakeCommitGit({ localCommit = null, fetchedCommit = baseline.commitSha } = {}) {
+  const calls = []
+  let local = localCommit
+  const runGit = (args) => {
+    calls.push(args)
+    if (args[0] === 'fetch') {
+      local = fetchedCommit
+      return ''
+    }
+    if (args[0] === 'cat-file') {
+      return 'commit'
+    }
+    if (args[0] === 'rev-parse' && args.includes('--verify')) {
+      if (local === null) {
+        throw new Error('missing ref')
+      }
+      return local
+    }
+    if (args[0] === 'rev-parse' && args[1].endsWith('^{commit}')) {
+      return local
+    }
+    throw new Error(`Unexpected git call: ${args.join(' ')}`)
+  }
+  return { calls, runGit }
+}
+
 describe('pinned upstream history', () => {
   it('pins the approved annotated tag objects and peeled commits', () => {
     expect(validatePinnedHistoryManifest(manifest)).toEqual(manifest)
@@ -69,17 +96,71 @@ describe('pinned upstream history', () => {
           tagObjectSha: '43268cadff07d513a73181741090ece06a364fd6',
           peeledCommitSha: '6e4f817101daa18d82824b69243d9079baa9c416'
         }
+      ],
+      commits: [
+        {
+          id: 'vm_runtime_baseline',
+          commitSha: 'bf0c77d5bc800e19117084c27fd1441eda9134ad'
+        },
+        {
+          id: 'vm_runtime_affected',
+          commitSha: '25abb9368d98ad84a174f530e02f4228d2269062'
+        }
       ]
     })
+  })
+
+  it('fetches an exact commit into the temporary namespace and reuses a verified ref', () => {
+    const git = fakeCommitGit()
+    const expected = {
+      vm_runtime_baseline: 'refs/h0x-ci/upstream-commits/vm_runtime_baseline'
+    }
+    expect(
+      preparePinnedUpstreamHistory({
+        manifest,
+        ids: ['vm_runtime_baseline'],
+        runGit: git.runGit
+      })
+    ).toEqual(expected)
+    expect(
+      preparePinnedUpstreamHistory({
+        manifest,
+        ids: ['vm_runtime_baseline'],
+        runGit: git.runGit
+      })
+    ).toEqual(expected)
+    expect(git.calls.filter(([command]) => command === 'fetch')).toEqual([
+      [
+        'fetch',
+        '--no-tags',
+        '--no-write-fetch-head',
+        '--depth=1',
+        'https://github.com/stablyai/orca.git',
+        '+bf0c77d5bc800e19117084c27fd1441eda9134ad:refs/h0x-ci/upstream-commits/vm_runtime_baseline'
+      ]
+    ])
+  })
+
+  it('rejects a fetched commit that does not match its pin', () => {
+    const git = fakeCommitGit({ fetchedCommit: '3'.repeat(40) })
+    expect(() =>
+      preparePinnedUpstreamHistory({
+        manifest,
+        ids: ['vm_runtime_baseline'],
+        runGit: git.runGit
+      })
+    ).toThrow(/local ref mismatch/)
   })
 
   it('fetches only the exact verified tag into the temporary namespace and is idempotent', () => {
     const git = fakeGit()
     const expected = { skill_roundtrip: 'refs/h0x-ci/upstream-tags/v1.4.178-rc.2' }
-    expect(preparePinnedUpstreamHistory({ manifest, ids: ['skill_roundtrip'], runGit: git.runGit }))
-      .toEqual(expected)
-    expect(preparePinnedUpstreamHistory({ manifest, ids: ['skill_roundtrip'], runGit: git.runGit }))
-      .toEqual(expected)
+    expect(
+      preparePinnedUpstreamHistory({ manifest, ids: ['skill_roundtrip'], runGit: git.runGit })
+    ).toEqual(expected)
+    expect(
+      preparePinnedUpstreamHistory({ manifest, ids: ['skill_roundtrip'], runGit: git.runGit })
+    ).toEqual(expected)
     expect(git.calls.filter(([command]) => command === 'ls-remote')).toHaveLength(2)
     expect(git.calls.filter(([command]) => command === 'fetch')).toEqual([
       [
@@ -106,11 +187,20 @@ describe('pinned upstream history', () => {
   })
 
   it('rejects malformed manifests and unknown ids', () => {
-    expect(() =>
-      validatePinnedHistoryManifest({ ...manifest, schemaVersion: 2 })
-    ).toThrow(/schema 1/)
+    expect(() => validatePinnedHistoryManifest({ ...manifest, schemaVersion: 2 })).toThrow(
+      /schema 1/
+    )
     expect(() =>
       validatePinnedHistoryManifest({ ...manifest, refs: [skill, { ...skill }] })
+    ).toThrow(/duplicate id/)
+    expect(() =>
+      validatePinnedHistoryManifest({
+        ...manifest,
+        commits: [{ ...baseline, commitSha: 'invalid' }]
+      })
+    ).toThrow(/invalid commit ID/)
+    expect(() =>
+      validatePinnedHistoryManifest({ ...manifest, commits: [baseline, { ...baseline }] })
     ).toThrow(/duplicate id/)
     expect(() =>
       preparePinnedUpstreamHistory({ manifest, ids: ['unknown'], runGit: fakeGit().runGit })

@@ -5,7 +5,8 @@ import { resolve } from 'node:path'
 
 const MANIFEST_PATH = 'config/pinned-upstream-history.json'
 const UPSTREAM_URL = 'https://github.com/stablyai/orca.git'
-const TEMP_REF_PREFIX = 'refs/h0x-ci/upstream-tags/'
+const TEMP_TAG_REF_PREFIX = 'refs/h0x-ci/upstream-tags/'
+const TEMP_COMMIT_REF_PREFIX = 'refs/h0x-ci/upstream-commits/'
 const SHA_PATTERN = /^[0-9a-f]{40}$/
 const TAG_PATTERN = /^v\d+\.\d+\.\d+(?:-rc\.\d+)?$/
 const ID_PATTERN = /^[a-z][a-z0-9_]*$/
@@ -14,8 +15,12 @@ export function validatePinnedHistoryManifest(value) {
   if (value?.schemaVersion !== 1 || value?.upstream?.url !== UPSTREAM_URL) {
     throw new Error(`Pinned history manifest must use schema 1 and ${UPSTREAM_URL}`)
   }
-  if (value.upstream.repository !== 'stablyai/orca' || !Array.isArray(value.refs)) {
-    throw new Error('Pinned history manifest has an invalid upstream repository or refs list')
+  if (
+    value.upstream.repository !== 'stablyai/orca' ||
+    !Array.isArray(value.refs) ||
+    !Array.isArray(value.commits)
+  ) {
+    throw new Error('Pinned history manifest has an invalid upstream repository or history list')
   }
   const ids = new Set()
   const tags = new Set()
@@ -36,6 +41,15 @@ export function validatePinnedHistoryManifest(value) {
     ids.add(entry.id)
     tags.add(entry.tag)
   }
+  for (const entry of value.commits) {
+    if (!ID_PATTERN.test(entry?.id ?? '') || ids.has(entry.id)) {
+      throw new Error(`Pinned history manifest has an invalid or duplicate id: ${entry?.id}`)
+    }
+    if (!SHA_PATTERN.test(entry?.commitSha ?? '')) {
+      throw new Error(`Pinned history manifest has an invalid commit ID for ${entry.id}`)
+    }
+    ids.add(entry.id)
+  }
   return value
 }
 
@@ -55,7 +69,7 @@ function localRef(runGit, ref) {
   }
 }
 
-function verifyLocalRef(runGit, entry, ref) {
+function verifyLocalTagRef(runGit, entry, ref) {
   const type = runGit(['cat-file', '-t', ref])
   const object = runGit(['rev-parse', ref])
   const peeled = runGit(['rev-parse', `${ref}^{commit}`])
@@ -63,6 +77,17 @@ function verifyLocalRef(runGit, entry, ref) {
     throw new Error(
       `Pinned history ${entry.id} (${entry.tag}) local ref mismatch: expected tag ${entry.tagObjectSha} ` +
         `and commit ${entry.peeledCommitSha}; got type ${type}, tag ${object}, commit ${peeled}`
+    )
+  }
+}
+
+function verifyLocalCommitRef(runGit, entry, ref) {
+  const type = runGit(['cat-file', '-t', ref])
+  const commit = runGit(['rev-parse', `${ref}^{commit}`])
+  if (type !== 'commit' || commit !== entry.commitSha) {
+    throw new Error(
+      `Pinned history ${entry.id} local ref mismatch: expected commit ${entry.commitSha}; ` +
+        `got type ${type}, commit ${commit}`
     )
   }
 }
@@ -94,14 +119,16 @@ function verifyRemoteTag(runGit, manifest, entry) {
 export function preparePinnedUpstreamHistory({ manifest, ids, runGit = defaultRunGit }) {
   const validated = validatePinnedHistoryManifest(manifest)
   const requested = new Set(ids)
-  const selected = validated.refs.filter((entry) => requested.delete(entry.id))
-  if (requested.size > 0 || selected.length === 0) {
+  const selectedTags = validated.refs.filter((entry) => requested.delete(entry.id))
+  const selectedCommits = validated.commits.filter((entry) => requested.delete(entry.id))
+  const selected = selectedTags.length + selectedCommits.length
+  if (requested.size > 0 || selected === 0) {
     throw new Error(`Unknown or empty pinned history ids: ${[...requested].join(',') || '(none)'}`)
   }
   const outputs = {}
-  for (const entry of selected) {
+  for (const entry of selectedTags) {
     verifyRemoteTag(runGit, validated, entry)
-    const ref = `${TEMP_REF_PREFIX}${entry.tag}`
+    const ref = `${TEMP_TAG_REF_PREFIX}${entry.tag}`
     const existing = localRef(runGit, ref)
     if (existing === null) {
       runGit([
@@ -113,7 +140,23 @@ export function preparePinnedUpstreamHistory({ manifest, ids, runGit = defaultRu
         `+refs/tags/${entry.tag}:${ref}`
       ])
     }
-    verifyLocalRef(runGit, entry, ref)
+    verifyLocalTagRef(runGit, entry, ref)
+    outputs[entry.id] = ref
+  }
+  for (const entry of selectedCommits) {
+    const ref = `${TEMP_COMMIT_REF_PREFIX}${entry.id}`
+    const existing = localRef(runGit, ref)
+    if (existing === null) {
+      runGit([
+        'fetch',
+        '--no-tags',
+        '--no-write-fetch-head',
+        '--depth=1',
+        validated.upstream.url,
+        `+${entry.commitSha}:${ref}`
+      ])
+    }
+    verifyLocalCommitRef(runGit, entry, ref)
     outputs[entry.id] = ref
   }
   return outputs

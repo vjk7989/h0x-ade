@@ -444,7 +444,7 @@ release smoke checks remain blocked or staged.
   `node_modules` was removed, but the website build remains unverified.
 - The website repo lockfile is pnpm lockfile v6 and should be installed with a
   pnpm 8 command, for example `corepack pnpm@8.15.9 --ignore-workspace install
-  --frozen-lockfile`, after enough D: space is available.
+--frozen-lockfile`, after enough D: space is available.
 - `resources/build/icon.icns` still needs macOS or CI tooling to regenerate from
   the h0x-ADE logo.
 - Full `src/cli` without exclusions is still not a reliable Windows gate because
@@ -790,3 +790,37 @@ inputs usable.
 This records only the completed mobile slice. The complete PR gate, merge,
 unsigned platform builds, and release verification remain pending and are not
 implied by the focused green evidence above.
+
+## Historical VM Rollback Fixture Pin — Completed Local Slice
+
+The static-analysis rollback reproduction now obtains its two immutable VM
+runtime source fixtures without requiring the fork checkout to contain
+unrelated upstream history.
+
+- `config/pinned-upstream-history.json` adds the exact upstream commits
+  `bf0c77d5bc800e19117084c27fd1441eda9134ad` (`vm_runtime_baseline`) and
+  `25abb9368d98ad84a174f530e02f4228d2269062` (`vm_runtime_affected`). The
+  existing annotated-tag object and peeled-commit pins remain unchanged.
+- `config/scripts/prepare-pinned-upstream-history.mjs` validates tag and commit
+  entries under one unique ID namespace. Requested commits are fetched by
+  exact SHA, with `--no-tags`, `--no-write-fetch-head`, and `--depth=1`, from
+  the read-only `https://github.com/stablyai/orca.git` fixture source into
+  `refs/h0x-ci/upstream-commits/<id>`. The helper verifies that each temporary
+  ref is a commit and peels to the pinned SHA; an already verified ref is
+  reused without another fetch. Tag fixtures continue to use
+  `refs/h0x-ci/upstream-tags/<tag>` and retain their remote annotated-tag
+  verification.
+- `.github/workflows/pr.yml` prepares exactly
+  `vm_runtime_baseline,vm_runtime_affected` immediately before
+  `run-ephemeral-vm-runtime-store-rollback-repro.mjs`. The workflow contains no
+  upstream push and creates no persistent fork ref.
+- `config/scripts/pinned-upstream-history.test.mjs` covers manifest commit pins,
+  exact fetch arguments, temporary-ref reuse, mismatched fetched commits,
+  malformed commit IDs, duplicate IDs, and the existing tag behavior.
+  `config/scripts/pinned-upstream-history-workflows.test.mjs` verifies ordering,
+  the exact selected IDs, and the no-push contract for the rollback step.
+
+This slice fixes the deterministic fixture setup locally only. The PR CI rerun,
+unsigned Android and iOS simulator builds and artifact inspection, the complete
+desktop gate, merge, version bump, unsigned desktop builds, and `v1.4.200`
+publication all remain pending.

@@ -121,7 +121,7 @@ jobs:
       - name: Generate iOS project
         run: pnpm exec expo prebuild --platform ios --no-install
       - name: Install CocoaPods
-        run: pnpm exec pod-install ios
+        run: pod install --project-directory=ios
       - name: Build unsigned simulator app
         run: >-
           xcodebuild -workspace ios/Orca.xcworkspace -scheme Orca

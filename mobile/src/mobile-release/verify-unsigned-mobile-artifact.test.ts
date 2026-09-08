@@ -134,6 +134,8 @@ describe('unsigned mobile artifact verifier', () => {
     expect(workflow).toContain('github.event.pull_request.head.sha || inputs.ref || github.ref')
     expect(workflow).toContain('--init-script ../scripts/unsigned-android-release.gradle')
     expect(workflow).toContain('export APKSIGNER=')
+    expect(workflow).toContain('pod install --project-directory=ios')
+    expect(unsignedGradle).toContain("gradle.rootProject.findProject(':app')")
     expect(unsignedGradle).toContain('buildTypes.release.signingConfig = null')
   })
 })

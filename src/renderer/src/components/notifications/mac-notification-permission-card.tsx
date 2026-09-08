@@ -35,78 +35,84 @@ export function resolveMacNotificationPermissionState(
   return promptedBefore ? 'blocked' : 'awaiting-permission'
 }
 
+function startMacNotificationPermissionMonitoring(
+  enabled: boolean,
+  setState: (state: MacNotificationPermissionState | null) => void
+): () => void {
+  let cancelled = false
+  let pollTimer: ReturnType<typeof setTimeout> | null = null
+  let pollAttempts = 0
+  // Why: while h0x-ADE's own notifications setting is off, the OS permission
+  // is irrelevant — a green "notifications are enabled" card next to a
+  // disabled toggle reads as a contradiction. Hide the card and skip the
+  // readout polling entirely until the setting is back on.
+  if (!enabled) {
+    setState(null)
+  } else {
+    function schedulePoll(promptedBefore: boolean): void {
+      if (cancelled || pollAttempts >= MAC_PROBE_POLL_MAX_ATTEMPTS) {
+        return
+      }
+      pollTimer = setTimeout(() => {
+        pollAttempts += 1
+        void window.api.notifications.probeDelivery({ force: true }).then((probe) => {
+          if (cancelled) {
+            return
+          }
+          setState(resolveMacNotificationPermissionState(probe.state, promptedBefore))
+          // Why: authoritative readouts are silent, so keep tracking System
+          // Settings live in every state — flipping the toggle updates the
+          // card within a poll. Probe fallbacks flash a banner when delivery
+          // works, so for them polling stops once the card turns green.
+          if (probe.authoritative || probe.state !== 'delivered') {
+            schedulePoll(promptedBefore)
+          }
+        })
+      }, MAC_PROBE_POLL_INTERVAL_MS)
+    }
+
+    void (async () => {
+      const status = await window.api.notifications.getPermissionStatus()
+      if (cancelled) {
+        return
+      }
+      if (status.platform !== 'darwin' || !status.supported) {
+        return
+      }
+      setState('checking')
+      // Why: `status.requested` is read before the probe stamps it, so a
+      // fresh install (where the check itself pops the macOS dialog) renders
+      // as "answer the dialog" instead of "blocked" on probe-fallback hosts.
+      const probe = await window.api.notifications.probeDelivery()
+      if (cancelled) {
+        return
+      }
+      const resolved = resolveMacNotificationPermissionState(probe.state, status.requested)
+      setState(resolved)
+      if (resolved !== null && (probe.authoritative || resolved !== 'enabled')) {
+        schedulePoll(status.requested)
+      }
+    })()
+  }
+
+  return () => {
+    cancelled = true
+    if (pollTimer !== null) {
+      clearTimeout(pollTimer)
+    }
+  }
+}
+
 export function useMacNotificationPermissionState(
   enabled: boolean = true
 ): [MacNotificationPermissionState | null, (state: MacNotificationPermissionState | null) => void] {
   const [macPermissionState, setMacPermissionState] =
     useState<MacNotificationPermissionState | null>(null)
 
-  useEffect(() => {
-    let cancelled = false
-    let pollTimer: ReturnType<typeof setTimeout> | null = null
-    let pollAttempts = 0
-    // Why: while h0x-ADE's own notifications setting is off, the OS permission
-    // is irrelevant — a green "notifications are enabled" card next to a
-    // disabled toggle reads as a contradiction. Hide the card and skip the
-    // readout polling entirely until the setting is back on.
-    if (!enabled) {
-      setMacPermissionState(null)
-    } else {
-      function schedulePoll(promptedBefore: boolean): void {
-        if (cancelled || pollAttempts >= MAC_PROBE_POLL_MAX_ATTEMPTS) {
-          return
-        }
-        pollTimer = setTimeout(() => {
-          pollAttempts += 1
-          void window.api.notifications.probeDelivery({ force: true }).then((probe) => {
-            if (cancelled) {
-              return
-            }
-            setMacPermissionState(
-              resolveMacNotificationPermissionState(probe.state, promptedBefore)
-            )
-            // Why: authoritative readouts are silent, so keep tracking System
-            // Settings live in every state — flipping the toggle updates the
-            // card within a poll. Probe fallbacks flash a banner when delivery
-            // works, so for them polling stops once the card turns green.
-            if (probe.authoritative || probe.state !== 'delivered') {
-              schedulePoll(promptedBefore)
-            }
-          })
-        }, MAC_PROBE_POLL_INTERVAL_MS)
-      }
-
-      void (async () => {
-        const status = await window.api.notifications.getPermissionStatus()
-        if (cancelled) {
-          return
-        }
-        if (status.platform !== 'darwin' || !status.supported) {
-          return
-        }
-        setMacPermissionState('checking')
-        // Why: `status.requested` is read before the probe stamps it, so a
-        // fresh install (where the check itself pops the macOS dialog) renders
-        // as "answer the dialog" instead of "blocked" on probe-fallback hosts.
-        const probe = await window.api.notifications.probeDelivery()
-        if (cancelled) {
-          return
-        }
-        const resolved = resolveMacNotificationPermissionState(probe.state, status.requested)
-        setMacPermissionState(resolved)
-        if (resolved !== null && (probe.authoritative || resolved !== 'enabled')) {
-          schedulePoll(status.requested)
-        }
-      })()
-    }
-
-    return () => {
-      cancelled = true
-      if (pollTimer !== null) {
-        clearTimeout(pollTimer)
-      }
-    }
-  }, [enabled])
+  useEffect(
+    () => startMacNotificationPermissionMonitoring(enabled, setMacPermissionState),
+    [enabled]
+  )
 
   return [macPermissionState, setMacPermissionState]
 }

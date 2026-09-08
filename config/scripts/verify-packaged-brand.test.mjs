@@ -149,6 +149,8 @@ describe('packaged brand verifier', () => {
     const builder = readFileSync('config/electron-builder.config.cjs', 'utf8')
     expect(verifier).toContain("].join('\\n')")
     expect(verifier).not.toContain("].join('; ')")
+    expect(verifier).toContain('$bitmap.GetPixel($x,$y)')
+    expect(verifier).not.toContain('$bitmap.Save(')
     expect(builder).toMatch(/win:\s*{[\s\S]*?icon: 'resources\/build\/icon\.ico'/)
     const generator = readFileSync('resources/icon-source/generate.sh', 'utf8')
     expect(generator).toContain('icon_512x512@2x.png')

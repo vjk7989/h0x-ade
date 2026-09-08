@@ -1009,7 +1009,15 @@ change application runtime behavior or restore a legacy executable identity.
   exposed an actual embedded-icon mismatch rather than a PowerShell parse error.
 - `config/electron-builder.config.cjs` now explicitly pins `win.icon` to
   `resources/build/icon.ico`, removing icon-source inference from Windows
-  packaging. This correction still requires an authoritative Windows rerun.
+  packaging.
+- [Unsigned desktop run 34278102134](https://github.com/vjk7989/h0x-ade/actions/runs/34278102134)
+  passed Linux x64 and macOS x64/arm64, while Windows still failed the icon
+  comparison with the explicit ICO configured. This proves builder icon-source
+  inference was not the mismatch cause.
+- The Windows verifier now hashes the exact dimension-prefixed BGRA pixel stream
+  for both images instead of hashing serialized PNG bytes, whose encoder metadata
+  can differ for identical pixels. The corrected pixel oracle requires another
+  authoritative Windows packaging rerun.
 - `v1.4.200` still has no Git tag or GitHub release after the separate release-cut
   failure; no draft or public release was produced by this unsigned-build run.
 

@@ -791,6 +791,36 @@ This records only the completed mobile slice. The complete PR gate, merge,
 unsigned platform builds, and release verification remain pending and are not
 implied by the focused green evidence above.
 
+## Unsigned Mobile Artifacts — Completed Local Slice
+
+- `.github/workflows/unsigned-mobile-build.yml` is a manual-only, ref-selectable
+  workflow for an Android release APK and an unsigned iOS simulator `.app` zip.
+  It uses JDK 17/Temurin for Android and Xcode 26.5 with code signing disabled
+  for iOS; neither job publishes a release or changes repository state. Each
+  job resolves `git rev-parse HEAD` after checkout and includes that SHA in the
+  uploaded artifact-container name; the per-file metadata records the platform,
+  version, filename, and file SHA-256, not the source commit.
+- `mobile/scripts/verify-unsigned-mobile-artifact.mjs` validates the packaged
+  name, version `0.0.48`, package/bundle identifier, sole `pavii-h0x` output
+  scheme, native display and permission copy, required executable/icon assets,
+  and exact source logo hashes. It emits deterministic JSON metadata and a
+  conventional SHA-256 sidecar next to each artifact.
+- `mobile/scripts/unsigned-android-release.gradle` is applied only by the
+  manual artifact workflow. It clears Expo's debug signing configuration from
+  the release build; the verifier then requires `apksigner` to prove that the
+  resulting APK has no signer. Normal release and store workflows are unchanged.
+- `mobile/src/mobile-release/verify-unsigned-mobile-artifact.test.ts` covers
+  canonical Android/iOS inspections and rejection of identity, scheme, visible
+  brand, asset, artifact-name, and checksum drift. `.github/workflows/mobile.yml`
+  includes the manual workflow path so these verifier tests run when that
+  workflow changes.
+- Legacy `orca://pair` remains accepted as input by the existing compatibility
+  parser; it is intentionally absent from generated native URL schemes.
+
+The workflow and verifier are locally validated. Actual Android and iOS
+artifacts remain pending until the manual workflow is dispatched for the exact
+release commit and its uploaded files are inspected.
+
 ## Historical VM Rollback Fixture Pin — Completed Local Slice
 
 The static-analysis rollback reproduction now obtains its two immutable VM

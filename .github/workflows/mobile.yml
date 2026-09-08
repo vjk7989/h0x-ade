@@ -17,6 +17,8 @@ on:
       - '.github/workflows/mobile.yml'
       - '.github/actions/install-node-dependencies/**'
       - '.github/workflows/mobile-ios-release.yml'
+      - '.github/workflows/unsigned-mobile-build.yml'
+      - 'mobile/scripts/unsigned-android-release.gradle'
 
 concurrency:
   group: mobile-${{ github.event.pull_request.number || github.ref }}

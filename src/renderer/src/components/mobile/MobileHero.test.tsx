@@ -159,7 +159,9 @@ describe('HeroFlow height', () => {
     renderFlow(0)
 
     expect(
-      screen.getByText('Scan the QR with your phone or open the install link to grab h0x-ADE Mobile.')
+      screen.getByText(
+        'Scan the QR with your phone or open the install link to grab h0x-ADE Mobile.'
+      )
     ).toBeInTheDocument()
     expect(screen.getByText(/Open h0x-ADE Mobile, tap/)).toBeInTheDocument()
   })
@@ -192,7 +194,7 @@ describe('HeroFlow height', () => {
     expect(notice).toHaveTextContent('Use LAN')
     expect(screen.getByText('No pairing code available')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Generate code' })).not.toBeInTheDocument()
-    expect(screen.getByText('Orca Relay is in beta.')).toBeInTheDocument()
+    expect(screen.getByText('h0x Relay is in beta.')).toBeInTheDocument()
   })
 
   it('explains an empty QR frame when no code has been generated yet', () => {
@@ -231,9 +233,7 @@ describe('HeroFlow height', () => {
         message: 'Orca Relay is not available on this desktop'
       }
     })
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Orca Relay isn’t available on this desktop'
-    )
+    expect(screen.getByRole('alert')).toHaveTextContent('h0x Relay isn’t available on this desktop')
     expect(screen.queryByRole('button', { name: 'Retry Relay' })).toBeNull()
     expect(screen.getByRole('button', { name: 'Use LAN' })).toBeEnabled()
   })

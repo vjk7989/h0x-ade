@@ -64,7 +64,7 @@ describe('orca CLI skill guidance', () => {
       '`task-create` is also forbidden because it records coordinator-owned tracking state'
     )
     expect(skill).toContain(
-      'ORCA worktree create --name <task-name> --no-parent --agent codex --prompt'
+      'H0X worktree create --name <task-name> --no-parent --agent codex --prompt'
     )
     expect(skill).toContain('codex --model gpt-5.5 -c model_reasoning_effort="xhigh"')
     expect(skill).toContain('wait only for TUI readiness if needed to avoid losing input')
@@ -146,7 +146,7 @@ describe('orca CLI install stub', () => {
     const stub = readSkill(stubPath)
 
     expect(stub).toContain('discovery stub')
-    expect(stub).toContain('ORCA skills get orca-cli')
+    expect(stub).toContain('H0X skills get orca-cli')
     // The safe CLI-resolution contract must survive in the stub, never a bare `orca`.
     expect(stub).toContain('ORCA_CLI_COMMAND')
     expect(stub).toContain('h0x-dev')

@@ -49,9 +49,9 @@ describe('orchestration skill guidance', () => {
       '`coordinator-start`, `coordinator-stop`, `run`, and `run-stop` are retired scheduler commands'
     )
     expect(toolBoundary).toContain(
-      'Do not substitute non-Orca subagent tools, generic agent-spawn APIs, or chat-only parallel worker features'
+      'Do not substitute non-h0x-ADE subagent tools, generic agent-spawn APIs, or chat-only parallel worker features'
     )
-    expect(toolBoundary).toContain('do not create Orca task/dispatch provenance')
+    expect(toolBoundary).toContain('do not create h0x-ADE task/dispatch provenance')
     expect(toolBoundary).toContain('injected lifecycle preambles')
     expect(toolBoundary).toContain('`worker_done` authority')
     expect(toolBoundary).toContain('decision gates')
@@ -374,7 +374,7 @@ describe('orchestration install stub', () => {
     const stub = readFileSync(stubPath, 'utf8')
 
     expect(stub).toContain('discovery stub')
-    expect(stub).toContain('ORCA skills get orchestration')
+    expect(stub).toContain('H0X skills get orchestration')
     // The safe CLI-resolution contract must survive in the stub, never a bare `orca`.
     expect(stub).toContain('ORCA_CLI_COMMAND')
     expect(stub).toContain('h0x-dev')

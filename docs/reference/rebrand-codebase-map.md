@@ -824,3 +824,29 @@ This slice fixes the deterministic fixture setup locally only. The PR CI rerun,
 unsigned Android and iOS simulator builds and artifact inspection, the complete
 desktop gate, merge, version bump, unsigned desktop builds, and `v1.4.200`
 publication all remain pending.
+
+## Full-Suite Brand Oracle Corrections — Completed Local Slice
+
+The full-suite follow-up aligns stale test oracles with the canonical
+`h0x`/`h0x-ADE` output already produced by the application. Changes are scoped
+to assertions, fixtures, and selectors across `config`, `src/cli`, `src/main`,
+`src/renderer`, and `src/shared`; they do not introduce a new compatibility
+alias or change runtime, RPC, storage, package-ID, or remote-wire behavior.
+
+- PR workflow contracts now require explicit visible-brand inventory and logo
+  freshness steps. Wrapper fixtures and snapshots were regenerated from their
+  canonical sources rather than edited as independent outputs.
+- Hidden Electron E2E selectors now target the current h0x-ADE title and brand
+  surfaces, preserving the required background-only launch and CDP validation
+  path without focusing or revealing a window.
+- Focused tests covering the corrected config, CLI, main, renderer, and shared
+  oracles passed. The visible-brand scanner, logo freshness contract, and
+  changed-code quality gate also passed.
+- Local Windows runs of the complete Node shard set were non-representative
+  because platform-specific and CI environment assumptions differ from the
+  Linux PR runner. They are retained as diagnostic evidence only, not as the
+  authoritative full-suite verdict.
+
+The Linux PR CI rerun is pending. This local slice therefore does not yet claim
+the complete PR gate, merge, unsigned platform builds, version bump, or
+`v1.4.200` publication.

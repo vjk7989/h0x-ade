@@ -126,6 +126,12 @@ jobs:
       - name: Lint
         run: pnpm exec oxlint --format github
 
+      - name: Verify visible brand inventory
+        run: node config/scripts/visible-brand-inventory.mjs
+
+      - name: Verify generated brand assets
+        run: node config/scripts/generate-h0x-brand-assets.mjs --check
+
       - name: Enforce focused code-quality plugins
         run: pnpm run audit:code-quality:native
 

@@ -97,6 +97,9 @@ async function expectSecondaryBrandSurfaces(page: Page, testInfo: TestInfo): Pro
 
   await page.evaluate(() => window.__store?.getState().closeModal())
   await page.evaluate(() => window.__store?.getState().openSettingsPage())
+  await expect
+    .poll(() => page.evaluate(() => window.__store?.getState().activeView))
+    .toBe('settings')
   await expect(page.getByText('Settings', { exact: true }).first()).toBeVisible()
   await expect(page.getByText(/h0x-ADE|h0x CLI/).first()).toBeVisible()
   await attachSurfaceScreenshot(page, testInfo, 'settings')

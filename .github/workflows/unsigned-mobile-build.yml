@@ -127,19 +127,26 @@ jobs:
           set -euo pipefail
           shopt -s nullglob
           workspaces=(ios/*.xcworkspace)
+          app_projects=(ios/*.xcodeproj)
           if [[ "${#workspaces[@]}" -ne 1 ]]; then
             echo "::error::Expected exactly one generated Xcode workspace; found ${#workspaces[@]}"
             exit 1
           fi
+          if [[ "${#app_projects[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one generated Xcode app project; found ${#app_projects[@]}"
+            exit 1
+          fi
+          workspace_name="$(basename "${app_projects[0]}" .xcodeproj)"
           scheme="$(xcodebuild -list -json -workspace "${workspaces[0]}" | node -e '
             let input = ""
             process.stdin.on("data", (chunk) => (input += chunk))
             process.stdin.on("end", () => {
               const schemes = JSON.parse(input).workspace?.schemes ?? []
-              if (schemes.length !== 1) process.exit(2)
-              process.stdout.write(schemes[0])
+              const matches = schemes.filter((scheme) => scheme === process.argv[1])
+              if (matches.length !== 1) process.exit(2)
+              process.stdout.write(matches[0])
             })
-          ')"
+          ' "$workspace_name")"
           xcodebuild -workspace "${workspaces[0]}" -scheme "$scheme" \
             -sdk iphonesimulator -configuration Release \
             -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build

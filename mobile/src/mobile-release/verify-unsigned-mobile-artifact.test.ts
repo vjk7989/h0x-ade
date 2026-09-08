@@ -17,6 +17,10 @@ const workflow = readFileSync(
   'utf8'
 )
 const unsignedGradle = readFileSync(`${mobileRoot}/scripts/unsigned-android-release.gradle`, 'utf8')
+const verifierSource = readFileSync(
+  `${mobileRoot}/scripts/verify-unsigned-mobile-artifact.mjs`,
+  'utf8'
+)
 
 const expo = {
   name: 'h0x-ADE Mobile',
@@ -134,8 +138,11 @@ describe('unsigned mobile artifact verifier', () => {
     expect(workflow).toContain('github.event.pull_request.head.sha || inputs.ref || github.ref')
     expect(workflow).toContain('--init-script ../scripts/unsigned-android-release.gradle')
     expect(workflow).toContain('export APKSIGNER=')
+    expect(verifierSource).toContain("artifact, '--file', 'AndroidManifest.xml'")
     expect(workflow).toContain('pod install --project-directory=ios')
     expect(workflow).toContain('workspaces=(ios/*.xcworkspace)')
+    expect(workflow).toContain('app_projects=(ios/*.xcodeproj)')
+    expect(workflow).toContain('scheme === process.argv[1]')
     expect(workflow).toContain('apps=(build/ios/Build/Products/Release-iphonesimulator/*.app)')
     expect(unsignedGradle).toContain('if (gradle.parent != null)')
     expect(unsignedGradle).toContain("gradle.rootProject.findProject(':app')")

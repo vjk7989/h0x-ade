@@ -134,9 +134,13 @@ function parseAndroidBadging(text) {
 function inspectAndroid(artifact) {
   const aapt = process.env.AAPT2 || process.env.AAPT || 'aapt2'
   const badging = execFileSync(aapt, ['dump', 'badging', artifact], { encoding: 'utf8' })
-  const manifest = execFileSync(aapt, ['dump', 'xmltree', artifact, 'AndroidManifest.xml'], {
-    encoding: 'utf8'
-  })
+  const manifest = execFileSync(
+    aapt,
+    ['dump', 'xmltree', artifact, '--file', 'AndroidManifest.xml'],
+    {
+      encoding: 'utf8'
+    }
+  )
   const entries = execFileSync('unzip', ['-Z1', artifact], { encoding: 'utf8' }).split(/\r?\n/)
   const apksigner = process.env.APKSIGNER || 'apksigner'
   verifyUnsignedApkResult(

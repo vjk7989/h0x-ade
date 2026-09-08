@@ -73,6 +73,8 @@ jobs:
           build_tools="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
           export AAPT2="$build_tools/aapt2"
           export APKSIGNER="$build_tools/apksigner"
+          export APKANALYZER="$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer"
+          test -x "$APKANALYZER"
           node scripts/verify-unsigned-mobile-artifact.mjs --platform android \
             --artifact "$artifact" --app-config app.json \
             --metadata-out build/android-artifact-metadata.json

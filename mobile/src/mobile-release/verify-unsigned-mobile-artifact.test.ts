@@ -159,22 +159,31 @@ describe('unsigned mobile artifact verifier', () => {
     ).toThrow(/Unable to prove/)
   })
 
-  it('reads URL schemes from current and legacy aapt2 xmltree output', () => {
+  it('reads only resolved URL schemes from packaged data elements', () => {
     expect(
       parseAndroidManifestSchemes(
         [
-          'A: scheme(0x01010027)="pavii-h0x" (Raw: "pavii-h0x")',
-          '  A: android:scheme(0x01010027)=(type 0x03)"exp+h0x-mobile" (Raw: "exp+h0x-mobile")',
-          'A: android:scheme="tech.pavii.h0xade.mobile"'
+          '<manifest xmlns:android="http://schemas.android.com/apk/res/android">',
+          '  <application android:label="scheme=pavii-h0x">',
+          '    <activity>',
+          '      <intent-filter>',
+          '        <data android:host="ignored"',
+          '          android:scheme="pavii-h0x" />',
+          "        <data android:scheme='exp+h0x-mobile' android:host='ignored' />",
+          '        <data android:schemeExtra="ignored" android:scheme="tech.pavii.h0xade.mobile" />',
+          '      </intent-filter>',
+          '    </activity>',
+          '  </application>',
+          '</manifest>'
         ].join('\n')
       )
     ).toEqual(['pavii-h0x', 'exp+h0x-mobile', 'tech.pavii.h0xade.mobile'])
-    expect(
-      parseAndroidManifestSchemes(
-        'A: android:scheme(0x01010027)=(type 0x03)"evil" (Raw: "pavii-h0x")\n' +
-          'A: android:scheme(0x01010027)=@0x7f120001 (Raw: "pavii-h0x")'
-      )
-    ).toEqual(['evil'])
+    expect(parseAndroidManifestSchemes('<data android:scheme="pavii&#45;h0x" />')).toEqual([])
+    expect(parseAndroidManifestSchemes('<data foo:android:scheme="pavii-h0x" />')).toEqual([])
+    expect(parseAndroidManifestSchemes('<data-extra android:scheme="pavii-h0x" />')).toEqual([])
+    expect(parseAndroidManifestSchemes('<data x-android:scheme="pavii-h0x" />')).toEqual([])
+    expect(parseAndroidManifestSchemes('<!-- <data android:scheme="pavii-h0x" /> -->')).toEqual([])
+    expect(parseAndroidManifestSchemes('A: android:scheme="pavii-h0x"')).toEqual([])
   })
 
   it('builds Android with signing disabled and verifies the packaged signature', () => {
@@ -182,7 +191,8 @@ describe('unsigned mobile artifact verifier', () => {
     expect(workflow).toContain('ref: ${{ inputs.ref || github.ref }}')
     expect(workflow).toContain('node scripts/disable-android-release-signing.mjs')
     expect(workflow).toContain('export APKSIGNER=')
-    expect(verifierSource).toContain("artifact, '--file', 'AndroidManifest.xml'")
+    expect(verifierSource).toContain("['manifest', 'print', artifact]")
+    expect(workflow).toContain('export APKANALYZER=')
     expect(workflow).toContain('pod install --project-directory=ios')
     expect(workflow).toContain('workspaces=(ios/*.xcworkspace)')
     expect(workflow).toContain('app_projects=(ios/*.xcodeproj)')

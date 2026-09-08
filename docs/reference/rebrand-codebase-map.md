@@ -649,7 +649,8 @@ contracts without adding a packaged or global legacy `orca` executable.
   `D:\the-ade\orca\.git\orca-cache\electron` was removed after inventorying;
   its exact size was 374,251,224 bytes. The ignored
   `external-checkouts/fluffy-lamp` checkout was preserved because it contains
-  uncommitted work.
+  uncommitted user work. The same low-space boundary kept the release audit
+  remote-only; no release artifacts were downloaded locally.
 
 ## Historical CI Compatibility — Completed Slice
 
@@ -680,18 +681,43 @@ state.
   exposed only a lint failure in the new pinned-history helper/tests; it was
   diagnosed and minimally corrected by `a83c179f18` before the full green run.
 
-## v1.4.199 Final Gate — Completed Slice
+## v1.4.199 Merge And Release — Completed Slice
 
 Commit `0c1d3f1225` sets the package version to `1.4.199` and regenerates the
-corresponding deterministic `resources/skills/release-mapping.json` row. This
-records a verified release candidate only; the PR is not yet recorded as merged
-and `v1.4.199` is not yet recorded as published.
+corresponding deterministic `resources/skills/release-mapping.json` row. The
+candidate completed review, merge, unsigned cross-platform build, and public
+release publication.
 
-- [PR Checks run 34168794036](https://github.com/vjk7989/h0x-ade/actions/runs/34168794036)
+- [PR Checks run 34169330956](https://github.com/vjk7989/h0x-ade/actions/runs/34169330956)
   passed the complete gate: all eight Node 24 shards, typecheck, static analysis,
   specialized lanes, cross-version compatibility, and Windows/Linux packaging.
-- [Skill update round trip run 34168793795](https://github.com/vjk7989/h0x-ade/actions/runs/34168793795)
+- [Skill update round trip run 34169330826](https://github.com/vjk7989/h0x-ade/actions/runs/34169330826)
   passed all 13 matrix cells.
-- [Computer-use E2E run 34168793801](https://github.com/vjk7989/h0x-ade/actions/runs/34168793801)
-  passed, and [PR LoC run 34168793838](https://github.com/vjk7989/h0x-ade/actions/runs/34168793838)
+- [Computer-use E2E run 34169330811](https://github.com/vjk7989/h0x-ade/actions/runs/34169330811)
+  passed, and [PR LoC run 34169330813](https://github.com/vjk7989/h0x-ade/actions/runs/34169330813)
   passed for the same candidate.
+- [PR #3](https://github.com/vjk7989/h0x-ade/pull/3) merged at commit
+  `7b1ff928a2b9c09a04f10763b2f399cb8248445b`.
+- [Unsigned build run 34169861643](https://github.com/vjk7989/h0x-ade/actions/runs/34169861643)
+  succeeded for Windows x64, Linux x64, macOS x64, and macOS arm64. Its exact
+  artifact containers are
+  `h0x-windows-x64-7b1ff928a2b9c09a04f10763b2f399cb8248445b`,
+  `h0x-linux-x64-7b1ff928a2b9c09a04f10763b2f399cb8248445b`,
+  `h0x-macos-x64-7b1ff928a2b9c09a04f10763b2f399cb8248445b`, and
+  `h0x-macos-arm64-7b1ff928a2b9c09a04f10763b2f399cb8248445b`.
+- [Publish run 34176854048](https://github.com/vjk7989/h0x-ade/actions/runs/34176854048)
+  passed source-build verification, asset staging, release-note and checksum
+  generation, uploaded-asset verification, and publication.
+- Public release [v1.4.199](https://github.com/vjk7989/h0x-ade/releases/tag/v1.4.199)
+  is neither a draft nor a prerelease. Its target and lightweight tag both
+  resolve to merge commit `7b1ff928a2b9c09a04f10763b2f399cb8248445b`.
+- The 15 required release assets are `checksums.txt`, `latest.yml`,
+  `latest-linux.yml`, `latest-mac.yml`, `h0x-windows-setup.exe`,
+  `h0x-windows-setup.exe.blockmap`, `h0x-linux.AppImage`,
+  `h0x_1.4.199_amd64.deb`, `h0x-1.4.199.x86_64.rpm`,
+  `h0x-macos-x64.dmg`, `h0x-macos-arm64.dmg`, `h0x-ADE-1.4.199-mac.zip`,
+  `h0x-ADE-1.4.199-mac.zip.blockmap`,
+  `h0x-ADE-1.4.199-arm64-mac.zip`, and
+  `h0x-ADE-1.4.199-arm64-mac.zip.blockmap`. An independent remote artifact
+  audit passed; the existing low-space boundary above explains why no local
+  artifact copies were downloaded.

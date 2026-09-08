@@ -3,7 +3,7 @@
 Status: active durable map for the staged rebrand. Each pass still requires its
 own verification before release.
 
-Last updated: 2026-09-08.
+Last updated: 2026-09-09.
 
 Target fork/release repository: <https://github.com/vjk7989/h0x-ade>.
 
@@ -964,3 +964,29 @@ and must not be interpreted as an `exited` verdict.
 The authoritative CI rerun is pending. This guard resolves the invalid hidden
 lane precondition without claiming the visible `@headful` coverage has run in
 the background job.
+
+## Desktop Unsigned Packaging Corrections — Current Local Slice
+
+The current correction slice tightens the packaged-brand verification and
+macOS icon generation used by the unsigned desktop release path. It does not
+change application runtime behavior or restore a legacy executable identity.
+
+- The installed Linux desktop entry has one exact launch contract:
+  `Exec=/opt/h0x-ADE/h0x %U`. The packaged-brand verifier rejects the stale
+  PATH-only `Exec=h0x %U` form and the old `/opt/Orca/orca-ide` target.
+- The Windows packaged-brand icon inspector now joins its PowerShell statements
+  with newlines. This keeps the function declarations and following statements
+  parseable while preserving the existing argument-array invocation and product,
+  description, and embedded-icon checks.
+- The macOS ICNS path starts from the canonical generated
+  `resources/build/icon.png`, resizes it into the standard 16, 32, 128, 256,
+  512, and 1024 pixel iconset filenames (including the required `@2x` members),
+  and compiles that iconset with `iconutil -c icns`. The prior `actool` and
+  `.icon` source path is no longer the packaging contract.
+- GitHub release `v1.4.200` currently exists as a draft. The corrected unsigned
+  desktop packaging run has not yet been rerun, so this slice does not claim
+  successful replacement artifacts or publication.
+
+The authoritative unsigned desktop rerun and inspection of its Windows, Linux,
+macOS x64, and macOS arm64 outputs remain pending. Keep `v1.4.200` private as a
+draft until those corrected artifacts and release manifests pass verification.

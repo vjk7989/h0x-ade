@@ -158,10 +158,12 @@ function parseAndroidBadging(text) {
 
 export function parseAndroidManifestSchemes(text) {
   const manifest = text.replace(/<!--[\s\S]*?-->/g, '')
-  return [...manifest.matchAll(/<data(?=\s|\/?>)[^>]*>/gs)].flatMap(([tag]) => {
-    const value = /\sandroid:scheme\s*=\s*(["'])([^"'&<>]+)\1/.exec(tag)?.[2]
-    return value ? [value] : []
-  })
+  return [...manifest.matchAll(/<intent-filter(?=\s|>)[^>]*>([\s\S]*?)<\/intent-filter\s*>/g)]
+    .flatMap((match) => [...match[1].matchAll(/<data(?=\s|\/?>)[^>]*>/gs)])
+    .flatMap(([tag]) => {
+      const value = /\sandroid:scheme\s*=\s*(["'])([^"'&<>]+)\1/.exec(tag)?.[2]
+      return value ? [value] : []
+    })
 }
 
 function inspectAndroid(artifact) {

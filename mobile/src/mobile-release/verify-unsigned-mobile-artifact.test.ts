@@ -92,6 +92,9 @@ describe('unsigned mobile artifact verifier', () => {
     expect(() => verifyIosInspection({ ...ios, schemes: 'pavii-h0x,unknown' }, expo)).toThrow(
       /unexpected schemes/
     )
+    expect(() => verifyAndroidInspection({ ...android, schemes: 'pavii-h0x,https' }, expo)).toThrow(
+      /unexpected schemes/
+    )
   })
 
   it.each([
@@ -160,10 +163,12 @@ describe('unsigned mobile artifact verifier', () => {
   })
 
   it('reads only resolved URL schemes from packaged data elements', () => {
+    const filter = (data: string) => `<intent-filter>${data}</intent-filter>`
     expect(
       parseAndroidManifestSchemes(
         [
           '<manifest xmlns:android="http://schemas.android.com/apk/res/android">',
+          '  <queries><intent><data android:scheme="https" /></intent></queries>',
           '  <application android:label="scheme=pavii-h0x">',
           '    <activity>',
           '      <intent-filter>',
@@ -178,11 +183,27 @@ describe('unsigned mobile artifact verifier', () => {
         ].join('\n')
       )
     ).toEqual(['pavii-h0x', 'exp+h0x-mobile', 'tech.pavii.h0xade.mobile'])
-    expect(parseAndroidManifestSchemes('<data android:scheme="pavii&#45;h0x" />')).toEqual([])
-    expect(parseAndroidManifestSchemes('<data foo:android:scheme="pavii-h0x" />')).toEqual([])
-    expect(parseAndroidManifestSchemes('<data-extra android:scheme="pavii-h0x" />')).toEqual([])
-    expect(parseAndroidManifestSchemes('<data x-android:scheme="pavii-h0x" />')).toEqual([])
-    expect(parseAndroidManifestSchemes('<!-- <data android:scheme="pavii-h0x" /> -->')).toEqual([])
+    expect(parseAndroidManifestSchemes(filter('<data android:scheme="https" />'))).toEqual([
+      'https'
+    ])
+    expect(parseAndroidManifestSchemes(filter('<data android:scheme="pavii&#45;h0x" />'))).toEqual(
+      []
+    )
+    expect(parseAndroidManifestSchemes(filter('<data foo:android:scheme="pavii-h0x" />'))).toEqual(
+      []
+    )
+    expect(
+      parseAndroidManifestSchemes(filter('<data-extra android:scheme="pavii-h0x" />'))
+    ).toEqual([])
+    expect(parseAndroidManifestSchemes(filter('<data x-android:scheme="pavii-h0x" />'))).toEqual([])
+    expect(
+      parseAndroidManifestSchemes(filter('<!-- <data android:scheme="pavii-h0x" /> -->'))
+    ).toEqual([])
+    expect(
+      parseAndroidManifestSchemes(
+        '<queries><intent><data android:scheme="pavii-h0x" /></intent></queries>'
+      )
+    ).toEqual([])
     expect(parseAndroidManifestSchemes('A: android:scheme="pavii-h0x"')).toEqual([])
   })
 

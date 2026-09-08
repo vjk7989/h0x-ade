@@ -839,6 +839,13 @@ implied by the focused green evidence above.
   rejects entity-encoded values and scheme evidence found only in unrelated
   elements or attributes; the existing strict allowed-scheme set remains
   unchanged. Android requires another authoritative rerun.
+- [Android rerun 34289051698](https://github.com/vjk7989/h0x-ade/actions/runs/34289051698)
+  resolved the canonical app scheme plus `https`. Diagnosis showed that `https`
+  came from package-visibility `<queries>`, not an app-handled deep-link scheme.
+- The resolved-manifest parser now scopes `<data android:scheme>` extraction to
+  `<intent-filter>` blocks. `https` remains disallowed when the app actually
+  handles it; focused coverage distinguishes query-only declarations from real
+  handlers. Android still requires an authoritative rerun.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 

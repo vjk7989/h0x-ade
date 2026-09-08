@@ -87,6 +87,7 @@ describe('createMainWindow', () => {
 
     const win = createMainWindow(null, { deferLoad: true })
 
+    expect(browserWindowMock).toHaveBeenCalledWith(expect.objectContaining({ title: 'h0x-ADE' }))
     expect(browserWindowInstance.loadFile).not.toHaveBeenCalled()
     expect(browserWindowInstance.loadURL).not.toHaveBeenCalled()
 

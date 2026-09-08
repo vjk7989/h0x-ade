@@ -35,25 +35,20 @@ export function resolveMacNotificationPermissionState(
   return promptedBefore ? 'blocked' : 'awaiting-permission'
 }
 
-export function useMacNotificationPermissionState(
-  enabled: boolean = true
-): [MacNotificationPermissionState | null, (state: MacNotificationPermissionState | null) => void] {
-  const [macPermissionState, setMacPermissionState] =
-    useState<MacNotificationPermissionState | null>(null)
-
-  useEffect(() => {
-    // Why: while Orca's own notifications setting is off, the OS permission
-    // is irrelevant — a green "notifications are enabled" card next to a
-    // disabled toggle reads as a contradiction. Hide the card and skip the
-    // readout polling entirely until the setting is back on.
-    if (!enabled) {
-      setMacPermissionState(null)
-      return
-    }
-    let cancelled = false
-    let pollTimer: ReturnType<typeof setTimeout> | null = null
-    let pollAttempts = 0
-
+function startMacNotificationPermissionMonitoring(
+  enabled: boolean,
+  setState: (state: MacNotificationPermissionState | null) => void
+): () => void {
+  let cancelled = false
+  let pollTimer: ReturnType<typeof setTimeout> | null = null
+  let pollAttempts = 0
+  // Why: while h0x-ADE's own notifications setting is off, the OS permission
+  // is irrelevant — a green "notifications are enabled" card next to a
+  // disabled toggle reads as a contradiction. Hide the card and skip the
+  // readout polling entirely until the setting is back on.
+  if (!enabled) {
+    setState(null)
+  } else {
     function schedulePoll(promptedBefore: boolean): void {
       if (cancelled || pollAttempts >= MAC_PROBE_POLL_MAX_ATTEMPTS) {
         return
@@ -64,7 +59,7 @@ export function useMacNotificationPermissionState(
           if (cancelled) {
             return
           }
-          setMacPermissionState(resolveMacNotificationPermissionState(probe.state, promptedBefore))
+          setState(resolveMacNotificationPermissionState(probe.state, promptedBefore))
           // Why: authoritative readouts are silent, so keep tracking System
           // Settings live in every state — flipping the toggle updates the
           // card within a poll. Probe fallbacks flash a banner when delivery
@@ -84,7 +79,7 @@ export function useMacNotificationPermissionState(
       if (status.platform !== 'darwin' || !status.supported) {
         return
       }
-      setMacPermissionState('checking')
+      setState('checking')
       // Why: `status.requested` is read before the probe stamps it, so a
       // fresh install (where the check itself pops the macOS dialog) renders
       // as "answer the dialog" instead of "blocked" on probe-fallback hosts.
@@ -93,19 +88,31 @@ export function useMacNotificationPermissionState(
         return
       }
       const resolved = resolveMacNotificationPermissionState(probe.state, status.requested)
-      setMacPermissionState(resolved)
+      setState(resolved)
       if (resolved !== null && (probe.authoritative || resolved !== 'enabled')) {
         schedulePoll(status.requested)
       }
     })()
+  }
 
-    return () => {
-      cancelled = true
-      if (pollTimer) {
-        clearTimeout(pollTimer)
-      }
+  return () => {
+    cancelled = true
+    if (pollTimer !== null) {
+      clearTimeout(pollTimer)
     }
-  }, [enabled])
+  }
+}
+
+export function useMacNotificationPermissionState(
+  enabled: boolean = true
+): [MacNotificationPermissionState | null, (state: MacNotificationPermissionState | null) => void] {
+  const [macPermissionState, setMacPermissionState] =
+    useState<MacNotificationPermissionState | null>(null)
+
+  useEffect(
+    () => startMacNotificationPermissionMonitoring(enabled, setMacPermissionState),
+    [enabled]
+  )
 
   return [macPermissionState, setMacPermissionState]
 }
@@ -157,7 +164,7 @@ export function MacNotificationPermissionCard({
               <BellRing className="size-4" />
               {translate(
                 'auto.components.onboarding.NotificationStep.95d99b52fa',
-                'Allow notifications for Orca'
+                'Allow notifications for h0x-ADE'
               )}
             </div>
             <p className="max-w-[58ch] text-[13px] leading-relaxed text-muted-foreground">
@@ -197,13 +204,13 @@ export function MacNotificationPermissionCard({
               <TriangleAlert className="size-4" />
               {translate(
                 'auto.components.onboarding.NotificationStep.90b5d2e363',
-                'macOS is not delivering Orca notifications'
+                'macOS is not delivering h0x-ADE notifications'
               )}
             </div>
             <p className="max-w-[58ch] text-[13px] leading-relaxed text-amber-700/80 dark:text-amber-200/80">
               {translate(
                 'auto.components.onboarding.mac.notification.permission.card.721d2bedb6',
-                'Turn on Allow notifications for Orca in System Settings.'
+                'Turn on Allow notifications for h0x-ADE in System Settings.'
               )}
             </p>
           </div>

@@ -244,7 +244,7 @@ export const ORCHESTRATION_FEDERATION_ATTACH_METHODS: RpcMethod[] = [
             taskId: params.taskId,
             dispatchId: params.dispatchId,
             taskSpec: params.taskSpec,
-            coordinatorHandle: 'Run home (relayed by Orca)',
+            coordinatorHandle: 'Run home (relayed by h0x-ADE)',
             workerHandle: terminalHandle,
             dispatchCapability: capability,
             devMode: params.devMode,

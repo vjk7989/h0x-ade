@@ -49,9 +49,13 @@ describe('remote runtime client error classification', () => {
   })
 
   it.each([
+    'Could not connect to the remote h0x-ADE runtime.',
     'Could not connect to the remote Orca runtime.',
+    'Remote h0x-ADE runtime closed the connection.',
     'Remote Orca runtime closed the connection.',
+    'Remote h0x-ADE runtime connection closed.',
     'Remote Orca runtime connection closed.',
+    'Remote h0x-ADE runtime is not connected.',
     'Remote Orca runtime is not connected.',
     "Error invoking remote method 'runtimeEnvironments:call': RuntimeRpcCallQueueOverloadError: Remote runtime call queue is full; retry after current calls finish.",
     'Remote runtime subscription closed before it started.'

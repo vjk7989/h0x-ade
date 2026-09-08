@@ -432,7 +432,7 @@ type PtyProcessSummary = {
   /** Age on the HOST's clock. Published instead of a creation timestamp so a client with a skewed
    *  clock cannot compute a negative or enormous age and act on it. */
   hostAgeMs?: number
-  /** True when this PTY was spawned for an Orca pane (`ORCA_PANE_KEY`). False means a bare relay
+  /** True when this PTY was spawned for an h0x-ADE pane (`ORCA_PANE_KEY`). False means a bare relay
    *  shell. Absent from a host that predates the field — which is neither. */
   paneBound?: boolean
   /** See {@link ManagedPty.ownerClientInstanceId}. Omitted when this host cannot attest one. */
@@ -803,7 +803,7 @@ export class PtyHandler {
         ...stripInheritedBuildModeEnv(process.env),
         TERM: 'xterm-256color',
         COLORTERM: 'truecolor',
-        TERM_PROGRAM: 'Orca',
+        TERM_PROGRAM: 'h0x-ADE',
         TERM_PROGRAM_VERSION:
           rendererEnv?.ORCA_APP_VERSION || process.env.ORCA_APP_VERSION || '0.0.0-dev',
         FORCE_HYPERLINK: '1'
@@ -824,18 +824,18 @@ export class PtyHandler {
     // Why: an older client may not ask a newly upgraded relay to delete inherited shim state.
     stripLegacyTerminalShimEnv(result, process.platform)
     // Why unconditionally here, not in injectRelayFishHistoryEnv: that runs only for a
-    // fish pane with isolation on, yet an Orca-minted `fish_history` (fish EXPORTS it,
-    // so the relay inherits one when launched from an Orca fish pane) must never scope
+    // fish pane with isolation on, yet an h0x-ADE-minted `fish_history` (fish EXPORTS it,
+    // so the relay inherits one when launched from an h0x-ADE fish pane) must never scope
     // any pane to someone else's worktree. Matches the desktop, which drops it on both
     // branches (STA-4682).
     dropInheritedOrcaFishHistory(result)
     // Why here as well as in injectRelayHistoryEnv: that runs only with isolation
-    // on, yet an inherited Orca HISTFILE must not scope a pane to someone else's
+    // on, yet an inherited h0x-ADE HISTFILE must not scope a pane to someone else's
     // worktree on the disabled and revive paths either.
     dropInheritedOrcaHistFile(result)
-    // Why unconditionally: ORCA_HISTFILE is Orca-owned and minted below by
+    // Why unconditionally: ORCA_HISTFILE is h0x-ADE-owned and minted below by
     // injectRelayHistoryEnv, which also runs only with isolation on. An
-    // inherited one (the relay can be launched from an Orca pane) would
+    // inherited one (the relay can be launched from an h0x-ADE pane) would
     // otherwise reach the wrapper on the disabled and revive paths, scoping the
     // pane to another worktree's history file — and wrapping a zsh pane that
     // nothing asked to wrap, since `history` is selected on its presence.

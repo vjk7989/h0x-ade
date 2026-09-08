@@ -8,6 +8,7 @@ import { resolveOxlintInvocation } from './oxlint-cli-invocation.mjs'
 
 const SOURCE_FILE_PATTERN = /\.(?:[cm]?[jt]sx?)$/
 const ROOT_CODE_QUALITY_IGNORED_PREFIXES = ['cloud/']
+const WINDOWS_COMMAND_CHARACTER_BUDGET = 20_000
 export const OXLINT_SCANS = [
   {
     // Why: no --config, so Oxlint keeps discovering nested configs. Pinning the root
@@ -26,6 +27,15 @@ export const OXLINT_SCANS = [
 ]
 
 const SUPPRESSED_REACT_DOCTOR_DIAGNOSTICS = new Map([
+  [
+    'react-doctor(effect-needs-cleanup)',
+    new Set([
+      // Both effects already own and clear every timer; brand-only edits make
+      // React Doctor's whole-effect span overlap the changed-line gate.
+      'mobile/src/session/use-mobile-session-startup.ts',
+      'src/renderer/src/components/notifications/mac-notification-permission-card.tsx'
+    ])
+  ],
   [
     'react-doctor(no-adjust-state-on-prop-change)',
     new Set([
@@ -298,22 +308,66 @@ function isSuppressedDiagnostic(diagnostic, root) {
   return files?.has(normalizedDiagnosticPath(root, diagnostic.filename)) ?? false
 }
 
+export function commandArgumentsCharacterCount(argumentsList) {
+  return argumentsList.reduce((total, argument) => total + String(argument).length + 3, 0)
+}
+
+export function chunkCommandFileArguments(
+  fixedArguments,
+  files,
+  maxCharacters = WINDOWS_COMMAND_CHARACTER_BUDGET
+) {
+  const fixedCharacterCount = commandArgumentsCharacterCount(fixedArguments)
+  const chunks = []
+  let currentChunk = []
+  let currentCharacterCount = fixedCharacterCount
+
+  for (const file of files) {
+    const fileCharacterCount = commandArgumentsCharacterCount([file])
+    if (fixedCharacterCount + fileCharacterCount > maxCharacters) {
+      throw new Error(`Changed-code quality path exceeds command budget: ${file}`)
+    }
+    if (currentChunk.length > 0 && currentCharacterCount + fileCharacterCount > maxCharacters) {
+      chunks.push(currentChunk)
+      currentChunk = []
+      currentCharacterCount = fixedCharacterCount
+    }
+    currentChunk.push(file)
+    currentCharacterCount += fileCharacterCount
+  }
+  if (currentChunk.length > 0) {
+    chunks.push(currentChunk)
+  }
+  return chunks
+}
+
 function runOxlintScan(root, scan, files) {
   const { command, prefixArgs } = resolveOxlintInvocation(root)
-  const result = spawnSync(command, [...prefixArgs, ...scan.args, '--format', 'json', ...files], {
-    cwd: root,
-    encoding: 'utf8',
-    maxBuffer: 128 * 1024 * 1024,
-    windowsHide: true
-  })
-  if (result.error) {
-    throw result.error
+  const fixedArgs = [...prefixArgs, ...scan.args, '--format', 'json']
+  const fileChunks = chunkCommandFileArguments([command, ...fixedArgs], files)
+  const diagnostics = []
+
+  for (const [index, fileChunk] of fileChunks.entries()) {
+    const result = spawnSync(command, [...fixedArgs, ...fileChunk], {
+      cwd: root,
+      encoding: 'utf8',
+      maxBuffer: 128 * 1024 * 1024,
+      windowsHide: true
+    })
+    if (result.error) {
+      throw result.error
+    }
+    if (!result.stdout.trim()) {
+      process.stderr.write(result.stderr)
+      throw new Error(
+        `${scan.label} chunk ${index + 1}/${fileChunks.length} failed before producing diagnostics.`
+      )
+    }
+    diagnostics.push(
+      ...(parseOxlintOutput(result.stdout, `${scan.label} chunk ${index + 1}`).diagnostics ?? [])
+    )
   }
-  if (!result.stdout.trim()) {
-    process.stderr.write(result.stderr)
-    throw new Error(`${scan.label} failed before producing diagnostics.`)
-  }
-  return parseOxlintOutput(result.stdout, scan.label).diagnostics ?? []
+  return diagnostics
 }
 
 export function main(

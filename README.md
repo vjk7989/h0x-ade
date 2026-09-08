@@ -92,11 +92,11 @@ Click any UI element in a real Chromium window to send its HTML, CSS, and a crop
 
 Browse PRs, issues, and project boards in-app - open a worktree from any task and review without a context switch.
 
-[Docs →](https://www.onorca.dev/docs/review/linear)
+[Docs →](docs/site/content/docs/review/linear.mdx)
 
 </td>
 <td width="50%">
-  <a href="https://www.onorca.dev/docs/review/linear"><picture><source srcset="docs/assets/feature-wall/github-linear.gif" type="image/gif"><img src="docs/assets/feature-wall/github-linear.jpg" alt="GitHub and Linear task workflows in Orca" width="100%" /></picture></a>
+  <a href="docs/site/content/docs/review/linear.mdx"><picture><source srcset="docs/assets/feature-wall/github-linear.gif" type="image/gif"><img src="docs/assets/feature-wall/github-linear.jpg" alt="GitHub and Linear task workflows in h0x-ADE" width="100%" /></picture></a>
 </td>
 </tr>
 <tr>
@@ -238,9 +238,9 @@ Pair with your desktop app to monitor and steer your agents from your phone.
 
 - **Discord:** Join the community on **[Discord](https://discord.gg/fzjDKHxv8Q)**.
 - **Twitter / X:** Follow **[@orca_build](https://x.com/orca_build)** for updates and announcements.
-- **WeChat:** Scan to join the Orca community WeChat group 8. Group 8 may be full; if so, scan the Group 9 QR code instead.
+- **WeChat:** Scan to join the h0x-ADE community WeChat group 8. Group 8 may be full; if so, scan the Group 9 QR code instead.
 
-  <img src="docs/assets/wechat-qr-group8.jpg" alt="WeChat group 8 QR code for the Orca community" width="160" />&nbsp;&nbsp;<img src="docs/assets/wechat-qr-group9.jpg" alt="WeChat group 9 QR code for the Orca community" width="160" />
+  <img src="docs/assets/wechat-qr-group8.jpg" alt="WeChat group 8 QR code for the h0x-ADE community" width="160" />&nbsp;&nbsp;<img src="docs/assets/wechat-qr-group9.jpg" alt="WeChat group 9 QR code for the h0x-ADE community" width="160" />
 
 - **Feedback &amp; Ideas:** We ship fast. Missing something? [Request a new feature](https://github.com/vjk7989/h0x-ade/issues).
 - **Privacy:** See the [privacy &amp; telemetry docs](https://www.onorca.dev/docs/telemetry) for what anonymous usage data h0x-ADE collects and how to opt out.
@@ -269,4 +269,4 @@ Windows code signing sponored/provided by [SignPath.io](https://signpath.io), ce
 
 ## License
 
-Orca is free and open source under the [MIT License](LICENSE).
+h0x-ADE is free and open source under the [MIT License](LICENSE).

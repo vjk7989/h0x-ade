@@ -70,7 +70,7 @@ describe('OrcaAccountSettingsPane', () => {
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
     expect(screen.getByText('ada@example.com')).toBeInTheDocument()
     expect(screen.getByText('Artifact sharing')).toBeInTheDocument()
-    expect(screen.getByText('Orca Relay')).toBeInTheDocument()
+    expect(screen.getByText('h0x Relay')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Sign out' }))
     await user.click(screen.getByRole('button', { name: 'Confirm sign out' }))
@@ -84,7 +84,7 @@ describe('OrcaAccountSettingsPane', () => {
 
     expect(
       screen.getByText(
-        'Sign in to extend h0x-ADE with cloud features, including Artifacts and Orca Relay.'
+        'Sign in to extend h0x-ADE with cloud features, including Artifacts and h0x Relay.'
       )
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Sign in to h0x-ADE' }))

@@ -107,7 +107,7 @@ export function ComputerUsePane(): React.JSX.Element {
   const summaryDescription = checking
     ? translate(
         'auto.components.settings.computerUseSummary.checkingDescription',
-        'Orca is checking macOS privacy permissions for the Computer Use helper.'
+        'h0x-ADE is checking macOS privacy permissions for the Computer Use helper.'
       )
     : setupUnavailable
       ? translate(

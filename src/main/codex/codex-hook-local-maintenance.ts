@@ -66,7 +66,7 @@ export async function refreshCodexRuntimeUserHooksExclusively(
       runtimeHomePath,
       systemHomePath: getSystemCodexHomePath()
     })
-    // Why: this path is used when Orca status hooks are disabled. The
+    // Why: this path is used when h0x status hooks are disabled. The
     // runtime CODEX_HOME should keep user hooks, but not Orca-managed trust.
     // Write current mirrored user trust first so stale cleanup compares
     // against current hashes while deleting old managed hook keys.

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 // meaning reads instantly as a single mark — quieter than a looping demo.
 // Each compresses its step to one recognizable idea drawn from the old animation.
 
-// Mac-style terminal traffic-light dots — the signature of an Orca terminal pane.
+// Mac-style terminal traffic-light dots — the signature of an h0x terminal pane.
 function TerminalDots(): JSX.Element {
   return (
     <span className="flex gap-[3px]">

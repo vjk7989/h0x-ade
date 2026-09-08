@@ -23,5 +23,15 @@
       "tagObjectSha": "43268cadff07d513a73181741090ece06a364fd6",
       "peeledCommitSha": "6e4f817101daa18d82824b69243d9079baa9c416"
     }
+  ],
+  "commits": [
+    {
+      "id": "vm_runtime_baseline",
+      "commitSha": "bf0c77d5bc800e19117084c27fd1441eda9134ad"
+    },
+    {
+      "id": "vm_runtime_affected",
+      "commitSha": "25abb9368d98ad84a174f530e02f4228d2269062"
+    }
   ]
 }

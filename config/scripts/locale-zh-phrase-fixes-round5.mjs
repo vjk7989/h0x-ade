@@ -1,20 +1,20 @@
 // Chinese phrase fixes from high-visibility UI audit round 5.
 export const ZH_PHRASE_FIXES_ROUND5 = [
-  { pattern: /Orca集成开发环境/g, replacement: 'Orca IDE', whenEnIncludes: 'Orca IDE' },
-  { pattern: /Orca第一/g, replacement: 'Orca 优先', whenEnIncludes: 'Orca first' },
-  { pattern: /Orca移动/g, replacement: 'Orca Mobile', whenEnIncludes: 'Orca Mobile' },
-  { pattern: /Orca标志/g, replacement: 'Orca 标志', whenEnIncludes: 'Orca logo' },
-  { pattern: /喜欢Orca/g, replacement: '喜欢 Orca', whenEnIncludes: 'Enjoying Orca' },
-  { pattern: /认识Orca/g, replacement: '了解 Orca', whenEnIncludes: 'Get to know Orca' },
-  { pattern: /支持Orca/g, replacement: '支持 Orca', whenEnIncludes: 'Support Orca' },
-  { pattern: /展开Orca/g, replacement: '展开 Orca', whenEnIncludes: 'Expand Orca' },
-  { pattern: /来自Orca/g, replacement: '来自 Orca', whenEnIncludes: 'from Orca' },
+  { pattern: /h0x-ADE集成开发环境/g, replacement: 'h0x-ADE IDE', whenEnIncludes: 'h0x-ADE IDE' },
+  { pattern: /h0x-ADE第一/g, replacement: 'h0x-ADE 优先', whenEnIncludes: 'h0x-ADE first' },
+  { pattern: /h0x-ADE移动/g, replacement: 'h0x-ADE Mobile', whenEnIncludes: 'h0x-ADE Mobile' },
+  { pattern: /h0x-ADE标志/g, replacement: 'h0x-ADE 标志', whenEnIncludes: 'h0x-ADE logo' },
+  { pattern: /喜欢h0x-ADE/g, replacement: '喜欢 h0x-ADE', whenEnIncludes: 'Enjoying h0x-ADE' },
+  { pattern: /认识h0x-ADE/g, replacement: '了解 h0x-ADE', whenEnIncludes: 'Get to know h0x-ADE' },
+  { pattern: /支持h0x-ADE/g, replacement: '支持 h0x-ADE', whenEnIncludes: 'Support h0x-ADE' },
+  { pattern: /展开h0x-ADE/g, replacement: '展开 h0x-ADE', whenEnIncludes: 'Expand h0x-ADE' },
+  { pattern: /来自h0x-ADE/g, replacement: '来自 h0x-ADE', whenEnIncludes: 'from h0x-ADE' },
   {
-    pattern: /正在重新启动Orca/g,
-    replacement: '正在重启 Orca',
-    whenEnIncludes: 'Restarting Orca'
+    pattern: /正在重新启动h0x-ADE/g,
+    replacement: '正在重启 h0x-ADE',
+    whenEnIncludes: 'Restarting h0x-ADE'
   },
-  { pattern: /Orca([\u4e00-\u9fff])/g, replacement: 'Orca $1', whenEnIncludes: 'Orca' },
+  { pattern: /h0x-ADE([\u4e00-\u9fff])/g, replacement: 'h0x-ADE $1', whenEnIncludes: 'h0x-ADE' },
   { pattern: /Linear([\u4e00-\u9fff])/g, replacement: 'Linear $1', whenEnIncludes: 'Linear' },
   { pattern: /Codex([\u4e00-\u9fff])/g, replacement: 'Codex $1', whenEnIncludes: 'Codex' },
   { pattern: /Claude([\u4e00-\u9fff])/g, replacement: 'Claude $1', whenEnIncludes: 'Claude' },
@@ -49,8 +49,8 @@ export const ZH_PHRASE_FIXES_ROUND5 = [
     whenEnIncludes: 'actionable issues'
   },
   {
-    pattern: /显示 Orca 移动按钮/g,
-    replacement: '显示 Orca Mobile 按钮',
-    whenEnIncludes: 'Show Orca Mobile Button'
+    pattern: /显示 h0x-ADE 移动按钮/g,
+    replacement: '显示 h0x-ADE Mobile 按钮',
+    whenEnIncludes: 'Show h0x-ADE Mobile Button'
   }
 ]

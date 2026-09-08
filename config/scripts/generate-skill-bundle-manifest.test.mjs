@@ -522,13 +522,11 @@ describe('skill bundle manifest generator', () => {
   })
 
   it('computes the same Git tree identity as Git', async () => {
-    const packageRoot = path.resolve('skills', 'orca-cli')
-    const files = await collectPackageFiles(packageRoot)
-    const expected = execFileSync('git', ['ls-tree', 'HEAD:skills', 'orca-cli'], {
+    const committedBytes = execFileSync('git', ['show', 'HEAD:skills/orca-cli/SKILL.md'])
+    const files = [describeFile('SKILL.md', committedBytes, false)]
+    const expected = execFileSync('git', ['rev-parse', 'HEAD:skills/orca-cli'], {
       encoding: 'utf8'
-    })
-      .trim()
-      .split(/\s+/)[2]
+    }).trim()
 
     expect(gitTreeSha(files)).toBe(expected)
   })

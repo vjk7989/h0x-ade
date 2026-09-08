@@ -4,7 +4,7 @@ import { GLOBAL_FLAGS } from '../args'
 export const EMULATOR_COMMAND_SPECS: CommandSpec[] = [
   {
     path: ['emulator', 'list'],
-    summary: 'List available/running emulators (Orca-managed + raw serve-sim)',
+    summary: 'List available/running emulators (h0x-ADE-managed + raw serve-sim)',
     usage: 'h0x emulator list [--worktree <selector>] [--json]',
     allowedFlags: [...GLOBAL_FLAGS, 'worktree']
   },

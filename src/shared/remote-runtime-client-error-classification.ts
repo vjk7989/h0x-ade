@@ -15,14 +15,19 @@ export const RECOVERABLE_CODES: ReadonlySet<string> = new Set([
 ])
 
 export const RECOVERABLE_MESSAGE_FRAGMENTS: readonly string[] = [
+  'could not connect to the remote h0x-ade runtime',
   'could not connect to the remote orca runtime',
+  'remote h0x-ade runtime closed the connection',
   'remote orca runtime closed the connection',
+  'remote h0x-ade runtime connection closed',
   'remote orca runtime connection closed',
+  'remote h0x-ade runtime is not connected',
   'remote orca runtime is not connected',
   RUNTIME_RPC_QUEUE_OVERLOAD_MESSAGE_FRAGMENT,
   'remote runtime connection closed',
   'remote runtime subscription closed before it started',
   'remote terminal stream is not connected',
+  'timed out waiting for the remote h0x-ade runtime',
   'timed out waiting for the remote orca runtime'
 ]
 

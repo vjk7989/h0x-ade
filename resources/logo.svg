@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="h0x-ADE logo">
-  <path d="M66 54L118 24C127 19 138 26 138 37V219C138 230 127 237 118 232L66 202C60 199 56 192 56 185V71C56 64 60 58 66 54Z" stroke="#fff" stroke-width="12" stroke-linejoin="round"/>
-  <path d="M84 91L138 60V196L84 165V91Z" stroke="#fff" stroke-width="10" stroke-linejoin="round"/>
-  <path d="M190 54L138 24C129 19 118 26 118 37V219C118 230 129 237 138 232L190 202C196 199 200 192 200 185V71C200 64 196 58 190 54Z" stroke="#fff" stroke-width="12" stroke-linejoin="round"/>
-  <path d="M172 91L118 60V196L172 165V91Z" stroke="#fff" stroke-width="10" stroke-linejoin="round"/>
-  <rect x="107" y="107" width="42" height="42" rx="8" stroke="#fff" stroke-width="10"/>
-</svg>

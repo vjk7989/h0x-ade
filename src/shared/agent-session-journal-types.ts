@@ -32,7 +32,7 @@ export type AgentSessionProviderHandle =
 /** The narrow slice of the durable session record the journal needs. The full
  *  record (owner, lease, account home) belongs to the session store. */
 export type AgentSessionJournalIdentity = {
-  /** Orca agent-session id — the journal's primary key. */
+  /** h0x agent-session id — the journal's primary key. */
   sessionId: string
   /** Execution-host workspace key. Identical for a worktree, a folder
    *  workspace, a WSL distro, and an SSH host; never a path. */

@@ -8,6 +8,18 @@ import { afterEach, describe, expect, it } from 'vitest'
 const scriptPath = fileURLToPath(
   new URL('../../scripts/prepare-android-release.mjs', import.meta.url)
 )
+const productionConfig = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../../app.json', import.meta.url)), 'utf8')
+) as {
+  expo: {
+    name: string
+    scheme: string
+    icon: string
+    ios: { bundleIdentifier: string }
+    android: { package: string; adaptiveIcon: { foregroundImage: string } }
+    splash: { image: string }
+  }
+}
 
 const appConfig = {
   expo: {
@@ -37,6 +49,20 @@ describe('prepare Android release script', () => {
     tempDirs = []
   })
 
+  it('pins the canonical mobile launcher, deep link, package, and brand assets', () => {
+    expect(productionConfig.expo).toMatchObject({
+      name: 'h0x-ADE Mobile',
+      scheme: 'pavii-h0x',
+      icon: './assets/icon.png',
+      splash: { image: './assets/splash-icon.png' },
+      ios: { bundleIdentifier: 'tech.pavii.h0xade.mobile' },
+      android: {
+        package: 'tech.pavii.h0xade.mobile',
+        adaptiveIcon: { foregroundImage: './assets/adaptive-icon.png' }
+      }
+    })
+  })
+
   it('uses committed Android release identity without mutating app config', () => {
     const { configPath, contents } = createAppConfig()
 
@@ -49,7 +75,7 @@ describe('prepare Android release script', () => {
       }
     })
 
-    expect(output).toContain('Prepared Orca Mobile Android 0.0.22 (4)')
+    expect(output).toContain('Prepared h0x-ADE Mobile Android 0.0.22 (4)')
     expect(output).toContain('Release tag: mobile-android-v0.0.22')
     expect(readFileSync(configPath, 'utf8')).toBe(contents)
   })

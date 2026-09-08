@@ -444,7 +444,7 @@ release smoke checks remain blocked or staged.
   `node_modules` was removed, but the website build remains unverified.
 - The website repo lockfile is pnpm lockfile v6 and should be installed with a
   pnpm 8 command, for example `corepack pnpm@8.15.9 --ignore-workspace install
-  --frozen-lockfile`, after enough D: space is available.
+--frozen-lockfile`, after enough D: space is available.
 - `resources/build/icon.icns` still needs macOS or CI tooling to regenerate from
   the h0x-ADE logo.
 - Full `src/cli` without exclusions is still not a reliable Windows gate because
@@ -721,3 +721,246 @@ release publication.
   `h0x-ADE-1.4.199-arm64-mac.zip.blockmap`. An independent remote artifact
   audit passed; the existing low-space boundary above explains why no local
   artifact copies were downloaded.
+
+## Deterministic Surface Rebrand — Completed Local Slice
+
+The current surface-rebrand work centralizes canonical identity in
+`src/shared/brand.ts`: `h0x-ADE` is the product display name and `h0x` is the
+CLI display name. Desktop, web, and dashboard document titles, Electron main
+and dashboard window titles, shell-facing copy, tray tooltip/menu copy, and the
+local, daemon, and relay `TERM_PROGRAM` value now use `h0x-ADE`. The tray loads
+`resources/tray/h0x-menu-barTemplate.png` and its `@2x` counterpart.
+
+- `resources/brand/h0x-mark-source.png` is the authoritative 1254 × 1254 logo
+  source, pinned by SHA-256
+  `D54E012E3A323D284E5CF0AB9A41522F89A92B3AA3DF4D10316E5A06B267B6F8`.
+  `config/scripts/generate-h0x-brand-assets.mjs` deterministically emits the
+  black/white renderer marks, app/build/dev icons, six-frame Windows ICO,
+  pre-sized 16–512 px Linux icons, icon-source asset, 1×/2× tray templates,
+  mobile icon/adaptive/splash/favicon assets, and documentation logo/favicon.
+  `build:brand-assets` writes them and `check:brand-assets` verifies byte-for-byte
+  freshness.
+- `config/scripts/visible-brand-inventory.mjs` scans production UI, docs,
+  localization catalogs, skills, plugins, mobile surfaces, native sources, and
+  packaging configuration. Its allowlist covers 78 exact path-and-text
+  compatibility matches; entries are rejected when stale, duplicated, or
+  missing a reason. Legacy Orca names remain only at deliberate input,
+  mixed-version, migration, cleanup, persisted-key/file, protocol/header,
+  environment-variable, helper-bundle, process-recognition, and internal-symbol
+  boundaries.
+- `config/scripts/check-changed-code-quality.mjs` chunks Windows Oxlint file
+  arguments under a deterministic 20,000-character command budget and merges
+  diagnostics, allowing the complete 860-file changed-code set to run without
+  exceeding Windows command-line limits.
+- Earlier focused execution passed 188 tests. Independent execution then passed
+  216 tests with 2 skipped; the logo contract passed 47 tests; scanner and
+  changed-quality coverage passed 22 tests; and the locale/manifest batch passed
+  65 tests with 3 skipped. Localization and skill freshness verifiers,
+  `pnpm tc`, and changed-code quality across all 860 files also passed.
+
+Rendered Electron validation and package CI for this new surface slice, its
+merge, any further version bump, and release publication are not established by
+these local gates and remain pending.
+
+## Mobile Compatibility And Rebrand — Completed Slice
+
+Commit `9bd6aa1a8b` completes the scoped mobile identity and compatibility
+contracts while leaving existing installations and mixed-version pairing
+inputs usable.
+
+- The Expo launcher display name is `h0x-ADE Mobile`, and Android release output
+  uses the same display identity. The release contract also pins the existing
+  `pavii-h0x` scheme, mobile package IDs, and generated brand-asset paths.
+- New pairing URLs are emitted with the canonical `pavii-h0x` scheme. Desktop
+  and mobile parsers additively accept legacy `orca://pair` input, including
+  case-normalized valid forms, while rejecting lookalike schemes and routes;
+  this is an input compatibility boundary, not a legacy-output restoration.
+- Stale mobile component, diagnostics, session, source-control, task, release,
+  and transport assertions now reflect current `h0x`/`h0x-ADE` behavior. The
+  generated mobile icon dimension contract includes `mobile/assets/icon.png`,
+  and the bundled navigation plugin content hash was refreshed to match its
+  generated content.
+- Adjacent shell/static-analysis findings were resolved with narrowly scoped
+  production cleanup, including neutral GitHub stacked-PR ambiguity messages;
+  no RPC, storage, remote-wire, or package-ID migration was introduced.
+- Focused local tests, typecheck, generated-asset/manifest verification, and
+  changed-code quality passed. The GitHub mobile verification workflow also
+  passed for this commit.
+
+This records only the completed mobile slice. The complete PR gate, merge,
+unsigned platform builds, and release verification remain pending and are not
+implied by the focused green evidence above.
+
+## Unsigned Mobile Artifacts — Completed Local Slice
+
+- `.github/workflows/unsigned-mobile-build.yml` is a ref-selectable manual
+  workflow for an Android release APK and an unsigned iOS simulator `.app` zip.
+  It is intentionally deferred until the desktop release is merged, when the
+  workflow exists on `main` and can be dispatched for the selected commit.
+  It uses JDK 17/Temurin for Android and Xcode 26.5 with code signing disabled
+  for iOS; neither job publishes a release or changes repository state. Each
+  job resolves `git rev-parse HEAD` after checkout and includes that SHA in the
+  uploaded artifact-container name; the per-file metadata records the platform,
+  version, filename, and file SHA-256, not the source commit.
+- `mobile/scripts/verify-unsigned-mobile-artifact.mjs` validates the packaged
+  name, version `0.0.48`, package/bundle identifier, sole `pavii-h0x` output
+  scheme plus Expo's derived technical schemes, native display and permission copy, required executable/icon assets,
+  and exact source logo hashes. It emits deterministic JSON metadata and a
+  conventional SHA-256 sidecar next to each artifact.
+- `mobile/scripts/disable-android-release-signing.mjs` removes exactly one
+  Expo-generated debug-signing line from the generated Android `release {}`
+  block before Gradle configures variants. The verifier then requires
+  `apksigner` to prove that the resulting APK has no signer. Normal release and
+  store workflows are unchanged. The iOS lane uses runner CocoaPods directly
+  and resolves the single
+  generated workspace, the single app project's basename-matching shared
+  scheme, and the single simulator app instead of retaining a stale internal
+  project filename.
+- `mobile/src/mobile-release/verify-unsigned-mobile-artifact.test.ts` covers
+  canonical Android/iOS inspections and rejection of identity, scheme, visible
+  brand, asset, artifact-name, and checksum drift. `.github/workflows/mobile.yml`
+  includes the manual workflow path so these verifier tests run when that
+  workflow changes.
+- Legacy `orca://pair` remains accepted as input by the existing compatibility
+  parser; it is intentionally absent from generated native URL schemes.
+
+The workflow and verifier are locally validated. Actual Android and iOS
+artifacts remain pending until the manual workflow is dispatched for the exact
+release commit and its uploaded files are inspected.
+
+## Historical VM Rollback Fixture Pin — Completed Local Slice
+
+The static-analysis rollback reproduction now obtains its two immutable VM
+runtime source fixtures without requiring the fork checkout to contain
+unrelated upstream history.
+
+- `config/pinned-upstream-history.json` adds the exact upstream commits
+  `bf0c77d5bc800e19117084c27fd1441eda9134ad` (`vm_runtime_baseline`) and
+  `25abb9368d98ad84a174f530e02f4228d2269062` (`vm_runtime_affected`). The
+  existing annotated-tag object and peeled-commit pins remain unchanged.
+- `config/scripts/prepare-pinned-upstream-history.mjs` validates tag and commit
+  entries under one unique ID namespace. Requested commits are fetched by
+  exact SHA, with `--no-tags`, `--no-write-fetch-head`, and `--depth=1`, from
+  the read-only `https://github.com/stablyai/orca.git` fixture source into
+  `refs/h0x-ci/upstream-commits/<id>`. The helper verifies that each temporary
+  ref is a commit and peels to the pinned SHA; an already verified ref is
+  reused without another fetch. Tag fixtures continue to use
+  `refs/h0x-ci/upstream-tags/<tag>` and retain their remote annotated-tag
+  verification.
+- `.github/workflows/pr.yml` prepares exactly
+  `vm_runtime_baseline,vm_runtime_affected` immediately before
+  `run-ephemeral-vm-runtime-store-rollback-repro.mjs`. The workflow contains no
+  upstream push and creates no persistent fork ref.
+- `config/scripts/pinned-upstream-history.test.mjs` covers manifest commit pins,
+  exact fetch arguments, temporary-ref reuse, mismatched fetched commits,
+  malformed commit IDs, duplicate IDs, and the existing tag behavior.
+  `config/scripts/pinned-upstream-history-workflows.test.mjs` verifies ordering,
+  the exact selected IDs, and the no-push contract for the rollback step.
+
+This slice fixes the deterministic fixture setup locally only. The PR CI rerun,
+unsigned Android and iOS simulator builds and artifact inspection, the complete
+desktop gate, merge, version bump, unsigned desktop builds, and `v1.4.200`
+publication all remain pending.
+
+## Full-Suite Brand Oracle Corrections — Completed Local Slice
+
+The full-suite follow-up aligns stale test oracles with the canonical
+`h0x`/`h0x-ADE` output already produced by the application. Changes are scoped
+to assertions, fixtures, and selectors across `config`, `src/cli`, `src/main`,
+`src/renderer`, and `src/shared`; they do not introduce a new compatibility
+alias or change runtime, RPC, storage, package-ID, or remote-wire behavior.
+
+- PR workflow contracts now require explicit visible-brand inventory and logo
+  freshness steps. Wrapper fixtures and snapshots were regenerated from their
+  canonical sources rather than edited as independent outputs.
+- Hidden Electron E2E selectors now target the current h0x-ADE title and brand
+  surfaces, preserving the required background-only launch and CDP validation
+  path without focusing or revealing a window.
+- Focused tests covering the corrected config, CLI, main, renderer, and shared
+  oracles passed. The visible-brand scanner, logo freshness contract, and
+  changed-code quality gate also passed.
+- Local Windows runs of the complete Node shard set were non-representative
+  because platform-specific and CI environment assumptions differ from the
+  Linux PR runner. They are retained as diagnostic evidence only, not as the
+  authoritative full-suite verdict.
+
+The Linux PR CI rerun is pending. This local slice therefore does not yet claim
+the complete PR gate, merge, unsigned platform builds, version bump, or
+`v1.4.200` publication.
+
+## CI Failure Classifier Robustness — Completed Local Slice
+
+Repeated GitHub-hosted runs exposed `EAGAIN` while the failure classifier read
+its piped payload through `readFileSync` on standard input. The classifier now
+consumes `process.stdin` asynchronously, preserving its existing parsing and
+classification behavior while avoiding the transient synchronous-read failure.
+
+- The focused classifier gate passed 31 tests, and its lint and formatting
+  checks passed.
+- The unrelated Windows workflow-parallelism path test is excluded from this
+  slice; its platform-path expectation is not evidence about classifier stdin
+  handling.
+
+The authoritative CI rerun is pending. This robustness fix therefore does not
+yet establish a complete green PR gate or advance merge, build, version, or
+release status.
+
+## Node Shards 2–8 Second-Layer Corrections — Completed Local Slice
+
+The next full-suite pass updates 28 test files plus a generated Bash wrapper
+comment to match current fork-owned behavior. The corrected oracles cover
+dispatch prefixes, visible product copy, skill selectors, Relay branding, and
+packaged artifact names across shards 2–8.
+
+- Canonical output expectations use `h0x` and `h0x-ADE` where production now
+  emits them. Internal compatibility identifiers, legacy accepted inputs,
+  environment variables, persisted names, and mixed-version boundaries remain
+  unchanged.
+- The generated Bash comment was refreshed through its source/generation path;
+  it is not an independent hand-edited runtime contract.
+- Focused verification passed two batches totaling 193 and 86 tests. Changed
+  code quality, the visible-brand scanner, and the logo freshness contract also
+  passed.
+
+The Linux PR CI rerun is pending. Local focused evidence does not yet establish
+that all eight authoritative CI shards pass or advance merge, build, version,
+or release status.
+
+## Full Node Shard Verification And Hidden E2E Follow-Up
+
+[PR run 34215218893](https://github.com/vjk7989/h0x-ade/actions/runs/34215218893)
+passed all eight Node 24 shards, establishing the authoritative Linux result for
+the brand-oracle correction slices above.
+
+- The remaining surface-brand hidden E2E failure was diagnosed from its trace:
+  the settings view rendered completely, but the test waited for an exact
+  `Settings` label that no longer exists.
+- The assertion now targets the stable `Search settings` textbox exposed by the
+  rendered settings view. This is a selector correction only and does not alter
+  renderer behavior or visible copy.
+- The SSH and GPU E2E failures are unrelated to this selector correction. Their
+  rerun remains pending and no green result for those jobs is claimed here.
+
+The eight Node shards are green; complete E2E and PR-gate status remains pending
+until the unrelated SSH/GPU rerun and the corrected hidden surface-brand E2E
+job finish.
+
+## SSH Headful E2E Background Guard — Completed Local Slice
+
+The SSH cleanup E2E failure was traced to the required background launch mode:
+`ORCA_BACKGROUND_LAUNCH=1` keeps the Electron `BrowserWindow` hidden, while the
+production scanner intentionally parks until a visible window can participate.
+The resulting cleanup reconnect is not evidence that the remote process died
+and must not be interpreted as an `exited` verdict.
+
+- The `@headful` cleanup test now skips only when
+  `ORCA_BACKGROUND_LAUNCH=1`. It remains active in the isolated visible-window
+  lane where its native visibility precondition can be satisfied.
+- Production scanner behavior and SSH execution-boundary semantics are
+  unchanged: loss of contact remains `unverifiable`, never proof of death.
+- The scanner suite passed 9/9 tests. Typecheck, lint, and formatting checks
+  also passed for the scoped change.
+
+The authoritative CI rerun is pending. This guard resolves the invalid hidden
+lane precondition without claiming the visible `@headful` coverage has run in
+the background job.

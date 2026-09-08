@@ -2,20 +2,20 @@
 title: Browser-use profiles
 ---
 
-Browser-use profiles let you run the Orca browser with a specific identity — a logged-in user, a particular cookie jar, a custom user-agent. Useful when an agent needs to log in, reproduce a session-specific bug, or emulate multiple users.
+Browser-use profiles let you run the h0x-ADE browser with a specific identity — a logged-in user, a particular cookie jar, a custom user-agent. Useful when an agent needs to log in, reproduce a session-specific bug, or emulate multiple users.
 
 ## Create a profile
 
 1. Open [Settings → Browser → Profiles](/docs/settings).
 1. Click **Add profile**, give it a name.
 1. Optionally seed it with cookies, a user-agent, and a viewport size.
-1. Every profile presents Electron's own user agent. Orca no longer rewrites it to look like Chrome, because Cloudflare Turnstile rejects a Chrome-shaped UA that sends no client hints and accepts a declared Electron client. The only exception is Google's sign-in hosts, where Orca presents a Firefox identity so Google issues cookies bound to the embedded browser. A **native user agent** profile (`orca tab profile create --no-ua-spoof`) also skips that Google exception.
+1. Every profile presents Electron's own user agent. h0x-ADE no longer rewrites it to look like Chrome, because Cloudflare Turnstile rejects a Chrome-shaped UA that sends no client hints and accepts a declared Electron client. The only exception is Google's sign-in hosts, where h0x-ADE presents a Firefox identity so Google issues cookies bound to the embedded browser. A **native user agent** profile (`h0x tab profile create --no-ua-spoof`) also skips that Google exception.
 
 ## Cookie import and Google sign-in
 
-Import cookies from Chrome or Edge (or from a cookie file) into a profile from Settings or the browser toolbar. Orca replaces existing cookies only for domains included in the import, so sign-ins for unrelated sites in the same profile stay intact. Google cookies are excluded — import menus show **Google logins aren't imported** and tell you to **Sign in to Google directly in Orca.** After an import that skipped Google cookies, a separate warning names the host that ran the import: open a browser in Orca on that host with the same profile, then sign in.
+Import cookies from Chrome or Edge (or from a cookie file) into a profile from Settings or the browser toolbar. h0x-ADE replaces existing cookies only for domains included in the import, so sign-ins for unrelated sites in the same profile stay intact. Google cookies are excluded — import menus show **Google logins aren't imported** and tell you to **Sign in to Google directly in h0x-ADE.** After an import that skipped Google cookies, a separate warning names the host that ran the import: open a browser in h0x-ADE on that host with the same profile, then sign in.
 
-When a site requests a discoverable passkey from a USB security key and the key offers multiple accounts, Orca opens an account picker instead of silently canceling the sign-in. Choose the account you want or cancel the request. Platform passkeys stored by the operating system are not available in Orca yet; this flow is for external FIDO security keys.
+When a site requests a discoverable passkey from a USB security key and the key offers multiple accounts, h0x-ADE opens an account picker instead of silently canceling the sign-in. Choose the account you want or cancel the request. Platform passkeys stored by the operating system are not available in h0x-ADE yet; this flow is for external FIDO security keys.
 
 ## Use a profile
 

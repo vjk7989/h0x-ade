@@ -33,24 +33,24 @@ Choose the executable once for the current session:
 - Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `h0x-dev`.
 - Otherwise, use `h0x`.
 
-In every command block, `ORCA` is a documentation placeholder. Replace it with the chosen
-executable before running the command; do not create a shell variable or run `ORCA`
+In every command block, `H0X` is a documentation placeholder. Replace it with the chosen
+executable before running the command; do not create a shell variable or run `H0X`
 literally. This substitution works the same way in POSIX shells, PowerShell, and cmd.exe.
 
 ```text
-ORCA status --json
-ORCA worktree ps --json
-ORCA terminal list --json
+H0X status --json
+H0X worktree ps --json
+H0X terminal list --json
 ```
 
 Keep using that same executable for every later command so dev sessions do not reach a
 production CLI and Linux never falls through to the GNOME screen reader.
 
-If Orca is not running, start it:
+If h0x-ADE is not running, start it:
 
 ```text
-ORCA open --json
-ORCA status --json
+H0X open --json
+H0X status --json
 ```
 
 Prefer `--json` for agent-driven calls. If the CLI is missing, say so explicitly instead of inspecting source files first.
@@ -64,7 +64,7 @@ Do not use `h0x orchestration task-create`, `h0x orchestration dispatch --inject
 Independent new-worktree handoff:
 
 ```text
-ORCA worktree create --name <task-name> --no-parent --agent codex --prompt "<task brief>" --json
+H0X worktree create --name <task-name> --no-parent --agent codex --prompt "<task brief>" --json
 ```
 
 Use `--no-parent` and omit `--base-branch` for independent top-level handoffs unless the user explicitly asks for stacked work, "branch from current", or a specific base. Put any current-branch context in the prompt.
@@ -75,19 +75,19 @@ Custom Codex model/effort handoff:
 
 **Extra first terminal:** when no repo default-terminal configuration supplies a primary terminal, bare `worktree create` (no `--agent`) opens a fallback shell before the later `terminal create --command ...` adds the agent. Configured default tabs are materialized instead and may run real commands. Prefer `--agent` whenever the built-in launcher is enough. When custom argv forces the two-step path, target the agent handle only; close a prior terminal only after `terminal list` or `terminal show` confirms it is an unused shell.
 
-The create result's `worktree.id` already contains both pieces Orca needs: `<repoId>::<worktreePath>`. Copy that whole value into the next command; do not shorten it to the repo id.
+The create result's `worktree.id` already contains both pieces h0x-ADE needs: `<repoId>::<worktreePath>`. Copy that whole value into the next command; do not shorten it to the repo id.
 
 ```text
-ORCA worktree create --name <task-name> --no-parent --json
-ORCA terminal create --worktree id:<repoId>::<newWorktreePath> --title <task-name> --command 'codex --model gpt-5.5 -c model_reasoning_effort="xhigh"' --json
-ORCA terminal wait --terminal <handle> --for tui-idle --timeout-ms 60000 --json
-ORCA terminal send --terminal <handle> --text "<task brief>" --enter --json
+H0X worktree create --name <task-name> --no-parent --json
+H0X terminal create --worktree id:<repoId>::<newWorktreePath> --title <task-name> --command 'codex --model gpt-5.5 -c model_reasoning_effort="xhigh"' --json
+H0X terminal wait --terminal <handle> --for tui-idle --timeout-ms 60000 --json
+H0X terminal send --terminal <handle> --text "<task brief>" --enter --json
 ```
 
 Existing-terminal handoff:
 
 ```text
-ORCA terminal send --terminal <handle> --text "<task brief>" --enter --json
+H0X terminal send --terminal <handle> --text "<task brief>" --enter --json
 ```
 
 ## Worktrees
@@ -99,24 +99,24 @@ Think of its id as a two-part address: `<repoId>::<worktreePath>`. For example, 
 Common commands:
 
 ```text
-ORCA repo list --json
-ORCA repo show --repo id:<repoId> --json
-ORCA repo add --path /abs/repo --json
-ORCA repo set-base-ref --repo id:<repoId> --ref origin/main --json
-ORCA repo search-refs --repo id:<repoId> --query main --limit 10 --json
-ORCA worktree list --repo id:<repoId> --json
-ORCA worktree ps --json
-ORCA worktree current --json
-ORCA worktree show --worktree <selector> --json
-ORCA worktree create --repo id:<repoId> --name related-task --json
-ORCA worktree create --repo id:<repoId> --name related-task --parent-worktree active --json
-ORCA worktree create --repo id:<repoId> --name folder-child --parent-worktree folder:<folderId> --json
-ORCA worktree create --name child-task --agent codex --prompt "hi" --json
-ORCA worktree create --name independent-task --no-parent --json
-ORCA worktree set --worktree id:<repoId>::<worktreePath> --display-name "My Task" --json
-ORCA worktree set --worktree active --comment "reproduced bug; testing fix" --json
-ORCA worktree set --worktree active --workspace-status in-review --json
-ORCA worktree rm --worktree id:<repoId>::<worktreePath> --force --json
+H0X repo list --json
+H0X repo show --repo id:<repoId> --json
+H0X repo add --path /abs/repo --json
+H0X repo set-base-ref --repo id:<repoId> --ref origin/main --json
+H0X repo search-refs --repo id:<repoId> --query main --limit 10 --json
+H0X worktree list --repo id:<repoId> --json
+H0X worktree ps --json
+H0X worktree current --json
+H0X worktree show --worktree <selector> --json
+H0X worktree create --repo id:<repoId> --name related-task --json
+H0X worktree create --repo id:<repoId> --name related-task --parent-worktree active --json
+H0X worktree create --repo id:<repoId> --name folder-child --parent-worktree folder:<folderId> --json
+H0X worktree create --name child-task --agent codex --prompt "hi" --json
+H0X worktree create --name independent-task --no-parent --json
+H0X worktree set --worktree id:<repoId>::<worktreePath> --display-name "My Task" --json
+H0X worktree set --worktree active --comment "reproduced bug; testing fix" --json
+H0X worktree set --worktree active --workspace-status in-review --json
+H0X worktree rm --worktree id:<repoId>::<worktreePath> --force --json
 ```
 
 Selectors:
@@ -128,7 +128,7 @@ Selectors:
 
 Lineage rules:
 
-- When creating from inside an h0x-ADE-managed worktree or folder context, Orca infers the current parent context when it can.
+- When creating from inside an h0x-ADE-managed worktree or folder context, h0x-ADE infers the current parent context when it can.
 - Use `--parent-worktree active` when the child worktree relationship should be explicit.
 - Use `--parent-worktree folder:<folderId>` or `--parent-worktree worktree:<repoId>::<worktreePath>` when a folder or worktree parent context should be explicit.
 - Use `--no-parent` only when the new work is independent.
@@ -138,33 +138,33 @@ Lineage rules:
 Agent/setup flags:
 
 ```text
-ORCA worktree create --name task --agent codex --prompt "hi" --json
-ORCA worktree create --name task --agent claude --setup run --json
-ORCA worktree create --name task --setup skip --json
-ORCA worktree create --name task --run-hooks --json
+H0X worktree create --name task --agent codex --prompt "hi" --json
+H0X worktree create --name task --agent claude --setup run --json
+H0X worktree create --name task --setup skip --json
+H0X worktree create --name task --run-hooks --json
 ```
 
-- `--agent <id>` launches that agent **in the first terminal** (Orca docs: _"`--agent` launches the selected agent in the first terminal"_); `--prompt <text>` sends initial work to it. Known ids include `claude`, `codex`, `omp`, `pi`, `grok`, and other installed TUI agents.
+- `--agent <id>` launches that agent **in the first terminal** (h0x-ADE docs: _"`--agent` launches the selected agent in the first terminal"_); `--prompt <text>` sends initial work to it. Known ids include `claude`, `codex`, `omp`, `pi`, `grok`, and other installed TUI agents.
 - **Prefer agent-first create for agent workers.** `h0x worktree create --agent <id> --prompt "..."` puts the agent in the worktree's first terminal without adding a separate fallback shell for that worker. Repo setup or default-terminal settings may still add tabs or splits. Without configured default tabs, the bare-create fallback shell plus a later `terminal create --command <agent>` is an anti-pattern for ordinary agent worktrees — use `--agent` instead of “create worktree, then open agent.” Configured default tabs are intentional surfaces; never treat one as disposable without verifying that it is an unused shell.
 - After create, use exactly one agent handle: `startupTerminal.handle` from the create response when present, or the matching result from `h0x terminal list --worktree id:<repoId>::<newWorktreePath> --json` (or `name:<displayName>`) when the response omits it. If a handle later returns `terminal_handle_stale`, re-list it; never dual-send to old and replacement handles.
 - `--setup run|skip|inherit` controls repo setup hooks. Default is `inherit`, which follows the repo's setup policy.
 - `--run-hooks` is a legacy alias for `--setup run`; it also reveals/activates the new worktree.
 - `--activate` and `--run-hooks` reveal the new worktree. `--agent` alone stays in the background.
-- Let Orca choose setup terminal placement from repo settings, including tab vs split behavior. Do not manually create extra setup terminals when `--agent` already owns the first tab.
+- Let h0x-ADE choose setup terminal placement from repo settings, including tab vs split behavior. Do not manually create extra setup terminals when `--agent` already owns the first tab.
 - If an older installed CLI rejects `--agent`, `--prompt`, or `--setup`, create the worktree normally, then run `h0x terminal create --worktree <selector> --command "<requested-agent>"` and `h0x terminal send` if a prompt is needed. This can leave a fallback shell when no default tabs are configured; close it only after confirming it is unused.
 - `worktree create` creates a new checkout. For a fresh agent in the **current** checkout (no new worktree), use `h0x terminal create --worktree active --command "codex" --json` — that path does not create a second worktree shell.
 
 ## Worktree Comments
 
-A worktree comment is the short status text shown in Orca's workspace list/card for quick progress visibility.
+A worktree comment is the short status text shown in h0x-ADE's workspace list/card for quick progress visibility.
 
 Coding agents should update the active worktree comment at meaningful checkpoints:
 
 ```text
-ORCA worktree set --worktree active --comment "fix implemented; running integration tests" --json
+H0X worktree set --worktree active --comment "fix implemented; running integration tests" --json
 ```
 
-Update after meaningful state changes such as repro, fix, validation, handoff, or blocker. Keep comments short/current; failures are best-effort unless Orca state was requested.
+Update after meaningful state changes such as repro, fix, validation, handoff, or blocker. Keep comments short/current; failures are best-effort unless h0x-ADE state was requested.
 
 Card status uses `--workspace-status <id>`; defaults are `todo`, `in-progress`, `in-review`, `completed`.
 
@@ -173,24 +173,24 @@ Card status uses `--workspace-status <id>`; defaults are `todo`, `in-progress`, 
 Common commands:
 
 ```text
-ORCA terminal list --worktree id:<repoId>::<worktreePath> --json
-ORCA terminal show --terminal <handle> --json
-ORCA terminal read --terminal <handle> --json
-ORCA terminal read --terminal <handle> --cursor <cursor> --limit 1000 --json
-ORCA terminal read --json
-ORCA terminal send --terminal <handle> --text "continue" --enter --json
-ORCA terminal send --text "echo hello" --enter --json
-ORCA terminal wait --terminal <handle> --for exit --timeout-ms 5000 --json
-ORCA terminal wait --terminal <handle> --for tui-idle --timeout-ms 300000 --json
-ORCA terminal create --json
-ORCA terminal create --title "Worker" --json
-ORCA terminal create --worktree active --command "codex" --json
-ORCA terminal split --terminal <handle> --direction vertical --json
-ORCA terminal split --terminal <handle> --direction horizontal --command "npm test" --json
-ORCA terminal rename --terminal <handle> --title "New Name" --json
-ORCA terminal switch --terminal <handle> --json
-ORCA terminal close --terminal <handle> --json
-ORCA terminal close --worktree id:<repoId>::<worktreePath> --all --json
+H0X terminal list --worktree id:<repoId>::<worktreePath> --json
+H0X terminal show --terminal <handle> --json
+H0X terminal read --terminal <handle> --json
+H0X terminal read --terminal <handle> --cursor <cursor> --limit 1000 --json
+H0X terminal read --json
+H0X terminal send --terminal <handle> --text "continue" --enter --json
+H0X terminal send --text "echo hello" --enter --json
+H0X terminal wait --terminal <handle> --for exit --timeout-ms 5000 --json
+H0X terminal wait --terminal <handle> --for tui-idle --timeout-ms 300000 --json
+H0X terminal create --json
+H0X terminal create --title "Worker" --json
+H0X terminal create --worktree active --command "codex" --json
+H0X terminal split --terminal <handle> --direction vertical --json
+H0X terminal split --terminal <handle> --direction horizontal --command "npm test" --json
+H0X terminal rename --terminal <handle> --title "New Name" --json
+H0X terminal switch --terminal <handle> --json
+H0X terminal close --terminal <handle> --json
+H0X terminal close --worktree id:<repoId>::<worktreePath> --all --json
 ```
 
 Terminal rules:
@@ -205,24 +205,24 @@ Terminal rules:
 - For structured coordination, invoke the `orchestration` skill; it uses `h0x orchestration ...` commands for messages, handoffs, task DAGs, dispatches, inbox/reply flows, and coordinator loops. A receiving agent can run `h0x orchestration check --unread --format` to render its unread mail in agent-readable form; this checks the caller's inbox and does not remotely deliver input to another terminal.
 - Use `terminal create --worktree active --command "<agent>"` for a fresh agent in the current worktree. Use `worktree create --agent <agent>` only for a separate checkout (agent in the first terminal — do not also `terminal create` the same agent).
 - Use `terminal wait --for tui-idle` for agent CLIs such as Claude Code, Gemini, Codex, OMP, Pi, and Grok; always pass `--timeout-ms`.
-- Terminal handles are runtime-scoped. Use `startupTerminal.handle` as the sole agent handle when `worktree create --agent` returns it; if Orca restarts, omits the handle, or returns `terminal_handle_stale`, reacquire with `terminal list` and continue with the replacement only.
+- Terminal handles are runtime-scoped. Use `startupTerminal.handle` as the sole agent handle when `worktree create --agent` returns it; if h0x-ADE restarts, omits the handle, or returns `terminal_handle_stale`, reacquire with `terminal list` and continue with the replacement only.
 - For long output, use cursor reads. After a limited tail preview, page from `oldestCursor`; after a cursor read, continue with `nextCursor` while `limited` is true and `nextCursor !== latestCursor`.
 - `--direction horizontal` splits left/right. `--direction vertical` splits top/bottom.
 
 ## Automations
 
-An automation is a scheduled Orca prompt run by a chosen provider against either a repo-created worktree or an existing workspace.
+An automation is a scheduled h0x-ADE prompt run by a chosen provider against either a repo-created worktree or an existing workspace.
 
 ```text
-ORCA automations list --json
-ORCA automations show <automationId> --json
-ORCA automations create --name "Daily review" --trigger daily --time 09:00 --prompt "Review open changes" --provider codex --repo id:<repoId> --json
-ORCA automations create --name "Weekday triage" --trigger "0 9 * * 1-5" --prompt "Triage issues" --provider claude --repo path:/abs/repo --disabled --json
-ORCA automations create --name "Inbox digest" --trigger hourly --prompt "Summarize unread mail" --provider codex --workspace active --reuse-session --json
-ORCA automations edit <automationId> --trigger weekdays --time 09:30 --fresh-session --json
-ORCA automations run <automationId> --json
-ORCA automations runs --id <automationId> --json
-ORCA automations remove <automationId> --json
+H0X automations list --json
+H0X automations show <automationId> --json
+H0X automations create --name "Daily review" --trigger daily --time 09:00 --prompt "Review open changes" --provider codex --repo id:<repoId> --json
+H0X automations create --name "Weekday triage" --trigger "0 9 * * 1-5" --prompt "Triage issues" --provider claude --repo path:/abs/repo --disabled --json
+H0X automations create --name "Inbox digest" --trigger hourly --prompt "Summarize unread mail" --provider codex --workspace active --reuse-session --json
+H0X automations edit <automationId> --trigger weekdays --time 09:30 --fresh-session --json
+H0X automations run <automationId> --json
+H0X automations runs --id <automationId> --json
+H0X automations remove <automationId> --json
 ```
 
 Schedules accept `hourly`, `daily`, `weekdays`, `weekly`, 5-field cron, or RRULE. Use `--time <HH:MM>` with `daily`/`weekdays`/`weekly`, and `--day <0-6>` only with `weekly` where Sunday is `0`.
@@ -231,12 +231,12 @@ Use `--repo <selector>` for a new worktree per run, or `--workspace <selector>` 
 
 ## Artifacts
 
-Artifacts publish HTML or Markdown files through the signed-in Orca account. The public
+Artifacts publish HTML or Markdown files through the signed-in h0x-ADE account. The public
 share URL is viewable without signing in; creating, listing, updating, and deleting
-artifacts require the active Orca profile to be signed in.
+artifacts require the active h0x-ADE profile to be signed in.
 
 **Publishing is off by default and only a human can turn it on.** `share` and `update` are
-gated by a device-wide capability that the user grants in the Orca desktop app under
+gated by a device-wide capability that the user grants in the h0x-ADE desktop app under
 Settings → Artifacts ("Allow publishing public artifact links"). The gate applies to every
 caller on the device, agent or human. There is no CLI or RPC way to grant it — do not try.
 `list`, `unshare`, and `delete` are never gated, so old links stay auditable and revocable.
@@ -246,22 +246,22 @@ small round trip rather than an upload-sized payload.
 
 When a share is denied, the CLI fails with code `artifact_sharing_disabled` and prints the
 recovery steps. Do not retry — the answer will not change until a human acts. Tell the user
-to open Settings → Artifacts in the Orca desktop app on this device, turn on "Allow
+to open Settings → Artifacts in the h0x-ADE desktop app on this device, turn on "Allow
 publishing public artifact links", and then re-run the command. If they do not want to grant
 it, deliver the file locally instead.
 
 ```text
-ORCA artifacts share <file> --json
-ORCA artifacts update <file> --json
-ORCA artifacts unshare <file> --json
-ORCA artifacts list [--cursor <cursor>] --json
-ORCA artifacts delete <id> --json
+H0X artifacts share <file> --json
+H0X artifacts update <file> --json
+H0X artifacts unshare <file> --json
+H0X artifacts list [--cursor <cursor>] --json
+H0X artifacts delete <id> --json
 ```
 
 - `share`, `update`, and `unshare` accept `.html`, `.htm`, `.md`, and `.markdown` files.
-- `share` saves the returned edit token in the active Orca profile and never includes it
+- `share` saves the returned edit token in the active h0x-ADE profile and never includes it
   in CLI output. `update` and `unshare` look up that record by the resolved local file
-  path, so use the same path and Orca profile that originally shared the file.
+  path, so use the same path and h0x-ADE profile that originally shared the file.
 - `list` returns one page of artifacts owned by the signed-in account. If JSON output has
   `nextCursor`, pass it back with `--cursor <cursor>`. `delete <id>` deletes an account-owned
   artifact by the id returned from `list`; it does not need the original local file or its
@@ -273,19 +273,19 @@ ORCA artifacts delete <id> --json
 - For local or staging development, `--api-url <url>` overrides the artifact service;
   `ORCA_ARTIFACTS_API_URL` provides the same override for the session.
 - `ORCA_CLOUD_AUTH_TOKEN` is a development-only authentication override. Prefer the active
-  Orca profile's normal PropelAuth session and never expose the token in logs or agent output.
+  h0x-ADE profile's normal PropelAuth session and never expose the token in logs or agent output.
 
 ## Skill Sharing
 
 Agents can publish one or more installed skills behind one unlisted link through the
-signed-in Orca account. The user must first grant the separate, default-off permission in
-Settings → Share Skills ("Allow agents and the Orca CLI to publish skill links"). There is
+signed-in h0x-ADE account. The user must first grant the separate, default-off permission in
+Settings → Share Skills ("Allow agents and the h0x-ADE CLI to publish skill links"). There is
 no CLI or RPC way to grant it. Manual publishing from the reviewed desktop flow remains
 available without this agent permission.
 
 ```text
-ORCA skills installed --json
-ORCA skills share --skill <selector> [--skill <selector> ...] --bundle-name <name> --json
+H0X skills installed --json
+H0X skills share --skill <selector> [--skill <selector> ...] --bundle-name <name> --json
 ```
 
 - `skills installed` returns safe discovery IDs and names. It does not expose local skill
@@ -300,7 +300,7 @@ ORCA skills share --skill <selector> [--skill <selector> ...] --bundle-name <nam
   requested skills and never widen the selection.
 - A denied command fails with `agent_skill_sharing_disabled`. Do not retry; ask the user to
   enable the switch in the desktop app if they want this action.
-- Orca stages one agent-published bundle at a time per host. If another publish is active,
+- h0x-ADE stages one agent-published bundle at a time per host. If another publish is active,
   wait for it to finish before retrying `agent_skill_sharing_busy`.
 - Run the command in a h0x-ADE terminal on the machine that stores the skills. Forwarded WSL,
   SSH, and paired-runtime invocations fail before discovery so h0x-ADE cannot read from the
@@ -317,46 +317,46 @@ These commands control only h0x-ADE's embedded browser tabs. For external Chrome
 Use a snapshot-interact-re-snapshot loop:
 
 ```text
-ORCA goto --url https://example.com --json
-ORCA snapshot --json
-ORCA click --element @e3 --json
-ORCA snapshot --json
+H0X goto --url https://example.com --json
+H0X snapshot --json
+H0X click --element @e3 --json
+H0X snapshot --json
 ```
 
 Common commands:
 
 ```text
-ORCA goto --url <url> --json
-ORCA back --json
-ORCA reload --json
-ORCA snapshot --json
-ORCA screenshot --json
-ORCA full-screenshot --json
-ORCA pdf --json
-ORCA click --element <ref> --json
-ORCA fill --element <ref> --value <text> --json
-ORCA type --input <text> --json
-ORCA select --element <ref> --value <value> --json
-ORCA check --element <ref> --json
-ORCA scroll --direction down --amount 1000 --json
-ORCA hover --element <ref> --json
-ORCA focus --element <ref> --json
-ORCA keypress --key Enter --json
-ORCA upload --element <ref> --files <paths> --json
-ORCA wait --text <text> --json
-ORCA wait --url <substring> --json
-ORCA wait --selector <css> --json
-ORCA wait --load networkidle --json
-ORCA eval --expression <js> --json
-ORCA tab list --json
-ORCA tab create --url <url> --json
-ORCA tab switch --index <n> --json
-ORCA tab close --index <n> --json
-ORCA cookie get --json
-ORCA capture start --json
-ORCA console --limit 50 --json
-ORCA network --limit 50 --json
-ORCA exec --command "help" --json
+H0X goto --url <url> --json
+H0X back --json
+H0X reload --json
+H0X snapshot --json
+H0X screenshot --json
+H0X full-screenshot --json
+H0X pdf --json
+H0X click --element <ref> --json
+H0X fill --element <ref> --value <text> --json
+H0X type --input <text> --json
+H0X select --element <ref> --value <value> --json
+H0X check --element <ref> --json
+H0X scroll --direction down --amount 1000 --json
+H0X hover --element <ref> --json
+H0X focus --element <ref> --json
+H0X keypress --key Enter --json
+H0X upload --element <ref> --files <paths> --json
+H0X wait --text <text> --json
+H0X wait --url <substring> --json
+H0X wait --selector <css> --json
+H0X wait --load networkidle --json
+H0X eval --expression <js> --json
+H0X tab list --json
+H0X tab create --url <url> --json
+H0X tab switch --index <n> --json
+H0X tab close --index <n> --json
+H0X cookie get --json
+H0X capture start --json
+H0X console --limit 50 --json
+H0X network --limit 50 --json
+H0X exec --command "help" --json
 ```
 
 Browser rules:
@@ -366,7 +366,7 @@ Browser rules:
 - Refs like `@e1` are assigned by `snapshot`, scoped to one tab, and invalidated by navigation or tab switch.
 - Browser commands default to the current worktree and its active tab. Use `--worktree all` only intentionally.
 - For concurrent browser work, run `h0x tab list --json`, read `tabs[].browserPageId`, and pass `--page <browserPageId>` on later commands.
-- Use typed tab commands (`h0x tab list/create/close/switch`), not `h0x exec --command "tab ..."`, so Orca keeps UI state synchronized.
+- Use typed tab commands (`h0x tab list/create/close/switch`), not `h0x exec --command "tab ..."`, so h0x-ADE keeps UI state synchronized.
 - Prefer `wait --text`, `--url`, `--selector`, or `--load` after async page changes instead of bare timeouts.
 - Less common workflows can use typed commands above or `h0x exec --command "<agent-browser command>"` passthrough.
 - If `fill` or `type` fails on a custom input, try `h0x focus --element @e1 --json` then `h0x inserttext --text "text" --json`.
@@ -385,30 +385,30 @@ Confirm `h0x status --json` unless already checked this turn, then choose the na
 
 ## Mobile Emulator (iOS Simulator via serve-sim)
 
-The mobile emulator surface is workspace-scoped like browser tabs (active per worktree for unqualified; explicit --worktree/--device/--emulator for targeting). Always prefer `h0x emulator ...` over raw `npx serve-sim` or simctl when inside Orca (the bridge owns lifecycle, scoping, and registration with the live pane).
+The mobile emulator surface is workspace-scoped like browser tabs (active per worktree for unqualified; explicit --worktree/--device/--emulator for targeting). Always prefer `h0x emulator ...` over raw `npx serve-sim` or simctl when inside h0x-ADE (the bridge owns lifecycle, scoping, and registration with the live pane).
 
 See the dedicated `orca-emulator` skill for the full table (tap/type/gesture/button/rotate/camera/permissions/ax/list/attach/exec/kill + --json + gotchas like tap preferred, normalized 0-1, name->UDID early resolve in bridge, US ASCII type, camera one-time builds, stale state cleanup, no auto-focus on attach except --focus flag mirroring browser exactly, AX via HTTP endpoint from state).
 
 Common:
 
 ```text
-ORCA emulator list --json
-ORCA emulator attach "iPhone 17 Pro" --json
-ORCA emulator tap 0.5 0.7 --json
-ORCA emulator type "hello" --json
-ORCA emulator gesture '[{"type":"begin","x":0.5,"y":0.8},{"type":"move","x":0.5,"y":0.4},{"type":"end","x":0.5,"y":0.2}]' --json
-ORCA emulator button home --json
-ORCA emulator exec --command "tap 0.5 0.7" --json   # no "serve-sim" in the command string
-ORCA emulator kill --json
+H0X emulator list --json
+H0X emulator attach "iPhone 17 Pro" --json
+H0X emulator tap 0.5 0.7 --json
+H0X emulator type "hello" --json
+H0X emulator gesture '[{"type":"begin","x":0.5,"y":0.8},{"type":"move","x":0.5,"y":0.4},{"type":"end","x":0.5,"y":0.2}]' --json
+H0X emulator button home --json
+H0X emulator exec --command "tap 0.5 0.7" --json   # no "serve-sim" in the command string
+H0X emulator kill --json
 ```
 
 Rules (mirror browser):
 
 - Default: current worktree's active (pane open or attach sets it; unqualified "just works").
-- Explicit: --device <udid|name> or --emulator <OrcaId from list> (bridge resolves names early to avoid serve-sim control bug).
+- Explicit: --device <udid|name> or --emulator <emulator id from list> (bridge resolves names early to avoid serve-sim control bug).
 - --worktree all only for list.
 - Recoveries: 'emulator_no_active' → h0x emulator attach or open pane; stale → list/kill/attach.
-- No raw serve-sim in agent prompts/skills (use orca wrappers; see orca-emulator skill).
+- No raw serve-sim in agent prompts/skills (use wrappers; see orca-emulator skill).
 
 The live pane (when implemented) registers its stream with the bridge for default targeting (seamless, recommended option per design).
 

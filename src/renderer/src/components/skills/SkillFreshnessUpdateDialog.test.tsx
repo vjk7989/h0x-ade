@@ -427,7 +427,7 @@ describe('SkillFreshnessUpdateDialog', () => {
     await renderDialog()
     await openViaRequest()
 
-    expect(container?.textContent).toContain('All installed Orca skills are up to date.')
+    expect(container?.textContent).toContain('All installed h0x-ADE skills are up to date.')
     expect(findButton('Update 1 skill')).toBeUndefined()
   })
 
@@ -484,7 +484,7 @@ describe('SkillFreshnessUpdateDialog', () => {
     await renderDialog()
     await openViaRequest()
 
-    expect(container?.textContent).toContain('All installed Orca skills are up to date.')
+    expect(container?.textContent).toContain('All installed h0x-ADE skills are up to date.')
     expect(container?.querySelector('[data-skill-row="computer-use"]')).toBeNull()
   })
 
@@ -583,7 +583,7 @@ describe('SkillFreshnessUpdateDialog', () => {
     await rerender()
 
     expect(container?.textContent).not.toContain('0 updates available')
-    expect(container?.textContent).toContain('Checking installed Orca skills…')
+    expect(container?.textContent).toContain('Checking installed h0x-ADE skills…')
     // The action keeps its place rather than reflowing the footer, but cannot
     // fire against bytes that are being re-read.
     const update = findButton('Update 1 skill')
@@ -740,7 +740,7 @@ describe('SkillFreshnessUpdateDialog', () => {
     await openViaRequest()
 
     expect(container?.textContent).toContain(
-      'Orca could not finish checking plugin-managed skills.'
+      'h0x-ADE could not finish checking plugin-managed skills.'
     )
     expect(container?.textContent).toContain('/home/.codex/plugins/cache/vendor/locked')
     expect(container?.textContent).toContain('EACCES')
@@ -779,7 +779,7 @@ describe('SkillFreshnessUpdateDialog', () => {
 
       expect(container?.textContent).not.toContain('All installed Orca skills are up to date.')
       expect(container?.textContent).toContain(
-        'Orca could not finish checking plugin-managed skills.'
+        'h0x-ADE could not finish checking plugin-managed skills.'
       )
       // Why: the headline alone would pass with the folder list gone, leaving the user
       // told the scan stopped but never told where. Assert the diagnostic renders too.
@@ -811,7 +811,7 @@ describe('SkillFreshnessUpdateDialog', () => {
     await renderDialog()
     await openViaRequest()
 
-    expect(container?.textContent).toContain('All installed Orca skills are up to date.')
+    expect(container?.textContent).toContain('All installed h0x-ADE skills are up to date.')
     expect(container?.textContent).not.toContain(
       'Orca could not finish checking plugin-managed skills.'
     )

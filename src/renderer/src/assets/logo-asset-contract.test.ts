@@ -1,20 +1,32 @@
 import fs from 'node:fs'
+import { PNG } from 'pngjs'
 import { describe, expect, it } from 'vitest'
 
-const logo = fs.readFileSync(new URL('../../../../resources/logo.svg', import.meta.url), 'utf8')
+const black = PNG.sync.read(
+  fs.readFileSync(new URL('../../../../resources/brand/h0x-mark-black.png', import.meta.url))
+)
+const white = PNG.sync.read(
+  fs.readFileSync(new URL('../../../../resources/brand/h0x-mark-white.png', import.meta.url))
+)
 
 describe('h0x-ADE logo asset contract', () => {
-  it('is a square, accessible SVG with the canonical display name', () => {
-    expect(logo).toMatch(/<svg\b[^>]*\bwidth="256"[^>]*\bheight="256"/)
-    expect(logo).toMatch(/<svg\b[^>]*\bviewBox="0 0 256 256"/)
-    expect(logo).toMatch(/<svg\b[^>]*\brole="img"/)
-    expect(logo).toMatch(/<svg\b[^>]*\baria-label="h0x-ADE logo"/)
+  it('provides equal-size black and white marks for adaptive surfaces', () => {
+    expect([black.width, black.height]).toEqual([1024, 1024])
+    expect([white.width, white.height]).toEqual([1024, 1024])
+    expect(black.data.length).toBe(white.data.length)
   })
 
-  it('stays self-contained and free of active or externally loaded content', () => {
-    expect(logo).not.toMatch(/<(?:script|foreignObject|iframe|image|use|a)\b/i)
-    expect(logo).not.toMatch(/\bon[a-z]+\s*=/i)
-    expect(logo).not.toMatch(/\b(?:href|src)\s*=/i)
-    expect(logo).not.toMatch(/\burl\s*\(/i)
+  it('keeps both theme variants on the same transparent geometry', () => {
+    let visiblePixels = 0
+    let mismatch = false
+    for (let index = 0; index < black.data.length; index += 4) {
+      const alpha = black.data[index + 3]
+      visiblePixels += alpha > 0 ? 1 : 0
+      mismatch ||= alpha !== white.data[index + 3]
+      mismatch ||= alpha > 0 && (black.data[index] !== 0 || white.data[index] !== 255)
+    }
+    expect(mismatch).toBe(false)
+    expect(visiblePixels).toBeGreaterThan(0)
+    expect(visiblePixels).toBeLessThan(black.width * black.height)
   })
 })

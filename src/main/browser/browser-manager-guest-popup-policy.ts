@@ -131,7 +131,7 @@ export abstract class BrowserManagerGuestPopupPolicy extends BrowserManagerNavig
         return { action: 'deny' }
       }
 
-      // Why: an unnamed, featureless window.open() is Chromium's own new-tab shape, so an Orca tab is
+      // Why: an unnamed, featureless window.open() is Chromium's own new-tab shape, so an h0x tab is
       // the honest presentation; a floating origin-bar window is not. Opener-dependent shapes are
       // excluded by isNewBrowserTabPopupIntent and still get a real child window below.
       if (

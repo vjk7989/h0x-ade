@@ -14,9 +14,9 @@ import { extractLegacyAppImageCliWrapperTarget } from './legacy-appimage-cli-wra
 // resources/linux/packaging/after-install.sh enumerates all three of these. A symlink into one is a
 // previous packaged h0x-ADE/Orca install and is ours to reclaim; anything else stays a conflict.
 const PACKAGED_LINUX_LAUNCHER_DIRECTORIES = [
-  '/opt/h0x-ADE',
-  '/opt/h0x',
   '/opt/Orca',
+  '/opt/h0x',
+  '/opt/h0x-ADE',
   '/opt/orca-ide',
   '/opt/orca'
 ]
@@ -130,7 +130,7 @@ export class CliCommandInspection extends CliInstallLocation {
     return false
   }
 
-  /** A launcher inside a packaged Linux install tree, left behind by a deb/rpm Orca. */
+  /** A launcher inside a packaged Linux install tree, left behind by a deb/rpm h0x-ADE. */
   protected isPackagedLinuxLauncherTarget(resolvedTarget: string, expectedName: string): boolean {
     return PACKAGED_LINUX_LAUNCHER_DIRECTORIES.some(
       (directory) => resolvedTarget === `${directory}/resources/bin/${expectedName}`
@@ -226,7 +226,7 @@ export class CliCommandInspection extends CliInstallLocation {
           supported: true,
           state: 'not_installed',
           currentTarget: null,
-          detail: `Register ${commandPath} to use Orca from Command Prompt or PowerShell.`
+          detail: `Register ${commandPath} to use h0x-ADE from Command Prompt or PowerShell.`
         })
       }
       throw error

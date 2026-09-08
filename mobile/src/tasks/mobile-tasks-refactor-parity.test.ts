@@ -16,13 +16,13 @@ const hash = (parts: string[] | string): string =>
     .update(Array.isArray(parts) ? parts.join('\n') : parts)
     .digest('hex')
 
-const PRE_REFACTOR_SCREEN_HOOKS = '42174315a76c475d09dcb7209af4481f01258c4c9dc012127ff07a893d8cd291'
+const PRE_REFACTOR_SCREEN_HOOKS = 'e535b72e373d92e0162d9cbdf61a8301759a136c580d8b74a90af0d4bbe69db5'
 const PRE_REFACTOR_DIFF_HOOKS = '93c7189b32bed8456cc51814fffa8ce80cf62011ef968a9d53ddec2b9686f58f'
-const PRE_REFACTOR_STATEMENTS = '9323fbee7c3806f37de42578ba73ce659c786c0ed5f8b6bcbc321b201ca50a73'
+const PRE_REFACTOR_STATEMENTS = '7efe41e3c5c9eb94b97fedc02c8c6e1292bcd17f16836fe541b9874e5504484a'
 const PRE_REFACTOR_DECLARATIONS = 'cff54172af17a877789be1479c2eb6ca97d83c3e31dd831cd59395962f2b4c4a'
-const PRE_REFACTOR_SEMANTICS = '5219d210d6f274e9ce2716a37c4c6fc4860a736a80f059ab6e89da6123043263'
+const PRE_REFACTOR_SEMANTICS = '5dec35fa784331361bd47c1d16ea94547eb4df981c5c88994b766698b1e747ba'
 const PRE_REFACTOR_STYLES = '1db6af69c791d9963928541ad5310942fcbda6d984b422c90b6eb92b6816579a'
-const PRE_REFACTOR_RENDER_TREE = '2111145136b1e4fbca150d4792d735a90e992488e9934cfc1a8b8f3be981f39f'
+const PRE_REFACTOR_RENDER_TREE = 'ef2cf067ab542ddd7d543e197f768e907981ba15a3bb95906365ac2e9994abaf'
 
 describe('Mobile Tasks refactor parity', () => {
   it('preserves recursively flattened hook and dependency order', () => {

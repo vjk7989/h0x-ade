@@ -188,7 +188,7 @@ export function createRuntimeAutomationRunTerminalObserver(
             return await buildUnobservedObservation(
               runtime,
               handle,
-              'Orca stopped watching this run after 6h without a completion signal.'
+              'h0x-ADE stopped watching this run after 6h without a completion signal.'
             )
           }
         }

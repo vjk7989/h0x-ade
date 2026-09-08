@@ -53,6 +53,10 @@ test.describe('Docker SSH port-forward lifecycle', () => {
     electronApp,
     orcaPage
   }, testInfo) => {
+    test.skip(
+      process.env.ORCA_BACKGROUND_LAUNCH === '1',
+      'Visibility-driven port scanning requires an isolated visible-window lane.'
+    )
     test.slow()
     let target: DockerSshRelayTarget | null = null
     const localPortReservation = await reserveLocalPort()

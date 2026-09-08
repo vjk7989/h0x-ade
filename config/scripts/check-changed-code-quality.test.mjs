@@ -1,12 +1,43 @@
 import { describe, expect, it } from 'vitest'
 import {
   OXLINT_SCANS,
+  chunkCommandFileArguments,
+  commandArgumentsCharacterCount,
   diagnosticTouchesAddedLines,
   isMovedCode,
   isRootCodeQualityPath,
   overlapsAddedLines,
   parseAddedLineRanges
 } from './check-changed-code-quality.mjs'
+
+describe('changed-code quality command chunking', () => {
+  it('preserves file order and includes every file exactly once', () => {
+    const files = ['src/one.ts', 'src/two.ts', 'src/three.ts', 'src/four.ts']
+    const chunks = chunkCommandFileArguments(['oxlint', '--format', 'json'], files, 70)
+
+    expect(chunks.flat()).toEqual(files)
+    expect(chunks.length).toBeGreaterThan(1)
+  })
+
+  it('keeps every command below the configured character budget', () => {
+    const fixedArguments = ['oxlint', '--type-aware', '--format', 'json']
+    const chunks = chunkCommandFileArguments(
+      fixedArguments,
+      Array.from({ length: 12 }, (_, index) => `src/feature-${index}.ts`),
+      100
+    )
+
+    for (const chunk of chunks) {
+      expect(commandArgumentsCharacterCount([...fixedArguments, ...chunk])).toBeLessThanOrEqual(100)
+    }
+  })
+
+  it('fails explicitly when one path cannot fit the command budget', () => {
+    expect(() =>
+      chunkCommandFileArguments(['oxlint', '--format', 'json'], ['src/path-is-too-long.ts'], 30)
+    ).toThrow('Changed-code quality path exceeds command budget: src/path-is-too-long.ts')
+  })
+})
 
 describe('changed-code quality line matching', () => {
   it('parses added and replaced hunk ranges while ignoring deletions', () => {

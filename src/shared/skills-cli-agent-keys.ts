@@ -72,7 +72,7 @@ export function isSkillsCliAgentKeyShaped(value: string): boolean {
   return /^(?:\*|[a-z0-9][a-z0-9.-]*)$/i.test(value)
 }
 
-/** Map detected Orca agents onto `skills --agent` keys, plus the universal target. */
+/** Map detected h0x agents onto `skills --agent` keys, plus the universal target. */
 export function toSkillsCliAgentKeys(detectedAgents: readonly TuiAgent[]): string[] {
   const keys = new Set<string>([SKILLS_CLI_UNIVERSAL_AGENT_KEY])
   for (const agent of detectedAgents) {

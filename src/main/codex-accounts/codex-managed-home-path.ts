@@ -60,7 +60,7 @@ export class CodexManagedHomePath {
       !wslInfo.linuxPath.includes('/.local/share/orca/codex-accounts/') ||
       !wslInfo.linuxPath.endsWith('/home')
     ) {
-      throw new Error('Managed WSL Codex home is outside Orca account storage.')
+      throw new Error('Managed WSL Codex home is outside h0x-ADE account storage.')
     }
     if (
       expectedAccountId !== undefined &&
@@ -79,7 +79,7 @@ export class CodexManagedHomePath {
     if (!this.pathsEqual(account.managedHomePath, expectedPath)) {
       throw originalError
     }
-    // Why: re-auth may recreate a lost empty home, but only at the exact Orca-owned path persisted for this account.
+    // Why: re-auth may recreate a lost empty home, but only at the exact h0x-ADE-owned path persisted for this account.
     mkdirSync(expectedPath, { recursive: true })
     writeFileSync(join(expectedPath, '.orca-managed-home'), `${account.id}\n`, 'utf-8')
     return this.assert(expectedPath, account.id)
@@ -153,7 +153,7 @@ export class CodexManagedHomePath {
       }
       return toWindowsWslPath(canonicalLinuxPath, wslInfo.distro)
     } catch (error) {
-      throw new Error('Managed WSL Codex home is outside Orca account storage.', {
+      throw new Error('Managed WSL Codex home is outside h0x-ADE account storage.', {
         cause: error
       })
     }
@@ -165,14 +165,14 @@ export class CodexManagedHomePath {
     expectedAccountId?: string
   ): string {
     if (linuxPath.split('/').includes('..')) {
-      throw new Error('Managed WSL Codex home is outside Orca account storage.')
+      throw new Error('Managed WSL Codex home is outside h0x-ADE account storage.')
     }
     if (!existsSync(candidatePath)) {
       throw new Error('Managed Codex home directory does not exist on disk.')
     }
     const markerPath = join(candidatePath, '.orca-managed-home')
     if (!existsSync(markerPath)) {
-      throw new Error('Managed Codex home is missing Orca ownership marker.')
+      throw new Error('Managed Codex home is missing h0x-ADE ownership marker.')
     }
     if (
       expectedAccountId !== undefined &&

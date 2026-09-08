@@ -180,7 +180,7 @@ export function WindowsFirewallNotice({
               <p className="text-xs text-muted-foreground">
                 {translate(
                   'auto.components.mobile.WindowsFirewallNotice.relay-note',
-                  'Pairing still works over Orca Relay — allowing this only adds the faster local connection.'
+                  'Pairing still works over h0x Relay — allowing this only adds the faster local connection.'
                 )}
               </p>
             ) : null}

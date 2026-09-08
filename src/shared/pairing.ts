@@ -32,7 +32,9 @@ export function decodePairingOffer(url: string): PairingOffer {
   }
   const code = extractPairingCodeFromUrl(url)
   if (!code) {
-    throw new Error('Invalid pairing URL: must start with pavii-h0x://pair and include a pairing code')
+    throw new Error(
+      'Invalid pairing URL: must start with pavii-h0x://pair and include a pairing code'
+    )
   }
   return decodePairingBase64(code)
 }
@@ -46,7 +48,7 @@ function extractPairingCodeFromUrl(url: string): string | null {
   }
   // Why: prefix checks accepted routes like `pavii-h0x://pairing?...`; only the
   // pairing deep-link host may carry runtime auth material.
-  if (parsed.protocol !== 'pavii-h0x:' || parsed.hostname !== 'pair') {
+  if (!['pavii-h0x:', 'orca:'].includes(parsed.protocol) || parsed.hostname !== 'pair') {
     return null
   }
   if (parsed.pathname !== '' && parsed.pathname !== '/') {
@@ -71,7 +73,7 @@ export function parsePairingCode(input: string): PairingOffer | null {
     return null
   }
   try {
-    if (trimmed.toLowerCase().startsWith('pavii-h0x://')) {
+    if (/^(?:pavii-h0x|orca):\/\//i.test(trimmed)) {
       return decodePairingOffer(trimmed)
     }
     return decodePairingBase64(trimmed)

@@ -1,5 +1,11 @@
 export const HERMES_PLUGIN_NAME = 'orca-status'
-export const HERMES_PLUGIN_MARKER = 'Managed by Orca. Do not edit; changes may be overwritten.'
+export const HERMES_PLUGIN_MARKER = 'Managed by h0x-ADE. Do not edit; changes may be overwritten.'
+export const LEGACY_HERMES_PLUGIN_MARKER =
+  'Managed by Orca. Do not edit; changes may be overwritten.'
+
+export function hasHermesPluginMarker(content: string): boolean {
+  return content.includes(HERMES_PLUGIN_MARKER) || content.includes(LEGACY_HERMES_PLUGIN_MARKER)
+}
 
 export const HERMES_EVENTS = [
   'on_session_start',
@@ -19,8 +25,8 @@ export function getPluginManifest(): string {
     `# ${HERMES_PLUGIN_MARKER}`,
     `name: ${HERMES_PLUGIN_NAME}`,
     'version: 1.0.0',
-    'description: "Reports Hermes Agent lifecycle events to Orca."',
-    'author: "Orca"',
+    'description: "Reports Hermes Agent lifecycle events to h0x-ADE."',
+    'author: "h0x-ADE"',
     'kind: standalone',
     'provides_hooks:',
     ...HERMES_EVENTS.map((event) => `  - ${event}`),

@@ -249,6 +249,29 @@ async function runProof(ctx, args) {
   await ensureTerminal(session.page, { allowCreate: false })
   await dismissOverlays(session.page)
 
+  const taskbarEvidenceDir = process.env.H0X_TASKBAR_BRAND_EVIDENCE_DIR
+  if (taskbarEvidenceDir) {
+    const taskbarScript = path.join(import.meta.dirname, 'taskbar-brand-evidence.ps1')
+    const expectedIcon = path.resolve(import.meta.dirname, '../../../resources/build/icon.ico')
+    execFileSync(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-File',
+        taskbarScript,
+        '-ProcessId',
+        String(session.app.process().pid),
+        '-ExpectedIcon',
+        expectedIcon,
+        '-EvidenceDir',
+        path.resolve(taskbarEvidenceDir)
+      ],
+      { stdio: 'inherit' }
+    )
+    log('taskbar-brand', `captured exact tooltip and icon evidence -> ${taskbarEvidenceDir}`)
+  }
+
   const evidence = await gatherEvidence({
     profile: opts.expect,
     page: session.page,

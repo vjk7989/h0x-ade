@@ -44,7 +44,7 @@ else
   # and a tag needs a commit. Empty repo = "Repository is empty" 25 minutes in.
   gh repo create "$ADHOC_REPO" \
     --public \
-    --description "Adhoc macOS dev builds of Orca, cut from unlanded branches. Not a source repo." \
+    --description "Adhoc macOS dev builds of h0x-ADE, cut from unlanded branches. Not a source repo." \
     --add-readme \
     --disable-issues \
     --disable-wiki ||

@@ -75,24 +75,24 @@ describe('bundled skill guide generator', () => {
 
   it('keeps pre-guide fallback useful and read-only for every converted domain', async () => {
     const expectedFallbackCommands = {
-      'computer-use': ['ORCA computer capabilities --json', 'ORCA computer list-apps --json'],
-      'linear-tickets': ['ORCA linear --help', 'ORCA linear issue --current --full --json'],
-      'orca-emulator': ['ORCA emulator list --json'],
-      'orca-emulator-android': ['ORCA emulator devices --json'],
-      'orca-linear': ['ORCA linear --help', 'ORCA linear issue --current --full --json'],
-      'orca-per-workspace-env': ['ORCA vm recipe doctor <recipe-id> --repo-path <repo> --json'],
-      orchestration: ['ORCA orchestration task-list --json', 'ORCA terminal list --json']
+      'computer-use': ['H0X computer capabilities --json', 'H0X computer list-apps --json'],
+      'linear-tickets': ['H0X linear --help', 'H0X linear issue --current --full --json'],
+      'orca-emulator': ['H0X emulator list --json'],
+      'orca-emulator-android': ['H0X emulator devices --json'],
+      'orca-linear': ['H0X linear --help', 'H0X linear issue --current --full --json'],
+      'orca-per-workspace-env': ['H0X vm recipe doctor <recipe-id> --repo-path <repo> --json'],
+      orchestration: ['H0X orchestration task-list --json', 'H0X terminal list --json']
     }
 
     for (const [name, commands] of Object.entries(expectedFallbackCommands)) {
       const stub = await readFile(path.join(projectDir, 'skill-stubs', `${name}.md`), 'utf8')
-      const fallback = stub.split('## If an older Orca does not recognize `skills get`')[1]
+      const fallback = stub.split('## If an older installation does not recognize `skills get`')[1]
 
       expect(fallback, name).toBeDefined()
       for (const command of commands) {
         expect(fallback, name).toContain(command)
       }
-      expect(fallback, name).not.toContain('ORCA worktree ps --json')
+      expect(fallback, name).not.toContain('H0X worktree ps --json')
     }
   })
 
@@ -208,7 +208,7 @@ describe('bundled skill guide generator', () => {
       expect(source).toContain('h0x')
       expect(source).toContain('PowerShell')
       expect(source).toContain('cmd.exe')
-      expect(source).toMatch(/^ORCA .+--json$/mu)
+      expect(source).toMatch(/^H0X .+--json$/mu)
       // Why: bare command lines can launch GNOME Orca, while shell variables make
       // the same guide unusable from PowerShell and cmd.exe.
       expect(source).not.toMatch(/^orca /mu)

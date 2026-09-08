@@ -21,7 +21,7 @@ export const getThemeEntries = createLocalizedCatalog((): SettingsSearchEntry[] 
     title: translate('auto.components.settings.appearance.search.71e06350b4', 'Theme'),
     description: translate(
       'auto.components.settings.appearance.search.0709c794f7',
-      'Choose how Orca looks in the app window.'
+      'Choose how h0x-ADE looks in the app window.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.appearance.search.262fe1d24f', 'dark'),
@@ -36,13 +36,13 @@ export const getLanguageEntries = createLocalizedCatalog((): SettingsSearchEntry
     title: translate('settings.appearance.language.title', 'Language'),
     description: translate(
       'settings.appearance.language.description',
-      'Choose the language used by the Orca interface.'
+      'Choose the language used by the h0x-ADE interface.'
     ),
     keywords: [
       ...translateSearchKeyword('settings.appearance.language.title', 'Language'),
       ...translateSearchKeyword(
         'settings.appearance.language.description',
-        'Choose the language used by the Orca interface.'
+        'Choose the language used by the h0x-ADE interface.'
       ),
       ...translateSearchKeyword('settings.appearance.language.system', 'System'),
       ...translateSearchKeyword('settings.appearance.language.english', 'English'),
@@ -93,7 +93,7 @@ export const getTypographyEntries = createLocalizedCatalog((): SettingsSearchEnt
     title: translate('auto.components.settings.appearance.search.ddb991024d', 'IDE Font'),
     description: translate(
       'auto.components.settings.appearance.search.07c7c38fac',
-      'Choose the font used by the Orca interface.'
+      'Choose the font used by the h0x-ADE interface.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.appearance.search.24094af355', 'font'),
@@ -149,7 +149,7 @@ export const getTitlebarEntries = createLocalizedCatalog((): SettingsSearchEntry
     title: translate('auto.components.settings.appearance.search.fdd31b00d0', 'Titlebar App Name'),
     description: translate(
       'auto.components.settings.appearance.search.18b4c4c30b',
-      'Show Orca in the titlebar.'
+      'Show h0x-ADE in the titlebar.'
     ),
     keywords: [
       ...translateSearchKeyword(
@@ -174,34 +174,6 @@ export const getStatusBarEntries = createLocalizedCatalog((): SettingsSearchEntr
 ])
 
 export { getLeftSidebarAppearanceEntry, getSidebarEntries }
-
-export const getAppIconEntries = createLocalizedCatalog((): SettingsSearchEntry[] => [
-  {
-    title: translate('auto.components.settings.appearance.search.2b313598c6', 'App Icon'),
-    description: translate(
-      'auto.components.settings.appearance.search.e80c2af428',
-      'Choose the app icon shown in the Dock and window switcher.'
-    ),
-    keywords: [
-      ...translateSearchKeyword(
-        'auto.components.settings.appearance.search.2cfb3420c0',
-        'app icon'
-      ),
-      ...translateSearchKeyword('auto.components.settings.appearance.search.1f2880a9d5', 'orca'),
-      ...translateSearchKeyword('auto.components.settings.appearance.search.d18b54ca90', 'dock'),
-      ...translateSearchKeyword('auto.components.settings.appearance.search.e5bc35d59e', 'window'),
-      ...translateSearchKeyword(
-        'auto.components.settings.appearance.search.651f35b2c6',
-        'switcher'
-      ),
-      ...translateSearchKeyword('auto.components.settings.appearance.search.f586abfa35', 'blue'),
-      ...translateSearchKeyword(
-        'auto.components.settings.appearance.search.468448bba4',
-        'watercolor'
-      )
-    ]
-  }
-])
 
 const getAppearanceSectionEntries = createLocalizedCatalog((): SettingsSearchEntry[] => [
   {
@@ -242,7 +214,6 @@ function buildAppearancePaneSearchEntries(
     ...getTitlebarEntries(),
     ...getStatusBarEntries(),
     ...getSidebarEntries(),
-    ...getAppIconEntries(),
     ...getSystemTrayEntries(options),
     ...getMenuBarIconEntries(options)
   ]

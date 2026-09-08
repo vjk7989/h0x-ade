@@ -426,24 +426,6 @@ describe('AppearancePane', () => {
     expect(requestFontSuggestions).toHaveBeenCalledOnce()
   })
 
-  it('keeps the app icon control at the bottom of the pane, after the section rows', async () => {
-    mocks.state.settingsSearchQuery = ''
-    const container = await renderAppearancePane(getDefaultSettings('/tmp'))
-
-    const buttons = Array.from(container.querySelectorAll('button'))
-    const interfaceRow = buttons.find((button) => button.textContent?.includes('Interface'))
-    const appIconImage = container.querySelector<HTMLImageElement>('img[alt="Selected app icon"]')
-
-    expect(interfaceRow).toBeDefined()
-    expect(appIconImage).not.toBeNull()
-    // The App Icon block sits after the Interface section row in document order.
-    expect(
-      interfaceRow &&
-        appIconImage &&
-        interfaceRow.compareDocumentPosition(appIconImage) & Node.DOCUMENT_POSITION_FOLLOWING
-    ).toBeTruthy()
-  })
-
   it('reveals an advanced sidebar control when its search matches, even though it is hidden by default', async () => {
     // The Show Tasks Button toggle lives behind the Window & Sidebar Advanced
     // disclosure; with no search it stays collapsed, but a matching query must

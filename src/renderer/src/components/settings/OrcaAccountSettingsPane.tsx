@@ -30,7 +30,7 @@ function accountStatusCopy(
   if (state === 'local') {
     return translate(
       'auto.components.settings.orcaAccount.signedOut',
-      'Sign in to extend h0x-ADE with cloud features, including Artifacts and Orca Relay.'
+      'Sign in to extend h0x-ADE with cloud features, including Artifacts and h0x Relay.'
     )
   }
   return translate('auto.components.settings.orcaAccount.checking', 'Checking account status…')
@@ -156,7 +156,7 @@ export function OrcaAccountSettingsPane(): React.JSX.Element {
               <AccountBenefit
                 icon={Smartphone}
                 className="md:pl-6"
-                title={translate('auto.components.settings.orcaAccount.relayTitle', 'Orca Relay')}
+                title={translate('auto.components.settings.orcaAccount.relayTitle', 'h0x Relay')}
                 description={translate(
                   'auto.components.settings.orcaAccount.relayDescription',
                   'Connect h0x-ADE Mobile to this desktop across cellular or any Wi-Fi.'

@@ -28,7 +28,12 @@ describe('resolvePairConfirmRouteState', () => {
     })
   })
 
-  it('accepts a full pairing URL', () => {
+  it('accepts canonical and legacy full pairing URLs', () => {
+    expect(resolvePairConfirmRouteState(`pavii-h0x://pair#${encodeOffer(offer)}`)).toEqual({
+      kind: 'ready',
+      offer,
+      errorMessage: ''
+    })
     expect(resolvePairConfirmRouteState(`orca://pair#${encodeOffer(offer)}`)).toEqual({
       kind: 'ready',
       offer,

@@ -201,7 +201,7 @@ describe('getComputerUsePermissionStatus', () => {
     await expect(getComputerUsePermissionStatus()).resolves.toEqual({
       platform: 'darwin',
       helperAppPath: null,
-      helperUnavailableReason: 'Orca Computer Use.app was not found',
+      helperUnavailableReason: 'h0x-ADE Computer Use.app was not found',
       permissions: [
         { id: 'accessibility', status: 'not-granted' },
         { id: 'screenshots', status: 'not-granted' }

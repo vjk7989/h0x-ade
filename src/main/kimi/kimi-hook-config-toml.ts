@@ -1,7 +1,7 @@
 // Kimi Code keeps all preferences in TOML (`~/.kimi-code/config.toml`) and reads
 // lifecycle hooks from an array of `[[hooks]]` tables. There is no JSON settings
 // file to reuse the shared JSON installer with, and no TOML library is vendored,
-// so Orca manages only its own marker-delimited block: install rewrites the
+// so h0x-ADE manages only its own marker-delimited block: install rewrites the
 // block, remove strips it, and arbitrary user config outside the markers is left
 // untouched. Appending table headers is always valid TOML, so the block can live
 // at the end of any existing file.
@@ -9,7 +9,7 @@
 import { MANAGED_HOOK_TIMEOUT_SECONDS } from '../agent-hooks/installer-utils'
 import { escapeRegex } from '../../shared/string-utils'
 
-// Why: mirror the Claude-compatible events Orca normalizes for status. Kimi uses
+// Why: mirror the Claude-compatible events h0x-ADE normalizes for status. Kimi uses
 // these exact event names (see normalizeKimiEvent), so each maps to a
 // working/waiting/done transition.
 export const KIMI_HOOK_EVENTS = [
@@ -22,7 +22,8 @@ export const KIMI_HOOK_EVENTS = [
   'StopFailure'
 ] as const
 
-const BLOCK_START = '# >>> orca-managed-kimi-hooks (managed by Orca; do not edit) >>>'
+const BLOCK_START = '# >>> orca-managed-kimi-hooks (managed by h0x-ADE; do not edit) >>>'
+const LEGACY_BLOCK_START = '# >>> orca-managed-kimi-hooks (managed by Orca; do not edit) >>>'
 const BLOCK_END = '# <<< orca-managed-kimi-hooks <<<'
 
 // Matches the managed block plus any blank lines immediately preceding it so
@@ -32,13 +33,13 @@ const BLOCK_END = '# <<< orca-managed-kimi-hooks <<<'
 // is always written last, so this recovers orphaned hook tables and lets
 // install re-converge in one step instead of appending a duplicate block.
 const MANAGED_BLOCK_RE = new RegExp(
-  `\\n*${escapeRegex(BLOCK_START)}[\\s\\S]*?(?:${escapeRegex(BLOCK_END)}[^\\n]*|$)`,
+  `\\n*(?:${escapeRegex(BLOCK_START)}|${escapeRegex(LEGACY_BLOCK_START)})[\\s\\S]*?(?:${escapeRegex(BLOCK_END)}[^\\n]*|$)`,
   'g'
 )
 
 // TOML basic (double-quoted) string. The managed command may contain single
 // quotes (from POSIX quoting) but no double quotes or backslashes on the paths
-// Orca generates; escape both defensively anyway.
+// h0x-ADE generates; escape both defensively anyway.
 function tomlBasicString(value: string): string {
   const escaped = value
     .replace(/\\/g, '\\\\')
@@ -86,7 +87,7 @@ export function removeManagedKimiHooks(configText: string): { text: string; chan
 }
 
 // Returns the managed events present in the block whose command still matches an
-// Orca-managed script (by filename, so a moved userData path is still swept).
+// h0x-ADE-managed script (by filename, so a moved userData path is still swept).
 export function readManagedKimiHookEvents(
   configText: string,
   isManagedCommand: (command: string | undefined) => boolean

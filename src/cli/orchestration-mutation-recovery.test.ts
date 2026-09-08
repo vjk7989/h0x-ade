@@ -43,7 +43,7 @@ describe('orchestration mutation recovery', () => {
     ])} before retrying.`
     const retryStep = `After inspecting the Dispatch, if keyed recovery is still needed, run ${renderCommand(
       ['h0x', 'orchestration', 'worker-start', '--task', 'task_1', '--retry-request', 'request_1']
-    )}. --retry-request reuses the same operation identity so Orca can replay, join, or safely recover it without starting a separate duplicate.`
+    )}. --retry-request reuses the same operation identity so h0x-ADE can replay, join, or safely recover it without starting a separate duplicate.`
     expect(result.message.indexOf(queryStep)).toBeLessThan(result.message.indexOf(retryStep))
     expect((result.data as { nextSteps?: string[] }).nextSteps).toEqual([queryStep, retryStep])
   })
@@ -120,7 +120,7 @@ describe('orchestration mutation recovery', () => {
 
     expect((result.data as { nextSteps?: string[] }).nextSteps).toEqual([
       `Run ${renderCommand(['h0x-dev', 'orchestration', 'worker-show', '--dispatch', 'dispatch_3', '--json'])} before retrying.`,
-      `After inspecting the Dispatch, if keyed recovery is still needed, run ${renderCommand(['h0x-dev', 'orchestration', 'worker-start', '--task', 'task 3', '--comment', 'literal $(do-not-run)', '--retry-request', 'request_3'])}. --retry-request reuses the same operation identity so Orca can replay, join, or safely recover it without starting a separate duplicate.`
+      `After inspecting the Dispatch, if keyed recovery is still needed, run ${renderCommand(['h0x-dev', 'orchestration', 'worker-start', '--task', 'task 3', '--comment', 'literal $(do-not-run)', '--retry-request', 'request_3'])}. --retry-request reuses the same operation identity so h0x-ADE can replay, join, or safely recover it without starting a separate duplicate.`
     ])
     expect(result.message).toContain('literal $(do-not-run)')
   })

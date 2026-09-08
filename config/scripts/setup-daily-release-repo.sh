@@ -45,7 +45,7 @@ else
   # and a tag needs a commit. Empty repo = "Repository is empty" 25 minutes in.
   gh repo create "$DAILY_REPO" \
     --public \
-    --description "Daily macOS dev builds of Orca, cut from main each morning. Not a source repo." \
+    --description "Daily macOS dev builds of h0x-ADE, cut from main each morning. Not a source repo." \
     --add-readme \
     --disable-issues \
     --disable-wiki ||

@@ -82,7 +82,7 @@ export function SkillInstallManagementDialog({
       setError(
         translate(
           'auto.components.skills.install.inspectManagedFailed',
-          'Orca could not inspect managed installs on this machine.'
+          'h0x-ADE could not inspect managed installs on this machine.'
         )
       )
     } finally {
@@ -116,7 +116,7 @@ export function SkillInstallManagementDialog({
           operation.status === 'reconnect-required'
             ? translate(
                 'auto.components.skills.install.reconnectForVersionHistory',
-                'Reconnect your Orca account to load version history.'
+                'Reconnect your h0x-ADE account to load version history.'
               )
             : operation.message
         )
@@ -202,7 +202,7 @@ export function SkillInstallManagementDialog({
             operation.status === 'reconnect-required'
               ? translate(
                   'auto.components.skills.install.reconnectBeforeVersionChange',
-                  'Reconnect your Orca account before changing versions.'
+                  'Reconnect your h0x-ADE account before changing versions.'
                 )
               : operation.message
           )
@@ -231,7 +231,7 @@ export function SkillInstallManagementDialog({
           operation.status === 'reconnect-required'
             ? translate(
                 'auto.components.skills.install.reconnectBeforeVersionChange',
-                'Reconnect your Orca account before changing versions.'
+                'Reconnect your h0x-ADE account before changing versions.'
               )
             : operation.message
         )
@@ -249,7 +249,7 @@ export function SkillInstallManagementDialog({
       setError(
         translate(
           'auto.components.skills.install.versionVerificationFailed',
-          'Orca could not verify the requested version.'
+          'h0x-ADE could not verify the requested version.'
         )
       )
     } finally {
@@ -320,7 +320,7 @@ export function SkillInstallManagementDialog({
       setError(
         translate(
           'auto.components.skills.install.removeFailed',
-          'Orca could not safely remove this skill.'
+          'h0x-ADE could not safely remove this skill.'
         )
       )
     } finally {

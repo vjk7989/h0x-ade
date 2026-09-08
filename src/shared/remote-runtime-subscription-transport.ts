@@ -157,7 +157,7 @@ export async function subscribeRemoteRuntimeTransport<TResult>(
       fail(
         new RemoteRuntimeClientError(
           'runtime_timeout',
-          'Timed out waiting for the remote Orca runtime subscription to start.'
+          'Timed out waiting for the remote h0x-ADE runtime subscription to start.'
         )
       )
     }, timeoutMs)
@@ -246,7 +246,7 @@ export async function subscribeRemoteRuntimeTransport<TResult>(
       fail(
         new RemoteRuntimeClientError(
           'remote_runtime_unavailable',
-          'Could not connect to the remote Orca runtime.'
+          'Could not connect to the remote h0x-ADE runtime.'
         )
       )
     }
@@ -303,7 +303,7 @@ export async function subscribeRemoteRuntimeTransport<TResult>(
         fail(
           new RemoteRuntimeClientError(
             'remote_runtime_unavailable',
-            'Remote Orca runtime stopped responding; the stream connection was reset.'
+            'Remote h0x-ADE runtime stopped responding; the stream connection was reset.'
           )
         )
         try {

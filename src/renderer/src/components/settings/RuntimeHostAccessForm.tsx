@@ -247,7 +247,7 @@ export function RuntimeHostAccessForm({
             {failure.kind === 'host-identity-mismatch'
               ? translate(
                   'auto.components.settings.RuntimeHostAccessForm.identityMismatch',
-                  'The reached Orca host does not match this access link'
+                  'The reached h0x-ADE host does not match this access link'
                 )
               : failure.kind === 'access-link-invalid'
                 ? translate(
@@ -257,7 +257,7 @@ export function RuntimeHostAccessForm({
                 : failure.kind === 'protocol-incompatible'
                   ? translate(
                       'auto.components.settings.RuntimeHostAccessForm.incompatible',
-                      'Orca versions are not compatible'
+                      'h0x-ADE versions are not compatible'
                     )
                   : failure.kind === 'connection-interrupted'
                     ? translate(
@@ -316,7 +316,7 @@ export function RuntimeHostAccessForm({
           <p className="mt-2 text-muted-foreground">
             {translate(
               'auto.components.settings.RuntimeHostAccessForm.headlessHelp',
-              'Using headless orca serve? Run orca serve --pairing-address <reachable-host> on the other computer.'
+              'Using headless h0x serve? Run h0x serve --pairing-address <reachable-host> on the other computer.'
             )}
           </p>
         )}

@@ -59,7 +59,7 @@ describe('WindowsFirewallNotice', () => {
       <WindowsFirewallNotice pairingReady address="192.168.0.108" usingRelay />
     )
     expect(await screen.findByText(/allow phone connections through/i)).toBeInTheDocument()
-    expect(screen.getByText(/still works over Orca Relay/i)).toBeInTheDocument()
+    expect(screen.getByText(/still works over h0x Relay/i)).toBeInTheDocument()
 
     rerender(<WindowsFirewallNotice pairingReady address="192.168.0.108" />)
     expect(screen.queryByText(/still works over Orca Relay/i)).not.toBeInTheDocument()

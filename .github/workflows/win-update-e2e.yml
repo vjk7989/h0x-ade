@@ -5,8 +5,8 @@ name: Windows Update-Survival E2E
 # packaged artifacts (daemon survival, terminal interactivity, zero console
 # flashes). This MUST run on a disposable CI Windows: electron-builder's oneClick
 # installer uninstalls the registry-registered copy of the app before every
-# install, so running the harness on a machine with a real Orca install would
-# delete it. A fresh runner has no Orca registered, so it is the only safe home
+# install, so running the harness on a machine with a real install would delete
+# it. A fresh runner has no h0x-ADE registered, so it is the only safe home
 # for install-based testing. Manual dispatch only.
 
 # Why: workflow_dispatch only works once a workflow is on the default branch.
@@ -18,19 +18,16 @@ name: Windows Update-Survival E2E
 on:
   push:
     branches:
-      - Jinwoo-H/windows-update-survival
+      - codex/complete-surface-rebrand
     paths:
       - 'tests/tools/win-update-e2e/**'
       - '.github/workflows/win-update-e2e.yml'
   workflow_dispatch:
     inputs:
       from_tag:
-        description: Release tag to install first (e.g. v1.4.124-rc.8)
-        required: true
-        type: string
-      to_tag:
-        description: Release tag to update to (e.g. v1.4.124-rc.9)
-        required: true
+        description: Legacy release tag to install first
+        required: false
+        default: v1.4.199
         type: string
       expect:
         description: Expected outcome profile
@@ -62,12 +59,11 @@ concurrency:
 
 jobs:
   update-e2e:
-    name: update ${{ inputs.from_tag || 'v1.4.124-rc.8' }} -> ${{ inputs.to_tag || 'v1.4.124-rc.9' }} (${{ inputs.expect || 'cold-restore' }})
+    name: update ${{ inputs.from_tag || 'v1.4.199' }} -> current ref (${{ inputs.expect || 'cold-restore' }})
     runs-on: windows-2022
     timeout-minutes: 30
     env:
-      FROM_TAG: ${{ inputs.from_tag || 'v1.4.124-rc.8' }}
-      TO_TAG: ${{ inputs.to_tag || 'v1.4.124-rc.9' }}
+      FROM_TAG: ${{ inputs.from_tag || 'v1.4.199' }}
       EXPECT: ${{ inputs.expect || 'cold-restore' }}
       ASSET_PATTERN: ${{ inputs.asset_pattern || '*windows-setup.exe' }}
       SOAK_SECONDS: ${{ inputs.soak_seconds || '60' }}
@@ -89,10 +85,18 @@ jobs:
         with:
           install: false
 
-      # Why: the harness only needs its runtime deps (the Playwright Electron
-      # driver); it drives already-built installer artifacts, so no app build.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Build current-ref Windows installer and icons
+        shell: pwsh
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          pnpm run build:icons
+          node config/scripts/ensure-native-runtime.mjs --runtime=electron
+          pnpm exec electron-builder --config config/electron-builder.config.cjs --win --x64 --publish never
+          if (-not (Test-Path 'dist/h0x-windows-setup.exe')) { throw 'Missing current-ref h0x installer' }
 
       # Why: fail fast with a readable message if a tag has no matching Windows
       # installer, rather than deep inside the harness.
@@ -102,17 +106,13 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force artifacts/from | Out-Null
-          New-Item -ItemType Directory -Force artifacts/to | Out-Null
           gh release download "$env:FROM_TAG" --repo "${{ github.repository }}" --pattern "$env:ASSET_PATTERN" --dir artifacts/from
-          gh release download "$env:TO_TAG" --repo "${{ github.repository }}" --pattern "$env:ASSET_PATTERN" --dir artifacts/to
           $from = Get-ChildItem artifacts/from -Filter *.exe | Select-Object -First 1
-          $to = Get-ChildItem artifacts/to -Filter *.exe | Select-Object -First 1
           if (-not $from) { throw "No installer matching '$env:ASSET_PATTERN' in $env:FROM_TAG" }
-          if (-not $to) { throw "No installer matching '$env:ASSET_PATTERN' in $env:TO_TAG" }
           "FROM_EXE=$($from.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "TO_EXE=$($to.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "TO_EXE=$((Resolve-Path 'dist/h0x-windows-setup.exe').Path)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      # Why: no --install-dir here. A CI runner has no real Orca registered, so
+      # Why: no --install-dir here. A CI runner has no real install registered, so
       # the harness installs to the default per-user location and owns it — the
       # isolated-install machinery exists only to (imperfectly) protect a real
       # developer install, which does not apply on a throwaway runner.
@@ -123,6 +123,10 @@ jobs:
           # Why: on a driving failure the harness dumps a screenshot + DOM state
           # here so the actual post-onboarding UI is visible in the artifacts.
           ORCA_E2E_DIAG_DIR: artifacts/diag
+          # Deliberate visible-window exception: this disposable interactive CI
+          # desktop must expose the taskbar so UI Automation can hover and prove
+          # the shell tooltip/icon. This workflow must never run on a user desktop.
+          H0X_TASKBAR_BRAND_EVIDENCE_DIR: artifacts/diag/taskbar-brand
         run: |
           $log = "artifacts/harness-output.log"
           node tests/tools/win-update-e2e/run.mjs `

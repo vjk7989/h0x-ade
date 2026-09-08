@@ -74,6 +74,34 @@ jobs:
           compgen -G "dist/h0x_*_amd64.deb" >/dev/null
           compgen -G "dist/h0x-*.x86_64.rpm" >/dev/null
 
+      - name: Verify packaged Linux branding and checksums
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: |
+          set -euo pipefail
+          rm -rf dist/brand-linux-root
+          dpkg-deb -x "$(compgen -G 'dist/h0x_*_amd64.deb' | head -n 1)" dist/brand-linux-root
+          node config/scripts/verify-packaged-brand.mjs \
+            --platform=linux --arch=x64 --app-dir=dist/linux-unpacked \
+            --package-root=dist/brand-linux-root
+
+      - name: Verify AppImage INT and TERM shutdown
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: >-
+          node config/scripts/run-headless-serve-shutdown-docker.mjs
+          --appimage dist/h0x-linux.AppImage --entrypoint appimage
+
+      - name: Verify AppImage packaged CLI
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: node config/scripts/run-linux-cli-launch-contract-docker.mjs --appimage dist/h0x-linux.AppImage
+
+      - name: Smoke packaged Linux CLI
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: node config/scripts/smoke-packaged-cli.mjs --app-dir=dist/linux-unpacked
+
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -83,6 +111,7 @@ jobs:
             dist/h0x_*_amd64.deb
             dist/h0x-*.x86_64.rpm
             dist/latest-linux.yml
+            dist/checksums-linux-x64.txt
           if-no-files-found: error
           retention-days: 14
 
@@ -142,6 +171,16 @@ jobs:
             throw 'Missing dist/latest.yml'
           }
 
+      - name: Verify packaged Windows branding and checksums
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: node config/scripts/verify-packaged-brand.mjs --platform=windows --arch=x64 --app-dir=dist/win-unpacked
+
+      - name: Smoke packaged Windows CLI
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: node config/scripts/smoke-packaged-cli.mjs --app-dir=dist/win-unpacked
+
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -150,6 +189,7 @@ jobs:
             dist/h0x-windows-setup.exe
             dist/h0x-windows-setup.exe.blockmap
             dist/latest.yml
+            dist/checksums-windows-x64.txt
           if-no-files-found: error
           retention-days: 14
 
@@ -192,6 +232,9 @@ jobs:
       - name: Prepare Electron native runtime
         run: node config/scripts/ensure-native-runtime.mjs --runtime=electron
 
+      - name: Generate canonical h0x macOS icon
+        run: pnpm run build:icons
+
       - name: Package macOS artifacts
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
@@ -206,6 +249,25 @@ jobs:
           test -s "dist/h0x-macos-${{ matrix.arch }}.dmg"
           compgen -G "dist/h0x-ADE-*-mac.zip" >/dev/null
 
+      - name: Verify packaged macOS branding and checksums
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: |
+          set -euo pipefail
+          app_dir="dist/mac/h0x-ADE.app"
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then app_dir="dist/mac-arm64/h0x-ADE.app"; fi
+          node config/scripts/verify-packaged-brand.mjs \
+            --platform=macos --arch=${{ matrix.arch }} --app-dir="$app_dir"
+
+      - name: Smoke packaged macOS CLI
+        env:
+          ORCA_BACKGROUND_LAUNCH: '1'
+        run: |
+          set -euo pipefail
+          app_dir="dist/mac/h0x-ADE.app"
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then app_dir="dist/mac-arm64/h0x-ADE.app"; fi
+          node config/scripts/smoke-packaged-cli.mjs --app-dir="$app_dir"
+
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -215,5 +277,6 @@ jobs:
             dist/h0x-ADE-*-mac.zip
             dist/h0x-ADE-*-mac.zip.blockmap
             dist/latest-mac.yml
+            dist/checksums-macos-${{ matrix.arch }}.txt
           if-no-files-found: error
           retention-days: 14

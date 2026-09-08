@@ -11,8 +11,12 @@ describe('pinned upstream history workflow contracts', () => {
     const steps = pr.jobs['cross-version-wire'].steps
     const checkout = steps.find((step) => step.name === 'Checkout')
     const prepare = steps.find((step) => step.id === 'pinned-history')
-    const install = steps.find((step) => step.uses === './.github/actions/install-node-dependencies')
-    const journey = steps.find((step) => step.name === 'Old/new client and server compatibility journeys')
+    const install = steps.find(
+      (step) => step.uses === './.github/actions/install-node-dependencies'
+    )
+    const journey = steps.find(
+      (step) => step.name === 'Old/new client and server compatibility journeys'
+    )
     expect(checkout.with).toMatchObject({
       'fetch-depth': 0,
       'fetch-tags': false,
@@ -30,13 +34,27 @@ describe('pinned upstream history workflow contracts', () => {
     })
   })
 
+  it('prepares pinned VM commits before the rollback reproduction', () => {
+    const step = pr.jobs.static_analysis.steps.find(
+      (candidate) => candidate.name === 'Check VM runtime rollback compatibility'
+    )
+    const prepare = 'prepare-pinned-upstream-history.mjs'
+    const reproduce = 'run-ephemeral-vm-runtime-store-rollback-repro.mjs'
+    expect(step.run).toContain('--ids=vm_runtime_baseline,vm_runtime_affected')
+    expect(step.run.indexOf(prepare)).toBeLessThan(step.run.indexOf(reproduce))
+    expect(step.run).not.toMatch(/git\s+push/)
+  })
+
   it('prepares the pinned skill ref in every one of the thirteen matrix cells', () => {
     const job = skills.jobs.roundtrip
     const steps = job.steps
     const prepare = steps.find((step) => step.id === 'pinned-history')
-    const verify = steps.find((step) => step.name === 'Verify targeted update convergence and copy behavior')
+    const verify = steps.find(
+      (step) => step.name === 'Verify targeted update convergence and copy behavior'
+    )
     const axes = job.strategy.matrix
-    const cells = axes.os.length * axes.shape.length * axes.autocrlf.length * axes['skills-cli'].length
+    const cells =
+      axes.os.length * axes.shape.length * axes.autocrlf.length * axes['skills-cli'].length
     expect(cells + axes.include.length).toBe(13)
     expect(prepare.run).toContain('--ids=skill_roundtrip')
     expect(steps.indexOf(prepare)).toBeLessThan(steps.indexOf(verify))

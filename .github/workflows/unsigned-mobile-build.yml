@@ -123,16 +123,38 @@ jobs:
       - name: Install CocoaPods
         run: pod install --project-directory=ios
       - name: Build unsigned simulator app
-        run: >-
-          xcodebuild -workspace ios/Orca.xcworkspace -scheme Orca
-          -sdk iphonesimulator -configuration Release
-          -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          workspaces=(ios/*.xcworkspace)
+          if [[ "${#workspaces[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one generated Xcode workspace; found ${#workspaces[@]}"
+            exit 1
+          fi
+          scheme="$(xcodebuild -list -json -workspace "${workspaces[0]}" | node -e '
+            let input = ""
+            process.stdin.on("data", (chunk) => (input += chunk))
+            process.stdin.on("end", () => {
+              const schemes = JSON.parse(input).workspace?.schemes ?? []
+              if (schemes.length !== 1) process.exit(2)
+              process.stdout.write(schemes[0])
+            })
+          ')"
+          xcodebuild -workspace "${workspaces[0]}" -scheme "$scheme" \
+            -sdk iphonesimulator -configuration Release \
+            -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
       - name: Archive and verify simulator app
         run: |
           set -euo pipefail
           version="$(node -p "require('./app.json').expo.version")"
           artifact="build/h0x-ade-mobile-${version}-ios-simulator.zip"
-          app="build/ios/Build/Products/Release-iphonesimulator/Orca.app"
+          shopt -s nullglob
+          apps=(build/ios/Build/Products/Release-iphonesimulator/*.app)
+          if [[ "${#apps[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one simulator app; found ${#apps[@]}"
+            exit 1
+          fi
+          app="${apps[0]}"
           ditto -c -k --sequesterRsrc --keepParent "$app" "$artifact"
           node scripts/verify-unsigned-mobile-artifact.mjs --platform ios \
             --artifact "$artifact" --app-config app.json \

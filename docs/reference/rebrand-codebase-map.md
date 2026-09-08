@@ -812,6 +812,9 @@ implied by the focused green evidence above.
   resulting APK has no signer. Normal release and store workflows are unchanged.
   The init script resolves `:app` from `gradle.rootProject`, which is required by
   the Gradle 9 init-script scope. The iOS lane uses runner CocoaPods directly.
+  Included Gradle builds are ignored, and the iOS lane resolves the single
+  generated workspace, shared scheme, and simulator app instead of retaining
+  a stale internal project filename.
 - `mobile/src/mobile-release/verify-unsigned-mobile-artifact.test.ts` covers
   canonical Android/iOS inspections and rejection of identity, scheme, visible
   brand, asset, artifact-name, and checksum drift. `.github/workflows/mobile.yml`

@@ -1,4 +1,7 @@
 gradle.projectsEvaluated {
+  if (gradle.parent != null) {
+    return
+  }
   def appProject = gradle.rootProject.findProject(':app')
   if (appProject == null) {
     throw new GradleException('Android app project was not found')

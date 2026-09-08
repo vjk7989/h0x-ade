@@ -965,7 +965,7 @@ The authoritative CI rerun is pending. This guard resolves the invalid hidden
 lane precondition without claiming the visible `@headful` coverage has run in
 the background job.
 
-## Desktop Unsigned Packaging Corrections — Current Local Slice
+## Desktop Unsigned Packaging Diagnostics And Fixes — Completed Local Slice
 
 The current correction slice tightens the packaged-brand verification and
 macOS icon generation used by the unsigned desktop release path. It does not
@@ -974,10 +974,13 @@ change application runtime behavior or restore a legacy executable identity.
 - The installed Linux desktop entry has one exact launch contract:
   `Exec=/opt/h0x-ADE/h0x %U`. The packaged-brand verifier rejects the stale
   PATH-only `Exec=h0x %U` form and the old `/opt/Orca/orca-ide` target.
-- The Windows packaged-brand icon inspector now joins its PowerShell statements
-  with newlines. This keeps the function declarations and following statements
-  parseable while preserving the existing argument-array invocation and product,
-  description, and embedded-icon checks.
+- The Windows packaged-brand icon inspector in
+  `config/scripts/verify-packaged-brand.mjs` uses newline-separated PowerShell
+  statements and transports paths through `H0X_PACKAGED_EXE_PATH` and
+  `H0X_CANONICAL_ICON_PATH`, outside `-Command` text. It compares the embedded
+  icon pixels with the canonical generated 32 px PNG frame at
+  `resources/build/linux-icons/32x32.png`, avoiding multi-frame ICO selection
+  ambiguity while retaining the VersionInfo checks.
 - The macOS ICNS path starts from the canonical generated
   `resources/build/icon.png`, resizes it into the standard 16, 32, 128, 256,
   512, and 1024 pixel iconset filenames (including the required `@2x` members),
@@ -990,23 +993,26 @@ change application runtime behavior or restore a legacy executable identity.
   because paths appended after `powershell.exe -Command` were parsed as part of
   the command instead of populating `$args`; Linux reached the AppImage shutdown
   oracle but TERM left the serving Electron process tree and listener alive.
-- The follow-up Windows verifier transports the packaged executable and
-  canonical-icon paths through `H0X_PACKAGED_EXE_PATH` and
-  `H0X_CANONICAL_ICON_PATH`, outside the PowerShell command text. Embedded icon
-  pixels are compared against the canonical generated 32 px PNG frame at
-  `resources/build/linux-icons/32x32.png`, avoiding multi-frame ICO selection
-  ambiguity while retaining the VersionInfo checks.
-- The follow-up Linux workflow invokes the established AppImage shutdown oracle
-  with `--signal-target serving-electron --int-delivery pid`. Both INT and TERM
-  therefore target the serving Electron process; INT keeps the explicit PID
-  delivery required by the packaged-launch contract.
-- The focused packaged-brand verifier test passed locally: 1 file, 10 tests.
-  Its workflow assertion pins the Linux signal-target flags, and its native
-  Windows case proves the environment-based path transport produces parseable
-  product, description, and icon-match fields.
+- `.github/workflows/unsigned-desktop-build.yml` invokes the established Linux
+  AppImage shutdown oracle with
+  `--signal-target serving-electron --int-delivery pid`. Both INT and TERM target
+  the serving Electron process; INT retains explicit PID delivery.
+- `config/scripts/verify-packaged-brand.test.mjs` passed 10/10 focused tests. Its
+  workflow assertion pins the Linux signal-target flags, and its native Windows
+  case proves the environment-path transport produces parseable product,
+  description, and icon-match fields. Independent Oxlint and scoped diff checks
+  for the verifier slice also passed.
+- [Unsigned desktop run 34275341613](https://github.com/vjk7989/h0x-ade/actions/runs/34275341613)
+  ran from merge commit `1bc80cbd1b517c0e92516cb8858b39e1f9b2a3a4`.
+  Linux x64 and macOS x64/arm64 passed their complete packaging, verification,
+  smoke, and upload lanes. The repaired Windows path transport completed and
+  exposed an actual embedded-icon mismatch rather than a PowerShell parse error.
+- `config/electron-builder.config.cjs` now explicitly pins `win.icon` to
+  `resources/build/icon.ico`, removing icon-source inference from Windows
+  packaging. This correction still requires an authoritative Windows rerun.
 - `v1.4.200` still has no Git tag or GitHub release after the separate release-cut
   failure; no draft or public release was produced by this unsigned-build run.
 
-The macOS x64 and arm64 outputs from run `34273255660` are green and uploaded.
-Windows and Linux require an authoritative rerun with the follow-up verifier
-corrections; successful artifacts, a tag, and publication are not yet claimed.
+Linux x64 and both macOS architectures are now green and uploaded. Windows is
+the only remaining unsigned desktop rerun; its successful artifact, a tag, and
+publication are not yet claimed.

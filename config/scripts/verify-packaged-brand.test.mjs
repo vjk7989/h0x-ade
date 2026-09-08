@@ -146,8 +146,10 @@ describe('packaged brand verifier', () => {
 
   it('keeps the Windows inspector parseable and generates a standard macOS iconset', () => {
     const verifier = readFileSync('config/scripts/verify-packaged-brand.mjs', 'utf8')
+    const builder = readFileSync('config/electron-builder.config.cjs', 'utf8')
     expect(verifier).toContain("].join('\\n')")
     expect(verifier).not.toContain("].join('; ')")
+    expect(builder).toMatch(/win:\s*{[\s\S]*?icon: 'resources\/build\/icon\.ico'/)
     const generator = readFileSync('resources/icon-source/generate.sh', 'utf8')
     expect(generator).toContain('icon_512x512@2x.png')
     expect(generator).toContain('iconutil -c icns')

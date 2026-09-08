@@ -43,6 +43,7 @@ describe('h0x brand asset generator', () => {
       ['resources/icon.png', 256, 256],
       ['resources/tray/h0x-menu-barTemplate.png', 22, 14],
       ['resources/tray/h0x-menu-barTemplate@2x.png', 44, 28],
+      ['mobile/assets/icon.png', 1024, 1024],
       ['mobile/assets/adaptive-icon.png', 1024, 1024],
       ['mobile/assets/splash-icon.png', 400, 400],
       ['mobile/assets/favicon.png', 48, 48]

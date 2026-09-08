@@ -62,7 +62,17 @@ describe('pairing deep links', () => {
     const code = encodeOffer()
 
     expect(parsePairingCode(`pavii-h0x://pair?code=${code}`)).toEqual(offer)
+    expect(parsePairingCode(`orca://pair?code=${code}`)).toEqual(offer)
     expect(parsePairingCode(code)).toEqual(offer)
+  })
+
+  it('accepts legacy pairing URLs without accepting lookalike routes', () => {
+    const code = encodeOffer()
+
+    expect(decodePairingUrl(`orca://pair?code=${code}`)).toEqual(offer)
+    expect(decodePairingUrl(` ORCA://PAIR#${code} `)).toEqual(offer)
+    expect(parsePairingCode(`orca://pairing?code=${code}`)).toBeNull()
+    expect(parsePairingCode(`other://pair?code=${code}`)).toBeNull()
   })
 
   it('preserves a TLS reverse-proxy endpoint with an explicit port and path', () => {

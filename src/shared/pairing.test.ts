@@ -112,6 +112,15 @@ describe('parsePairingCode', () => {
     expect(parsePairingCode(url)).toEqual(offer)
   })
 
+  it('accepts legacy pairing URLs while generation remains canonical', () => {
+    const canonical = encodePairingOffer(offer)
+    const legacy = canonical.replace(/^pavii-h0x:/, 'orca:')
+
+    expect(parsePairingCode(legacy)).toEqual(offer)
+    expect(decodePairingOffer(legacy)).toEqual(offer)
+    expect(canonical).toMatch(/^pavii-h0x:\/\/pair\?code=/)
+  })
+
   it('parses a bare base64url payload (without scheme prefix)', () => {
     const url = encodePairingOffer(offer)
     const base64url = new URLSearchParams(url.slice(url.indexOf('?') + 1)).get('code')!

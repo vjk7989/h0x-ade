@@ -42,17 +42,23 @@ export function useMacNotificationPermissionState(
     useState<MacNotificationPermissionState | null>(null)
 
   useEffect(() => {
+    let cancelled = false
+    let pollTimer: ReturnType<typeof setTimeout> | null = null
+    let pollAttempts = 0
+    const cancelPolling = (): void => {
+      cancelled = true
+      if (pollTimer !== null) {
+        clearTimeout(pollTimer)
+      }
+    }
     // Why: while h0x-ADE's own notifications setting is off, the OS permission
     // is irrelevant — a green "notifications are enabled" card next to a
     // disabled toggle reads as a contradiction. Hide the card and skip the
     // readout polling entirely until the setting is back on.
     if (!enabled) {
       setMacPermissionState(null)
-      return
+      return cancelPolling
     }
-    let cancelled = false
-    let pollTimer: ReturnType<typeof setTimeout> | null = null
-    let pollAttempts = 0
 
     function schedulePoll(promptedBefore: boolean): void {
       if (cancelled || pollAttempts >= MAC_PROBE_POLL_MAX_ATTEMPTS) {
@@ -99,12 +105,7 @@ export function useMacNotificationPermissionState(
       }
     })()
 
-    return () => {
-      cancelled = true
-      if (pollTimer) {
-        clearTimeout(pollTimer)
-      }
-    }
+    return cancelPolling
   }, [enabled])
 
   return [macPermissionState, setMacPermissionState]

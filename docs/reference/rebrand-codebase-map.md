@@ -761,3 +761,32 @@ local, daemon, and relay `TERM_PROGRAM` value now use `h0x-ADE`. The tray loads
 Rendered Electron validation and package CI for this new surface slice, its
 merge, any further version bump, and release publication are not established by
 these local gates and remain pending.
+
+## Mobile Compatibility And Rebrand — Completed Slice
+
+Commit `9bd6aa1a8b` completes the scoped mobile identity and compatibility
+contracts while leaving existing installations and mixed-version pairing
+inputs usable.
+
+- The Expo launcher display name is `h0x-ADE Mobile`, and Android release output
+  uses the same display identity. The release contract also pins the existing
+  `pavii-h0x` scheme, mobile package IDs, and generated brand-asset paths.
+- New pairing URLs are emitted with the canonical `pavii-h0x` scheme. Desktop
+  and mobile parsers additively accept legacy `orca://pair` input, including
+  case-normalized valid forms, while rejecting lookalike schemes and routes;
+  this is an input compatibility boundary, not a legacy-output restoration.
+- Stale mobile component, diagnostics, session, source-control, task, release,
+  and transport assertions now reflect current `h0x`/`h0x-ADE` behavior. The
+  generated mobile icon dimension contract includes `mobile/assets/icon.png`,
+  and the bundled navigation plugin content hash was refreshed to match its
+  generated content.
+- Adjacent shell/static-analysis findings were resolved with narrowly scoped
+  production cleanup, including neutral GitHub stacked-PR ambiguity messages;
+  no RPC, storage, remote-wire, or package-ID migration was introduced.
+- Focused local tests, typecheck, generated-asset/manifest verification, and
+  changed-code quality passed. The GitHub mobile verification workflow also
+  passed for this commit.
+
+This records only the completed mobile slice. The complete PR gate, merge,
+unsigned platform builds, and release verification remain pending and are not
+implied by the focused green evidence above.

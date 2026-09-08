@@ -850,3 +850,20 @@ alias or change runtime, RPC, storage, package-ID, or remote-wire behavior.
 The Linux PR CI rerun is pending. This local slice therefore does not yet claim
 the complete PR gate, merge, unsigned platform builds, version bump, or
 `v1.4.200` publication.
+
+## CI Failure Classifier Robustness — Completed Local Slice
+
+Repeated GitHub-hosted runs exposed `EAGAIN` while the failure classifier read
+its piped payload through `readFileSync` on standard input. The classifier now
+consumes `process.stdin` asynchronously, preserving its existing parsing and
+classification behavior while avoiding the transient synchronous-read failure.
+
+- The focused classifier gate passed 31 tests, and its lint and formatting
+  checks passed.
+- The unrelated Windows workflow-parallelism path test is excluded from this
+  slice; its platform-path expectation is not evidence about classifier stdin
+  handling.
+
+The authoritative CI rerun is pending. This robustness fix therefore does not
+yet establish a complete green PR gate or advance merge, build, version, or
+release status.

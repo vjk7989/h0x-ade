@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import process from 'node:process'
 import { pathToFileURL } from 'node:url'
 
@@ -360,7 +359,12 @@ function matchesPrefix(file, prefixes) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const files = readFileSync(0, 'utf8').split('\n').filter(Boolean)
+  let input = ''
+  process.stdin.setEncoding('utf8')
+  for await (const chunk of process.stdin) {
+    input += chunk
+  }
+  const files = input.split('\n').filter(Boolean)
   const classification = classifyPrJobs(files)
   for (const [name, value] of Object.entries(classification)) {
     process.stdout.write(`${name}=${value ? 'true' : 'false'}\n`)

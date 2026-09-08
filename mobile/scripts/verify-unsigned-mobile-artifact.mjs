@@ -157,25 +157,18 @@ function parseAndroidBadging(text) {
 }
 
 export function parseAndroidManifestSchemes(text) {
-  return text.split(/\r?\n/).flatMap((line) => {
-    const value =
-      /^\s*A:\s+(?:android:)?scheme(?:\([^)]*\))?\s*=\s*(?:\(type [^)]+\))?"([^"]+)"/.exec(
-        line
-      )?.[1]
+  const manifest = text.replace(/<!--[\s\S]*?-->/g, '')
+  return [...manifest.matchAll(/<data(?=\s|\/?>)[^>]*>/gs)].flatMap(([tag]) => {
+    const value = /\sandroid:scheme\s*=\s*(["'])([^"'&<>]+)\1/.exec(tag)?.[2]
     return value ? [value] : []
   })
 }
 
 function inspectAndroid(artifact) {
   const aapt = process.env.AAPT2 || process.env.AAPT || 'aapt2'
+  const apkanalyzer = process.env.APKANALYZER || 'apkanalyzer'
   const badging = execFileSync(aapt, ['dump', 'badging', artifact], { encoding: 'utf8' })
-  const manifest = execFileSync(
-    aapt,
-    ['dump', 'xmltree', artifact, '--file', 'AndroidManifest.xml'],
-    {
-      encoding: 'utf8'
-    }
-  )
+  const manifest = execFileSync(apkanalyzer, ['manifest', 'print', artifact], { encoding: 'utf8' })
   const entries = execFileSync('unzip', ['-Z1', artifact], { encoding: 'utf8' }).split(/\r?\n/)
   const apksigner = process.env.APKSIGNER || 'apksigner'
   verifyUnsignedApkResult(

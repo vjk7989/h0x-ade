@@ -831,6 +831,14 @@ implied by the focused green evidence above.
   value/Raw mismatches instead of accepting ambiguous diagnostics. The focused
   mobile verifier suite passed 17/17 tests; an authoritative Android rerun is
   still required.
+- [Android rerun 34285892976](https://github.com/vjk7989/h0x-ade/actions/runs/34285892976)
+  compiled the APK but repeated the scheme-verification failure, showing that
+  typed `aapt2` resource output is not a stable resolved-manifest oracle.
+- The verifier now uses the Android SDK `apkanalyzer manifest print` result and
+  parses schemes only from `android:scheme` attributes on `<data>` tags. It
+  rejects entity-encoded values and scheme evidence found only in unrelated
+  elements or attributes; the existing strict allowed-scheme set remains
+  unchanged. Android requires another authoritative rerun.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 

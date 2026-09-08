@@ -888,3 +888,22 @@ packaged artifact names across shards 2–8.
 The Linux PR CI rerun is pending. Local focused evidence does not yet establish
 that all eight authoritative CI shards pass or advance merge, build, version,
 or release status.
+
+## Full Node Shard Verification And Hidden E2E Follow-Up
+
+[PR run 34215218893](https://github.com/vjk7989/h0x-ade/actions/runs/34215218893)
+passed all eight Node 24 shards, establishing the authoritative Linux result for
+the brand-oracle correction slices above.
+
+- The remaining surface-brand hidden E2E failure was diagnosed from its trace:
+  the settings view rendered completely, but the test waited for an exact
+  `Settings` label that no longer exists.
+- The assertion now targets the stable `Search settings` textbox exposed by the
+  rendered settings view. This is a selector correction only and does not alter
+  renderer behavior or visible copy.
+- The SSH and GPU E2E failures are unrelated to this selector correction. Their
+  rerun remains pending and no green result for those jobs is claimed here.
+
+The eight Node shards are green; complete E2E and PR-gate status remains pending
+until the unrelated SSH/GPU rerun and the corrected hidden surface-brand E2E
+job finish.

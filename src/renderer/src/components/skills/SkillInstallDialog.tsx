@@ -88,7 +88,7 @@ export function SkillInstallDialog({
       setError(
         translate(
           'auto.components.skills.install.enterShareLink',
-          'Enter an Orca skill share link.'
+          'Enter an h0x-ADE skill share link.'
         )
       )
       return
@@ -213,7 +213,7 @@ export function SkillInstallDialog({
           operation.status === 'reconnect-required'
             ? translate(
                 'auto.components.skills.install.reconnectBeforeInstalling',
-                'Reconnect your Orca account before installing.'
+                'Reconnect your h0x-ADE account before installing.'
               )
             : operation.message
         )
@@ -228,7 +228,7 @@ export function SkillInstallDialog({
       setError(
         translate(
           'auto.components.skills.install.requestedVersionVerificationFailed',
-          'Installation failed before Orca could verify the requested version.'
+          'Installation failed before h0x-ADE could verify the requested version.'
         )
       )
     } finally {

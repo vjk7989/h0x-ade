@@ -31,8 +31,8 @@ import { getOptionalStringFlag, getRequiredStringFlag } from '../flags'
 import { resolveRepoPathArgument } from '../repo-path-arguments'
 import { RuntimeClientError, type RuntimeRpcSuccess } from '../runtime-client'
 
-// Why: an Orca server that predates project host setup answers `method_not_found`, which reads
-// as an Orca bug rather than a version gap — and since --host runtime:<id> now routes these
+// Why: an h0x-ADE server that predates project host setup answers `method_not_found`, which reads
+// as an h0x-ADE bug rather than a version gap — and since --host runtime:<id> now routes these
 // commands to that server, a client can reach an older host without meaning to. The desktop
 // already names this case; match it instead of surfacing the raw dispatcher error.
 async function callProjectHostSetup<TResult>(
@@ -50,7 +50,7 @@ async function callProjectHostSetup<TResult>(
     if (error instanceof RuntimeClientError && error.code === 'method_not_found') {
       throw new RuntimeClientError(
         'incompatible_runtime',
-        'This Orca server does not support project host setup yet. Update Orca on the server and try again.'
+        'This h0x-ADE server does not support project host setup yet. Update h0x-ADE on the server and try again.'
       )
     }
     throw error

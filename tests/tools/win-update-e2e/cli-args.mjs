@@ -32,7 +32,7 @@ Required:
 Options:
   --install-dir <path>     Isolated-install mode: install the test build into
                            <path> instead of the default per-user location,
-                           leaving a developer's REAL Orca install untouched.
+                           leaving a developer's real h0x-ADE install untouched.
                            The path must be absolute and contain NO SPACES (the
                            NSIS /D override cannot be quoted), must not be the
                            default install location, and must not point at a
@@ -41,12 +41,12 @@ Options:
                            shared per-user registry keys + shortcuts at teardown
                            so the real install's "next update" target is
                            preserved. See README "Isolated install mode".
-  --allow-existing-install Proceed even if an Orca install already exists. The
+  --allow-existing-install Proceed even if an h0x-ADE install already exists. The
                            run overwrites it with the --from/--to versions and
                            leaves the --to version installed (your prior build
                            is NOT restored). Without this flag the harness
                            refuses to run when an install exists, to protect a
-                           developer's real Orca. Clean machines (CI/VM) never
+                           developer's real h0x-ADE. Clean machines (CI/VM) never
                            need it. Ignored in --install-dir mode, which never
                            touches the real install.
   --keep-install           Skip teardown/uninstall (leaves the app installed)
@@ -80,11 +80,11 @@ export function parseArgs(argv) {
   return { ...opts, errors }
 }
 
-/** Default per-user oneClick install location: %LOCALAPPDATA%\Programs\Orca. */
+/** Default per-user oneClick install location for current packages. */
 function defaultInstallDir() {
   const localAppData =
     process.env.LOCALAPPDATA ?? path.join(process.env.USERPROFILE ?? '', 'AppData', 'Local')
-  return path.join(localAppData, 'Programs', 'Orca')
+  return path.join(localAppData, 'Programs', 'h0x-ADE')
 }
 
 /** True if `child` is equal to, inside, or an ancestor of `parent` (case-insensitive). */
@@ -105,7 +105,11 @@ function pathsOverlap(a, b) {
 
 /** A prior harness install directory carries both the app exe and its uninstaller. */
 function looksLikeHarnessInstall(dir) {
-  return existsSync(path.join(dir, 'Orca.exe')) && existsSync(path.join(dir, 'Uninstall Orca.exe'))
+  const current =
+    existsSync(path.join(dir, 'h0x-ADE.exe')) && existsSync(path.join(dir, 'Uninstall h0x-ADE.exe'))
+  const legacy =
+    existsSync(path.join(dir, 'Orca.exe')) && existsSync(path.join(dir, 'Uninstall Orca.exe'))
+  return current || legacy
 }
 
 /**
@@ -124,7 +128,7 @@ export function validateInstallDir(installDir) {
     errors.push(
       `--install-dir must not contain spaces (got "${installDir}"). The NSIS installer's ` +
         `/D path override must be the last, UNQUOTED argument, so a path with spaces cannot ` +
-        `be passed. Choose a spaces-free location (e.g. C:\\OrcaE2E).`
+        `be passed. Choose a spaces-free location (e.g. D:\\h0xE2E).`
     )
   }
   if (pathsOverlap(installDir, defaultInstallDir())) {
@@ -150,7 +154,7 @@ export function validateInstallDir(installDir) {
     if (entries.length > 0 && !looksLikeHarnessInstall(installDir)) {
       errors.push(
         `--install-dir "${installDir}" is a non-empty directory that does not look like a ` +
-          `prior harness install (no Orca.exe + "Uninstall Orca.exe"). Refusing to overwrite ` +
+          `prior harness install (no current or legacy executable/uninstaller pair). Refusing to overwrite ` +
           `unrelated files. Point at an empty or non-existent directory.`
       )
     }

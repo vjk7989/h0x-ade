@@ -3,7 +3,7 @@ import { readFileSync, rmSync, statSync } from 'node:fs'
 import { isAbsolute, join } from 'node:path'
 import { app } from 'electron'
 
-// Why: headless `orca serve` backs browser panes with offscreen BrowserWindows.
+// Why: headless `h0x serve` backs browser panes with offscreen BrowserWindows.
 // On Linux, Electron has no display platform without an X server and segfaults
 // when such a window loads a page (verified: --headless/--ozone-platform=headless
 // also crash; only a virtual display works). So before app.whenReady, ensure a
@@ -65,7 +65,7 @@ function probeDisplayLock(displayNumber: number): DisplayLockProbe {
 }
 
 /**
- * Liveness for a display Orca did not create. An X server writes its lock beside the socket and
+ * Liveness for a display h0x-ADE did not create. An X server writes its lock beside the socket and
  * both survive a crash (verified against Xvfb under SIGKILL), so a socket with no lock was never
  * left by a crashed server — it is an endpoint published from elsewhere: a container bind-mounting
  * only /tmp/.X11-unix, WSLg, or a foreign PID namespace. We cannot judge those, and refusing them
@@ -76,8 +76,8 @@ function isForeignDisplayServerAlive(displayNumber: number): boolean {
 }
 
 /**
- * Liveness for Orca's own VIRTUAL_DISPLAY_NUMBER. Stricter on purpose: `removeStaleDisplayArtifacts`
- * unlinks the lock before the socket, so a lockless socket here is Orca's own half-finished
+ * Liveness for h0x-ADE's own VIRTUAL_DISPLAY_NUMBER. Stricter on purpose: `removeStaleDisplayArtifacts`
+ * unlinks the lock before the socket, so a lockless socket here is h0x-ADE's own half-finished
  * teardown, not a foreign endpoint. Adopting it would resurrect the orphan-socket bug and stop the
  * cleanup below from self-healing.
  */
@@ -142,7 +142,7 @@ export function hasUsableLinuxDisplay(env: NodeJS.ProcessEnv = process.env): boo
 }
 
 export const MISSING_LINUX_DISPLAY_MESSAGE = [
-  'Orca needs a usable display server, but the selected X11 or Wayland endpoint is unavailable.',
+  'h0x-ADE needs a usable display server, but the selected X11 or Wayland endpoint is unavailable.',
   'Check DISPLAY, WAYLAND_DISPLAY, XDG_RUNTIME_DIR, and any --ozone-platform override.',
   `Use \`h0x serve\` to run headless. On a bare server, ${XVFB_INSTALL_GUIDANCE}`
 ].join('\n')
@@ -188,7 +188,7 @@ function hasUsableXDisplay(value: string | undefined): boolean {
   }
   const displayNumber = Number(localDisplay[1])
   if (isUnixSocket(xvfbSocketPath(displayNumber))) {
-    // Why the managed number is never treated as foreign: Orca's own teardown unlinks the lock
+    // Why the managed number is never treated as foreign: h0x-ADE's own teardown unlinks the lock
     // before the socket, so a lockless socket on VIRTUAL_DISPLAY_NUMBER is our own half-finished
     // cleanup even when DISPLAY names it explicitly. Trusting it there would accept a dead display.
     return displayNumber === VIRTUAL_DISPLAY_NUMBER
@@ -239,7 +239,7 @@ export function ensureVirtualDisplayForHeadlessServe(options: { isServeMode: boo
     }
     console.warn(
       `[serve] DISPLAY=${configuredDisplay} is not verifiably live; leaving it untouched. ` +
-        'Unset DISPLAY to let Orca start its own Xvfb.'
+        'Unset DISPLAY to let h0x-ADE start its own Xvfb.'
     )
     return false
   }

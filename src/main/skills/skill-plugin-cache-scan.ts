@@ -96,7 +96,7 @@ export async function scanKnownPluginSkillCandidates(
       return
     }
     // Why: an attention issue is the only thing that can turn the headline off "all up to
-    // date", so evicting one for display budget makes Orca report all-clear over a read
+    // date", so evicting one for display budget makes h0x report all-clear over a read
     // failure. Reserving a few keeps that unbounded on a tree full of unreadable folders.
     const attention =
       isSkillScanAttentionReason(reason) &&

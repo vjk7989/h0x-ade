@@ -1,5 +1,5 @@
 {
-  "title": "The Orca Model",
+  "title": "The h0x-ADE Model",
   "defaultOpen": true,
   "pages": ["worktrees", "tabs-panes-splits", "agents-sessions", "session-restore", "quick-open"]
 }

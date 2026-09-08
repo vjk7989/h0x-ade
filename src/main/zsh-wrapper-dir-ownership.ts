@@ -4,7 +4,7 @@
  *
  * Why: Orca used to recognise only its OWN wrapper path shape (a path ending in
  * shell-ready/zsh). Launched from any other terminal that had already
- * hijacked ZDOTDIR, Orca captured that dir as "the user's config" and re-sourced
+ * hijacked ZDOTDIR, h0x captured that dir as "the user's config" and re-sourced
  * it. Ownership is now established positively — a stamped marker file, or Orca's
  * own dir shape for wrappers written by older builds — and a dir holding no zsh
  * startup file at all is not a config dir whoever wrote it. No vendor is

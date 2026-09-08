@@ -545,9 +545,9 @@ module.exports = {
     // Why: the rebrand intentionally hard-replaces Orca's Linux-safe `orca-ide`
     // command with `h0x`; packaging and shell launchers must agree.
     executableName: 'h0x',
-    // Why: the icns source lets electron-builder emit standard hicolor PNG
-    // sizes; a single 1024px PNG is ignored by some Linux docks/launchers.
-    icon: 'resources/build/icon.icns',
+    // Why: checked-in pre-sized PNGs keep Linux packaging independent of the
+    // macOS-only ICNS compiler while covering standard hicolor launcher sizes.
+    icon: 'resources/build/linux-icons',
     desktop: {
       entry: {
         // Why: Electron reports WM_CLASS=h0x for the visible Linux window;

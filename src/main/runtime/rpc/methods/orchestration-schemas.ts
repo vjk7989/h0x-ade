@@ -36,7 +36,7 @@ export async function routeAllMailboxPages(
 
 const SEND_MESSAGE_TYPE_ERROR = [
   `Invalid --type. Expected one of: ${MESSAGE_TYPES.join(', ')}.`,
-  'To answer a worker question, use the same Orca CLI executable with orchestration reply --id <msg_id> --body <text>.'
+  'To answer a worker question, use the same h0x CLI executable with orchestration reply --id <msg_id> --body <text>.'
 ].join(' ')
 
 export type DispatchMutationMessageType =
@@ -141,9 +141,7 @@ export const CheckParams = z
     ack: OptionalString,
     compatibilityAck: OptionalString,
     compatibilityQuestionAck: OptionalString,
-    compatibilityCliCommand: z
-      .enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide'])
-      .optional(),
+    compatibilityCliCommand: z.enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide']).optional(),
     run: OptionalString,
     wait: OptionalBoolean,
     timeoutMs: OptionalFiniteNumber
@@ -243,9 +241,7 @@ export const AskParams = z
     timeoutMs: OptionalFiniteNumber,
     from: OptionalString,
     run: OptionalString,
-    compatibilityCliCommand: z
-      .enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide'])
-      .optional(),
+    compatibilityCliCommand: z.enum(['h0x', 'h0x-dev', 'orca', 'orca-dev', 'orca-ide']).optional(),
     compatibilityWindowsCommand: z.enum(['h0x', 'orca', 'orca-ide']).optional()
   })
   .superRefine((params, ctx) => {

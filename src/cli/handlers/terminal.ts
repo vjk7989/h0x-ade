@@ -142,7 +142,7 @@ export const TERMINAL_HANDLERS: Record<string, CommandHandler> = {
     if (screen && result.result.terminal.source === undefined) {
       throw new RuntimeClientError(
         'incompatible_runtime',
-        'This Orca host does not support --screen reads, so it answered with accumulated output instead of the rendered screen. Update Orca on the host, or drop --screen to read accumulated output deliberately.'
+        'This h0x-ADE host does not support --screen reads, so it answered with accumulated output instead of the rendered screen. Update h0x-ADE on the host, or drop --screen to read accumulated output deliberately.'
       )
     }
     printResult(result, json, formatTerminalRead)
@@ -252,7 +252,7 @@ export const TERMINAL_HANDLERS: Record<string, CommandHandler> = {
         if (error instanceof RuntimeClientError && error.code === 'method_not_found') {
           throw new RuntimeClientError(
             'incompatible_runtime',
-            'This Orca host does not support closing every terminal in a workspace yet. Update Orca on the host and try again.'
+            'This h0x-ADE host does not support closing every terminal in a workspace yet. Update h0x-ADE on the host and try again.'
           )
         }
         throw error

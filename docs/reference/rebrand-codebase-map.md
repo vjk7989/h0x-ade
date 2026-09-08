@@ -721,3 +721,43 @@ release publication.
   `h0x-ADE-1.4.199-arm64-mac.zip.blockmap`. An independent remote artifact
   audit passed; the existing low-space boundary above explains why no local
   artifact copies were downloaded.
+
+## Deterministic Surface Rebrand — Completed Local Slice
+
+The current surface-rebrand work centralizes canonical identity in
+`src/shared/brand.ts`: `h0x-ADE` is the product display name and `h0x` is the
+CLI display name. Desktop, web, and dashboard document titles, Electron main
+and dashboard window titles, shell-facing copy, tray tooltip/menu copy, and the
+local, daemon, and relay `TERM_PROGRAM` value now use `h0x-ADE`. The tray loads
+`resources/tray/h0x-menu-barTemplate.png` and its `@2x` counterpart.
+
+- `resources/brand/h0x-mark-source.png` is the authoritative 1254 × 1254 logo
+  source, pinned by SHA-256
+  `D54E012E3A323D284E5CF0AB9A41522F89A92B3AA3DF4D10316E5A06B267B6F8`.
+  `config/scripts/generate-h0x-brand-assets.mjs` deterministically emits the
+  black/white renderer marks, app/build/dev icons, six-frame Windows ICO,
+  pre-sized 16–512 px Linux icons, icon-source asset, 1×/2× tray templates,
+  mobile icon/adaptive/splash/favicon assets, and documentation logo/favicon.
+  `build:brand-assets` writes them and `check:brand-assets` verifies byte-for-byte
+  freshness.
+- `config/scripts/visible-brand-inventory.mjs` scans production UI, docs,
+  localization catalogs, skills, plugins, mobile surfaces, native sources, and
+  packaging configuration. Its allowlist covers 78 exact path-and-text
+  compatibility matches; entries are rejected when stale, duplicated, or
+  missing a reason. Legacy Orca names remain only at deliberate input,
+  mixed-version, migration, cleanup, persisted-key/file, protocol/header,
+  environment-variable, helper-bundle, process-recognition, and internal-symbol
+  boundaries.
+- `config/scripts/check-changed-code-quality.mjs` chunks Windows Oxlint file
+  arguments under a deterministic 20,000-character command budget and merges
+  diagnostics, allowing the complete 860-file changed-code set to run without
+  exceeding Windows command-line limits.
+- Earlier focused execution passed 188 tests. Independent execution then passed
+  216 tests with 2 skipped; the logo contract passed 47 tests; scanner and
+  changed-quality coverage passed 22 tests; and the locale/manifest batch passed
+  65 tests with 3 skipped. Localization and skill freshness verifiers,
+  `pnpm tc`, and changed-code quality across all 860 files also passed.
+
+Rendered Electron validation and package CI for this new surface slice, its
+merge, any further version bump, and release publication are not established by
+these local gates and remain pending.

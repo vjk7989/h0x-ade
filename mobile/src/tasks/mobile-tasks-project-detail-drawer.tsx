@@ -49,9 +49,9 @@ export function renderMobileTasksProjectMissingRepoDrawer(model: ConnectionPrese
       {projectRepoNotInOrca ? (
         <View>
           <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>Repository not in Orca</Text>
+            <Text style={styles.sheetTitle}>Repository not in h0x-ADE</Text>
             <Text style={styles.sheetSubtitle}>
-              {projectRepoNotInOrca.owner}/{projectRepoNotInOrca.repo} is not added to Orca. Add
+              {projectRepoNotInOrca.owner}/{projectRepoNotInOrca.repo} is not added to h0x-ADE. Add
               this repository from the desktop app, then refresh mobile Tasks.
             </Text>
           </View>
@@ -340,7 +340,7 @@ export function renderMobileTasksProjectDetailDrawer(model: ConnectionPresentati
                 </Pressable>
                 {!projectRowHostedRepo ? (
                   <Text style={styles.emptyInlineText}>
-                    Merge requires this repository in Orca.
+                    Merge requires this repository in h0x-ADE.
                   </Text>
                 ) : null}
               </>

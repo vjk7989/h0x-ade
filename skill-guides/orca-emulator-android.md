@@ -1,7 +1,7 @@
 ---
 name: orca-emulator-android
 description: >
-  Control an Android emulator / device from inside Orca using the `h0x` CLI.
+  Control an Android emulator / device from inside h0x-ADE using the `h0x` CLI.
   Use for listing/booting AVDs, taps, swipes, typing, hardware buttons (incl. Back
   and Recents), rotation, app install/launch, runtime permissions, the accessibility
   tree, and logcat — driving a real adb-connected device or emulator. Cross-platform
@@ -9,10 +9,10 @@ description: >
 license: Apache-2.0
 ---
 
-# Orca Emulator — Android (adb / emulator powered)
+# h0x-ADE Emulator — Android (adb / emulator powered)
 
-Drive an Android emulator or adb-connected device **from within Orca** using
-`ORCA emulator ...` commands. The Android backend shells out to the Android SDK
+Drive an Android emulator or adb-connected device **from within h0x-ADE** using
+`H0X emulator ...` commands. The Android backend shells out to the Android SDK
 (`adb`, `emulator`, `avdmanager`) that Android Studio installs, so it works on
 Windows, Linux, and macOS — unlike the iOS backend (`orca-emulator`), which is
 macOS-only. Device control uses `adb shell input`, so it works without any extra
@@ -25,14 +25,12 @@ streaming server.
 
 ## CLI executable
 
-Choose the Orca executable once: use the `ORCA_CLI_COMMAND` environment value when set;
-otherwise use `h0x-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, `h0x` on
-Linux outside an h0x-ADE-managed terminal, and `orca` everywhere else. Never try bare
-`orca` first on unmanaged Linux because it normally resolves to the GNOME screen reader.
+Choose the h0x-ADE executable once: use the `ORCA_CLI_COMMAND` environment value when set;
+otherwise use `h0x-dev` in a dev session exposing `ORCA_DEV_REPO_ROOT`, and `h0x` everywhere else.
 
-In every command example — fenced blocks, tables, and prose — `ORCA` is a documentation
+In every command example — fenced blocks, tables, and prose — `H0X` is a documentation
 placeholder. Replace it with the chosen executable before running the command; do not
-create a shell variable or run `ORCA` literally. The command examples are intentionally
+create a shell variable or run `H0X` literally. The command examples are intentionally
 shell-neutral for POSIX shells, PowerShell, and cmd.exe.
 
 ## When to use
@@ -52,10 +50,10 @@ shell-neutral for POSIX shells, PowerShell, and cmd.exe.
   scope for now).
 - Remote/SSH device control → out of scope; the SDK + device are local to the host.
 
-## Prerequisites (surfaced by Orca)
+## Prerequisites (surfaced by h0x-ADE)
 
 - **Android Studio / Android SDK** installed, with `ANDROID_HOME` (or
-  `ANDROID_SDK_ROOT`) set. Orca also checks the per-OS default location
+  `ANDROID_SDK_ROOT`) set. h0x-ADE also checks the per-OS default location
   (`%LOCALAPPDATA%\Android\Sdk`, `~/Library/Android/sdk`, `~/Android/Sdk`).
 - `adb` + `emulator` on the SDK path; at least one **AVD** (create in Android
   Studio ▸ Device Manager) or a connected device with USB debugging.
@@ -69,7 +67,7 @@ h0x-ADE returns a clear message when the SDK is missing
 
 ```text
 ┌────────────────────────┐
-│ orca CLI (agents)      │  e.g. ORCA emulator tap 0.5 0.7 --device emulator-5554
+│ h0x CLI (agents)      │  e.g. H0X emulator tap 0.5 0.7 --device emulator-5554
 └───────────┬────────────┘
             │ RPC
             ▼
@@ -80,36 +78,36 @@ h0x-ADE returns a clear message when the SDK is missing
                                                    Android emulator / device
 ```
 
-Orca owns backend routing and the per-worktree active-device registry. The
-Android backend converts Orca's normalized 0–1 coordinates to device pixels and
+h0x-ADE owns backend routing and the per-worktree active-device registry. The
+Android backend converts h0x-ADE's normalized 0–1 coordinates to device pixels and
 issues `adb shell input` events; AVD names resolve to running adb serials.
 
 ## Common operations
 
 Use `--json` for agent-friendly output. Coordinates are **normalized 0..1**
-(top-left origin) — never pixels; Orca converts using the live screen size.
+(top-left origin) — never pixels; h0x-ADE converts using the live screen size.
 
 | Goal                | Command                                                                                    | Notes                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| List devices + AVDs | `ORCA emulator devices --json`                                                             | Cross-platform; shows iOS + Android with a platform column, booted vs shutdown. |
-| Single tap          | `ORCA emulator tap <x> <y> --device <serial>`                                              | Normalized 0..1. Preferred for single taps.                                     |
-| Swipe / gesture     | `ORCA emulator gesture '<json>' --device <serial>`                                         | adb approximates the path by its endpoints (start→end).                         |
-| Type text           | `ORCA emulator type "user@example.com" --device <serial>`                                  | US ASCII; spaces handled. No newlines.                                          |
-| Hardware button     | `ORCA emulator button back --device <serial>`                                              | home, back, recents, power, volume_up, volume_down.                             |
-| Rotate              | `ORCA emulator rotate landscape_left --device <serial>`                                    | Sets user_rotation (disables auto-rotate).                                      |
-| Install an APK      | `ORCA emulator install ./app-debug.apk --reinstall --device <serial>`                      | `--reinstall` passes `-r`.                                                      |
-| Launch an app       | `ORCA emulator launch com.acme.app --activity .MainActivity --device <serial>`             | Omit `--activity` to launch the default LAUNCHER activity.                      |
-| Grant a permission  | `ORCA emulator permissions grant com.acme.app android.permission.CAMERA --device <serial>` | grant / revoke / reset.                                                         |
-| Accessibility tree  | `ORCA emulator ax --device <serial> --json`                                                | `uiautomator dump` parsed to a node tree.                                       |
-| Logcat (one-shot)   | `ORCA emulator logcat --lines 200 --device <serial>`                                       | Dumps recent lines; parsed to entries.                                          |
-| Raw adb shell       | `ORCA emulator exec --command "getprop ro.build.version.sdk" --device <serial>`            | Runs `adb -s <serial> shell <command>`.                                         |
+| List devices + AVDs | `H0X emulator devices --json`                                                             | Cross-platform; shows iOS + Android with a platform column, booted vs shutdown. |
+| Single tap          | `H0X emulator tap <x> <y> --device <serial>`                                              | Normalized 0..1. Preferred for single taps.                                     |
+| Swipe / gesture     | `H0X emulator gesture '<json>' --device <serial>`                                         | adb approximates the path by its endpoints (start→end).                         |
+| Type text           | `H0X emulator type "user@example.com" --device <serial>`                                  | US ASCII; spaces handled. No newlines.                                          |
+| Hardware button     | `H0X emulator button back --device <serial>`                                              | home, back, recents, power, volume_up, volume_down.                             |
+| Rotate              | `H0X emulator rotate landscape_left --device <serial>`                                    | Sets user_rotation (disables auto-rotate).                                      |
+| Install an APK      | `H0X emulator install ./app-debug.apk --reinstall --device <serial>`                      | `--reinstall` passes `-r`.                                                      |
+| Launch an app       | `H0X emulator launch com.acme.app --activity .MainActivity --device <serial>`             | Omit `--activity` to launch the default LAUNCHER activity.                      |
+| Grant a permission  | `H0X emulator permissions grant com.acme.app android.permission.CAMERA --device <serial>` | grant / revoke / reset.                                                         |
+| Accessibility tree  | `H0X emulator ax --device <serial> --json`                                                | `uiautomator dump` parsed to a node tree.                                       |
+| Logcat (one-shot)   | `H0X emulator logcat --lines 200 --device <serial>`                                       | Dumps recent lines; parsed to entries.                                          |
+| Raw adb shell       | `H0X emulator exec --command "getprop ro.build.version.sdk" --device <serial>`            | Runs `adb -s <serial> shell <command>`.                                         |
 
 ## Critical gotchas (teach agents)
 
-- **All coordinates are normalized 0..1** (top-left origin), never pixels — Orca
+- **All coordinates are normalized 0..1** (top-left origin), never pixels — h0x-ADE
   scales to the device's live resolution.
 - **Target a running device by its adb serial** (e.g. `emulator-5554`) shown in
-  `ORCA emulator devices`. An AVD name resolves only once that AVD is booted.
+  `H0X emulator devices`. An AVD name resolves only once that AVD is booted.
 - The device must be **booted and adb-visible** before input/capability commands;
   a shutdown AVD is listed with `state: shutdown` and must be started first
   (Android Studio, or `emulator @<avd>`).
@@ -127,7 +125,7 @@ Use `--json` for agent-friendly output. Coordinates are **normalized 0..1**
 
 - Explicit device: `--device <serial>` (recommended for Android today) or an AVD
   name once booted.
-- `ORCA emulator devices` is global (lists every backend's devices); other verbs
+- `H0X emulator devices` is global (lists every backend's devices); other verbs
   target the resolved device's backend automatically.
 - `--worktree <selector>` scopes to a worktree's active device once the
   attach/active flow lands for Android.
@@ -135,20 +133,20 @@ Use `--json` for agent-friendly output. Coordinates are **normalized 0..1**
 ## Examples (agent-friendly)
 
 ```text
-ORCA emulator devices --json
-ORCA emulator tap 0.5 0.85 --device emulator-5554 --json
-ORCA emulator type "hello world" --device emulator-5554 --json
-ORCA emulator button recents --device emulator-5554 --json
-ORCA emulator install ./app-debug.apk --reinstall --device emulator-5554 --json
-ORCA emulator launch com.acme.app --device emulator-5554 --json
-ORCA emulator permissions grant com.acme.app android.permission.CAMERA --device emulator-5554 --json
-ORCA emulator ax --device emulator-5554 --json
-ORCA emulator logcat --lines 100 --device emulator-5554 --json
+H0X emulator devices --json
+H0X emulator tap 0.5 0.85 --device emulator-5554 --json
+H0X emulator type "hello world" --device emulator-5554 --json
+H0X emulator button recents --device emulator-5554 --json
+H0X emulator install ./app-debug.apk --reinstall --device emulator-5554 --json
+H0X emulator launch com.acme.app --device emulator-5554 --json
+H0X emulator permissions grant com.acme.app android.permission.CAMERA --device emulator-5554 --json
+H0X emulator ax --device emulator-5554 --json
+H0X emulator logcat --lines 100 --device emulator-5554 --json
 ```
 
 ## Next action
 
-Run `ORCA emulator devices --json` to find a booted device, then drive it with
+Run `H0X emulator devices --json` to find a booted device, then drive it with
 `--device <serial>` while watching the emulator window.
 
 See also: `orca-emulator` (iOS, macOS-only), `orca-cli` (terminals, worktrees,

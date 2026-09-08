@@ -54,15 +54,15 @@ export function readLocalFullVersion(localRelayDir: string): string {
   const versionFile = join(localRelayDir, '.version')
   if (!existsSync(versionFile)) {
     throw new Error(
-      `Orca's local relay build is missing its version marker at ${versionFile}. ` +
-        `This usually indicates a packaging or build problem; reinstall Orca.`
+      `h0x-ADE's local relay build is missing its version marker at ${versionFile}. ` +
+        `This usually indicates a packaging or build problem; reinstall h0x-ADE.`
     )
   }
   const v = readFileSync(versionFile, 'utf-8').trim()
   if (!v) {
     throw new Error(
-      `Orca's local relay version marker at ${versionFile} is empty. ` +
-        `This usually indicates a packaging or build problem; reinstall Orca.`
+      `h0x-ADE's local relay version marker at ${versionFile} is empty. ` +
+        `This usually indicates a packaging or build problem; reinstall h0x-ADE.`
     )
   }
   return v

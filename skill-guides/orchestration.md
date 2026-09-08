@@ -17,9 +17,9 @@ description: >-
   Playwright or CDP for external pages.
 ---
 
-# Orca Inter-Agent Orchestration
+# h0x-ADE Inter-Agent Orchestration
 
-Orchestration is Orca's structured coordination layer for agent messages, task ownership, dispatch state, and worker completion tracking.
+Orchestration is h0x-ADE's structured coordination layer for agent messages, task ownership, dispatch state, and worker completion tracking.
 
 Use this skill when coordination state matters. For lightweight terminal prompts or basic worktree/terminal/built-in-browser control, use `orca-cli`.
 
@@ -27,7 +27,7 @@ Use this skill when coordination state matters. For lightweight terminal prompts
 
 If a task says to use h0x-ADE orchestration, the coordinator must create or bind a Run, create the Task with `h0x orchestration task-create`, then attach the worker with either the preferred `h0x orchestration worker-start` composition or the low-level `h0x orchestration dispatch --inject` path.
 
-Do not substitute non-Orca subagent tools, generic agent-spawn APIs, or chat-only parallel worker features. Those may create useful workers, but they do not create Orca task/dispatch provenance, injected lifecycle preambles, `worker_done` authority, or decision gates.
+Do not substitute non-h0x-ADE subagent tools, generic agent-spawn APIs, or chat-only parallel worker features. Those may create useful workers, but they do not create h0x-ADE task/dispatch provenance, injected lifecycle preambles, `worker_done` authority, or decision gates.
 
 Before claiming a worker was orchestrated, verify the task/dispatch exists:
 
@@ -56,7 +56,7 @@ Do not use orchestration merely because the user says "hand off", "handoff", "ha
 
 ## Contract Migration
 
-Orca adopts a live pre-update orchestration assignment into an ordinary Run. Adoption preserves the existing agent process, PTY/session, terminal handle, tab/leaf/pane, worktree or folder workspace, Task, and Dispatch; it never restarts or replaces the worker. The retired scheduler is not revived, and a newly created attempt uses the current grammar.
+h0x-ADE adopts a live pre-update orchestration assignment into an ordinary Run. Adoption preserves the existing agent process, PTY/session, terminal handle, tab/leaf/pane, worktree or folder workspace, Task, and Dispatch; it never restarts or replaces the worker. The retired scheduler is not revived, and a newly created attempt uses the current grammar.
 
 Treat the authority label on injected or formatted messages as definitive:
 
@@ -71,7 +71,7 @@ Database provenance, an old-looking terminal, or a legacy Run ID does not prove 
 
 Compatibility retries have narrow guarantees. A pending ask, a reply, a final Dispatch settlement, and a consuming check have durable recovery identities. A-era heartbeat and escalation calls remain at-least-once across a manual A-to-B retry because identical later signals may be intentional. If an A-era ask may already have been answered, run the exact non-consuming recovery check printed by the runtime first; after its answer is printed and acknowledged, a new invocation with the same question creates a new question. Never guess among multiple identical question threads.
 
-When a compatibility or recovery command returns structured next-step arguments, run those exact arguments with the same CLI executable. The arguments intentionally omit the executable name so the guidance works with `orca`, `h0x`, `h0x-dev`, or another configured Orca CLI command. Do not translate the command from memory, broaden its recipient, or retry it as a current mutation unless the returned guidance explicitly says to.
+When a compatibility or recovery command returns structured next-step arguments, run those exact arguments with the same CLI executable. The arguments intentionally omit the executable name so the guidance works with `orca`, `h0x`, `h0x-dev`, or another configured h0x-ADE CLI command. Do not translate the command from memory, broaden its recipient, or retry it as a current mutation unless the returned guidance explicitly says to.
 
 On packaged Windows, a legacy ask uses a two-step commit/resume protocol. The initial command durably commits the question, prints its exact `ask --resume <message_id>` command, and exits with launcher status `75`; it does not wait for the answer. Run that exact resume command after the launcher or update boundary. Resume is idempotent and read-oriented: it waits for the already-committed question and does not create another one. For a WSL process that received compatibility proof at launch, use the printed executable `h0x` WSL resume command so the same distro and packaged launcher authority are preserved; do not substitute a PATH-resolved local CLI. Older WSL processes that never received the hidden launch token remain lifecycle read-only after the update, even while their terminal and filesystem work continue.
 
@@ -104,7 +104,7 @@ Do not launch a replacement editor merely because the desktop app or runtime was
 
 ## Ownership
 
-New orchestration messages and tasks belong to one explicitly bound Run. A Run is only a durable namespace and coordinator inbox; it never schedules or places workers. Lifecycle authority comes from the active Dispatch, and terminal handles remain routing metadata rather than durable identity. Send `worker_done` and `heartbeat` from the worker's own terminal; Orca routes them to that Dispatch's Run.
+New orchestration messages and tasks belong to one explicitly bound Run. A Run is only a durable namespace and coordinator inbox; it never schedules or places workers. Lifecycle authority comes from the active Dispatch, and terminal handles remain routing metadata rather than durable identity. Send `worker_done` and `heartbeat` from the worker's own terminal; h0x-ADE routes them to that Dispatch's Run.
 
 Classify inherited context before sending lifecycle messages:
 
@@ -138,10 +138,10 @@ h0x orchestration inbox [--limit <n>] [--json]
 
 Rules:
 
-- Omit `--from` unless impersonating another terminal; Orca auto-resolves it from the current terminal.
+- Omit `--from` unless impersonating another terminal; h0x-ADE auto-resolves it from the current terminal.
 - A coordinator `check` returns the bound Run's oldest FIFO Delivery (up to 50 messages) and replays that exact batch until `--ack <delivery_id>`. Process every message before acknowledging; `check --ack <id> --wait` acknowledges, checks, and waits in one operation.
 - Use `--peek` and `--all` only for read-only history/debugging. Type filters decide when a waiter wakes; the returned actionable Delivery is still the oldest full batch.
-- Use `dispatch:<id>` for coordinator guidance to one supervised worker. Orca routes that stable address locally or through the connected-server relay; do not substitute a remote terminal handle.
+- Use `dispatch:<id>` for coordinator guidance to one supervised worker. h0x-ADE routes that stable address locally or through the connected-server relay; do not substitute a remote terminal handle.
 - Terminal handles remain appropriate for low-level pre-Dispatch messaging. Prefer `agentTerminalHandle` from the create response, fall back to `startupTerminal.handle` for older runtimes, then re-resolve with `h0x terminal list --worktree ... --json` if missing or stale. Continue with the replacement handle only; never dual-send to old and new handles.
 - `terminal list --json` omits `visualLayouts` because handle recovery does not need topology. Add `--include-visual-layouts` only for explicit tab and pane inspection.
 - `h0x orchestration check --peek --format --json` returns locally formatted unread mail without consuming it; it never writes to terminal input or remotely wakes another terminal. Use `orchestration dispatch --inject` to deliver a tracked task, or `terminal send` when an existing agent needs a free-form prompt.
@@ -156,7 +156,7 @@ Rules:
 - Use group addresses only for messages that are genuinely useful to many terminals, such as `status` broadcasts or intentional fan-out questions. Do not send dispatch lifecycle messages to groups.
 - `worker_done` belongs to the active Dispatch and defaults to its Run mailbox; never target a group.
 - A valid `worker_done` for the active `taskId` + `dispatchId` marks the task and dispatch completed automatically. Do not follow it with `task-update --status completed`; reserve manual updates for explicit recovery or overrides.
-- `heartbeat` is also Dispatch-scoped. Include both IDs and omit `--to` so Orca uses the owning Run; use `status` for broad progress updates.
+- `heartbeat` is also Dispatch-scoped. Include both IDs and omit `--to` so h0x-ADE uses the owning Run; use `status` for broad progress updates.
 
 ## Tasks And Dispatch
 
@@ -211,14 +211,14 @@ Two limits worth knowing:
 
 - **It is a guardrail, not a security boundary.** A caller that declares another terminal's
   handle while its own launch evidence is unverifiable (an ordinary restored terminal, for
-  example) can be counted as that terminal instead. Orca does not treat workers as hostile.
+  example) can be counted as that terminal instead. h0x-ADE does not treat workers as hostile.
 - **It applies while a Dispatch is active.** After `worker_done`, or after a coordinator
   settles the task, the terminal is no longer a worker and is counted as a root again. The
   process may still be alive; that is the documented boundary, not an accident.
 
 ## Preferred Supervised Worker Loop
 
-Use `worker-start` for the normal supervised path. It composes the existing worktree, terminal, readiness, and dispatch primitives while returning exact created/reused effects. Agents still choose placement and concurrency; Orca does not schedule workers or infer conflicts.
+Use `worker-start` for the normal supervised path. It composes the existing worktree, terminal, readiness, and dispatch primitives while returning exact created/reused effects. Agents still choose placement and concurrency; h0x-ADE does not schedule workers or infer conflicts.
 
 Create the Run and every independent Task first, then start all independent workers before waiting:
 
@@ -238,7 +238,7 @@ For a per-invocation Claude, Codex, or Cursor launch, pass an opaque provider mo
 h0x orchestration worker-start --task <task_id> --worktree current --agent claude --model opus --effort high --json
 ```
 
-`--effort` requires `--model`, and neither option can combine with `--terminal`. A connected worker server must advertise launch-preference support before Orca forwards either option.
+`--effort` requires `--model`, and neither option can combine with `--terminal`. A connected worker server must advertise launch-preference support before h0x-ADE forwards either option.
 
 For a new worktree, setup runs by default and agent-first creation reuses the returned startup agent terminal:
 
@@ -252,7 +252,7 @@ Setup normally starts alongside the agent. Only a repository explicitly configur
 
 Read the returned receipt before continuing: `ready` plus setup `running` is normal for start-immediately, while wait-for-setup returns setup `succeeded` before accepting task input. A failed or unknown start exits nonzero; inspect its `stage`, `effects`, and `residualResources` instead of guessing or automatically retrying. A wait-for-setup timeout can honestly leave setup `running`, which is not proof of failure.
 
-To run the worker on another connected Orca server, add `--on <saved-environment>`. The Run and Tasks remain authoritative on the current server; later commands route by Dispatch ID, so never repeat `--on`:
+To run the worker on another connected h0x-ADE server, add `--on <saved-environment>`. The Run and Tasks remain authoritative on the current server; later commands route by Dispatch ID, so never repeat `--on`:
 
 ```bash
 # Mac Run home -> Windows worker (the reverse is identical from a Windows Run home)
@@ -265,7 +265,7 @@ h0x orchestration send --to dispatch:<dispatch_id> --subject "Follow-up" --body 
 Remote `current` and `new-child` are intentionally invalid because those words are ambiguous across servers. Use an exact discovered remote worktree selector or `new-top-level` with an explicit remote repo selector.
 
 The follow-up is structured inbox mail, not prompt injection. The worker's next
-`orchestration check` receives it even when the Dispatch is on another connected Orca server.
+`orchestration check` receives it even when the Dispatch is on another connected h0x-ADE server.
 
 `worker-read` defaults to `--source auto`: h0x-ADE returns the exact hook-reported Codex, Claude, OpenClaude, or Grok transcript when it can prove the worker session, otherwise it returns bounded terminal output with `source: "terminal"` and a typed `fallbackReason`. Continue with the returned top-level `cursor`; it stays pinned to that exact source. If h0x-ADE reports `source_changed`, start a fresh read without the old cursor. Never supply or guess a provider session ID or transcript path.
 
@@ -285,7 +285,7 @@ Run `worker-release` after both succeeded and failed `worker_done` reports unles
 
 Do not release a worker because of a timeout, TUI idle state, heartbeat, status, question, escalation, or rejected/stale `worker_done`. If release returns `release_pending` or `release_unknown`, do not substitute `terminal close`; follow the exact recovery action in the receipt. A replayed Delivery may repeat `worker-release` safely.
 
-Workers report exactly once using the IDs and capability injected by Orca; they do not supply Run/server/terminal identity:
+Workers report exactly once using the IDs and capability injected by h0x-ADE; they do not supply Run/server/terminal identity:
 
 ```bash
 h0x orchestration send --type worker_done --subject "<status>" --body "<what changed, findings, and what remains>" --task-id <task_id> --dispatch-id <dispatch_id> --outcome succeeded --files-modified "path/a,path/b" --json
@@ -303,7 +303,7 @@ h0x orchestration reply --id <message_id> --body "<answer>" --json
 
 Recovery is conditional, never a fixed destructive sequence:
 
-- The response was lost and named no Dispatch: run `h0x orchestration request-show --request <request_id> --json` first. It is read-only. `completed` means the mutation already took effect. `pending` means the original mutation is still running or Orca restarted before recording its outcome. For either state, replaying the original command with `--retry-request <request_id>` reuses the same operation identity so Orca can replay, join, or safely recover it without starting a separate duplicate. `absent` means this runtime holds no receipt under your caller identity and is not proof that nothing happened; inspect the affected state before deciding whether to retry.
+- The response was lost and named no Dispatch: run `h0x orchestration request-show --request <request_id> --json` first. It is read-only. `completed` means the mutation already took effect. `pending` means the original mutation is still running or h0x-ADE restarted before recording its outcome. For either state, replaying the original command with `--retry-request <request_id>` reuses the same operation identity so h0x-ADE can replay, join, or safely recover it without starting a separate duplicate. `absent` means this runtime holds no receipt under your caller identity and is not proof that nothing happened; inspect the affected state before deciding whether to retry.
 - `worker-show --dispatch <id>` says `ready`: keep waiting or read bounded output.
 - It proves `failed` or `stopped`: start a replacement with `worker-start --task <task> --retry-of <id>` plus an explicit `--on`/`--worktree` and `--agent`/`--terminal` choice. Retry does not silently inherit placement.
 - It remains `outcome_unknown`: either `worker-stop --dispatch <id>` and inspect again, or explicitly `worker-abandon --dispatch <id>` while accepting that resources may still be live. Abandon performs no remote, process, or filesystem action.
@@ -384,7 +384,7 @@ h0x orchestration dispatch --task <task_id> --to <handle> --inject --json
 
 Reuse an idle agent in the required worktree only if the prompt allows reuse; otherwise create a fresh terminal there. Create a new worktree only when the user explicitly requests one or a concrete checkout or filesystem conflict makes sharing unsafe or impossible; if the user did not request it, state that conflict before running `worktree create`. Independent tasks, parallel execution, convenience, or a preference for separate checkouts are not isolation requirements.
 
-When a new worktree is allowed, use child lineage for isolated work that is stacked under or dependent on the active worktree, and use `--no-parent` when it is not stacked. Decide the Git base separately: `--no-parent` makes the worktree top-level in Orca, while omitted `--base-branch` uses the repo default base.
+When a new worktree is allowed, use child lineage for isolated work that is stacked under or dependent on the active worktree, and use `--no-parent` when it is not stacked. Decide the Git base separately: `--no-parent` makes the worktree top-level in h0x-ADE, while omitted `--base-branch` uses the repo default base.
 
 For every new worktree, pass `--setup run` so any configured repository setup hook runs. This does not mean waiting for setup before agent launch: preserve the repository's startup policy, whose default starts setup and the agent side by side. Use `--setup skip` or `--setup inherit` only when there is a concrete task-specific reason, and state that reason before creating the worktree. This rule does not rerun setup for current or existing worktrees.
 
@@ -423,7 +423,7 @@ Wait for `tui-idle` before dispatching. Always pass `--timeout-ms`; real coding 
 
 - Workers with a valid live preamble must send `worker_done` exactly once from their own terminal with an explicit `--outcome succeeded` or `--outcome failed`:
   `h0x orchestration send --type worker_done --subject "<short status>" --body "<3-sentence summary: what you did, what you found, what's left>" --task-id <task_id> --dispatch-id <dispatch_id> --outcome succeeded --files-modified "path/a" --report-path "<optional>" --json`
-- A failed outcome is still a terminal report, but Orca records both the Dispatch and Task as failed. Never encode failure only in the subject/body.
+- A failed outcome is still a terminal report, but h0x-ADE records both the Dispatch and Task as failed. Never encode failure only in the subject/body.
 - After sending `worker_done`, end that dispatched turn and idle at the agent prompt. Do not autonomously start more work, poll, or attempt to close the terminal yourself. A direct user instruction takes precedence and starts ordinary user-owned work: follow it without coordinator approval or a fresh Dispatch, never refuse it because of worker/coordinator roles, and do not reuse the settled Dispatch's lifecycle IDs. A coordinator-supervised follow-up still arrives with a fresh preamble + TASK block.
 - For long tasks, send heartbeat/status only when the preamble asks for it, including both IDs:
   `h0x orchestration send --type heartbeat --subject "alive" --payload '{"taskId":"<task_id>","dispatchId":"<dispatch_id>","phase":"implementing"}' --json`

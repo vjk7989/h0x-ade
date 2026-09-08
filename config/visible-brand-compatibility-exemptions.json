@@ -1,0 +1,397 @@
+[
+  {
+    "path": "config/scripts/build-computer-macos.mjs",
+    "text": "const appPath = path.join(packagePath, '.build', 'release', 'Orca Computer Use.app')",
+    "reason": "The macOS helper bundle path is a technical TCC identity retained until its separate permissions migration."
+  },
+  {
+    "path": "config/scripts/build-computer-macos.mjs",
+    "text": "const displayName = 'Orca Computer Use'",
+    "reason": "The macOS helper display identity is TCC-sensitive and remains technical while its user-facing permission copy is canonical."
+  },
+  {
+    "path": "config/electron-builder.config.cjs",
+    "text": "await signMacComputerUseHelper(join(resourcesDir, 'Orca Computer Use.app'), context.packager)",
+    "reason": "The existing helper bundle name is a macOS TCC compatibility identity, not rendered product copy."
+  },
+  {
+    "path": "config/electron-builder.config.cjs",
+    "text": "from: 'native/computer-use-macos/.build/release/Orca Computer Use.app',",
+    "reason": "The existing helper bundle name is a macOS TCC compatibility identity, not rendered product copy."
+  },
+  {
+    "path": "config/electron-builder.config.cjs",
+    "text": "to: 'Orca Computer Use.app'",
+    "reason": "The existing helper bundle name is a macOS TCC compatibility identity, not rendered product copy."
+  },
+  {
+    "path": "config/nsis/orca-installer-hooks.nsh",
+    "text": "!define MARKDOWN_PROGID \"Orca.Markdown\"",
+    "reason": "The installed ProgID is retained so upgrades can unregister the legacy association safely."
+  },
+  {
+    "path": "config/nsis/orca-installer-hooks.nsh",
+    "text": "RMDir /r \"$LOCALAPPDATA\\Orca\\daemon-host\"",
+    "reason": "The legacy data path remains an uninstall cleanup target and is never shown as the product name."
+  },
+  {
+    "path": "mobile/fastlane/Fastfile",
+    "text": "SCHEME = \"Orca\"",
+    "reason": "The checked-in Xcode scheme is a compatibility build identifier, not App Store display copy."
+  },
+  {
+    "path": "mobile/fastlane/Fastfile",
+    "text": "WORKSPACE = File.join(MOBILE_ROOT, \"ios\", \"Orca.xcworkspace\")",
+    "reason": "The checked-in Xcode workspace is a compatibility build identifier, not App Store display copy."
+  },
+  {
+    "path": "mobile/src/components/NewWorkspaceSetupScriptField.tsx",
+    "text": "{source === 'orca.yaml' ? 'ORCA.YAML' : 'HOOKS'}",
+    "reason": "This field displays the exact persisted legacy setup filename that users must edit."
+  },
+  {
+    "path": "src/cli/orchestration-mutation-recovery.ts",
+    "text": ".replace(' Restart Orca and try again.', '')",
+    "reason": "This exact legacy text is accepted only when parsing persisted or mixed-version input; canonical output uses h0x-ADE."
+  },
+  {
+    "path": "src/main/agent-hooks/hook-post-command.ts",
+    "text": "`  ${indent}-H \"X-Orca-Agent-Hook-Meta-Encoding: base64\" \\\\`,",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/agent-hooks/hook-post-command.ts",
+    "text": "`  ${indent}-H \"X-Orca-Agent-Hook-Meta: \\${orca_hook_metadata}\" \\\\`,",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/agent-hooks/hook-post-command.ts",
+    "text": "`  ${indent}-H \"X-Orca-Agent-Hook-Token: \\${ORCA_AGENT_HOOK_TOKEN}\" \\\\`,",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/agent-hooks/installer-utils.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: %ORCA_AGENT_HOOK_TOKEN%\" ^',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/agent-hooks/installer-utils.ts",
+    "text": "'-H \"X-Orca-Agent-Hook-Token: %ORCA_AGENT_HOOK_TOKEN%\"',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/amp/agent-status-plugin-source.ts",
+    "text": "'        \"X-Orca-Agent-Hook-Token\": coords.token',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/amp/agent-status-plugin-source.ts",
+    "text": "export const LEGACY_AMP_PLUGIN_MARKER = 'Managed by Orca. Do not edit; changes may be overwritten.'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/antigravity/hook-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/claude-accounts/keychain.ts",
+    "text": "const ORCA_CLAUDE_SERVICE = 'Orca Claude Code Managed Credentials'",
+    "reason": "This is the existing keychain service identifier required to find previously stored credentials."
+  },
+  {
+    "path": "src/main/claude/statusline-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/claude/statusline-script.ts",
+    "text": "'-H \"X-Orca-Agent-Hook-Token: %ORCA_AGENT_HOOK_TOKEN%\"',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/cli/cli-command-inspection.ts",
+    "text": "'/opt/Orca',",
+    "reason": "This legacy package directory remains only as an upgrade cleanup and ownership input."
+  },
+  {
+    "path": "src/main/cli/wsl-cli-scripts.ts",
+    "text": "const LEGACY_BRIDGE_MANAGED_MARKER = '# Orca managed WSL CLI PowerShell bridge'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/cli/wsl-cli-scripts.ts",
+    "text": "const LEGACY_MANAGED_MARKER = '# Orca managed WSL CLI launcher'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/codex/codex-hook-legacy-cleanup.ts",
+    "text": "const LEGACY_ORCA_PROFILE_BLOCK_END = '# END ORCA AGENT STATUS HOOKS'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/codex/codex-hook-legacy-cleanup.ts",
+    "text": "const LEGACY_ORCA_PROFILE_BLOCK_START = '# BEGIN ORCA AGENT STATUS HOOKS'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/command-code/command-code-managed-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/computer/macos-native-provider-paths.ts",
+    "text": "const packaged = [join(process.resourcesPath ?? '', 'Orca Computer Use.app')]",
+    "reason": "The macOS helper bundle path is a technical TCC identity retained until its separate permissions migration."
+  },
+  {
+    "path": "src/main/computer/macos-native-provider-paths.ts",
+    "text": "join(process.cwd(), 'native/computer-use-macos/.build/release/Orca Computer Use.app'),",
+    "reason": "The macOS helper bundle path is a technical TCC identity retained until its separate permissions migration."
+  },
+  {
+    "path": "src/main/computer/macos-native-provider-paths.ts",
+    "text": "resolve(__dirname, '../../native/computer-use-macos/.build/release/Orca Computer Use.app')",
+    "reason": "The macOS helper bundle path is a technical TCC identity retained until its separate permissions migration."
+  },
+  {
+    "path": "src/main/copilot/copilot-managed-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/copilot/copilot-managed-script.ts",
+    "text": "\"  Invoke-WebRequest -UseBasicParsing -Method Post -Uri ('http://127.0.0.1:' + $env:ORCA_AGENT_HOOK_PORT + '/hook/copilot') -Headers @{ 'Content-Type'='application/json'; 'X-Orca-Agent-Hook-Token'=$env:ORCA_AGENT_HOOK_TOKEN } -Body $body -TimeoutSec 2 | Out-Null\",",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/cursor/hook-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/cursor/hook-service.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/daemon/daemon-host-relocation.ts",
+    "text": "const LOCAL_HOST_ROOT_NAME = 'Orca'",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/devin/hook-service.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/droid/hook-service.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/gemini/hook-service.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/grok/grok-hook-script.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/hermes/hermes-managed-plugin-source.ts",
+    "text": "'Managed by Orca. Do not edit; changes may be overwritten.'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/hermes/hermes-managed-plugin-source.ts",
+    "text": "\"X-Orca-Agent-Hook-Token\": token,",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/jira/authenticated-request.ts",
+    "text": "const JIRA_API_USER_AGENT = 'Orca'",
+    "reason": "The Jira User-Agent is an established external integration identity retained for compatibility."
+  },
+  {
+    "path": "src/main/kimi/hook-service.ts",
+    "text": "'  -H \"X-Orca-Agent-Hook-Token: ${ORCA_AGENT_HOOK_TOKEN}\" \\\\',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/kimi/kimi-hook-config-toml.ts",
+    "text": "const LEGACY_BLOCK_START = '# >>> orca-managed-kimi-hooks (managed by Orca; do not edit) >>>'",
+    "reason": "This exact legacy marker is accepted only to migrate, refresh, or clean up an existing managed installation."
+  },
+  {
+    "path": "src/main/local-builds/local-build-candidate.ts",
+    "text": "return extractCompatibilityAtPath(zipFile, 'Orca.app')",
+    "reason": "This historical app-bundle path is a read-only compatibility fallback; new builds use h0x-ADE.app."
+  },
+  {
+    "path": "src/main/observability/logs-directory.ts",
+    "text": "return join(home, '.config', 'Orca')",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/observability/logs-directory.ts",
+    "text": "return join(home, 'Library', 'Application Support', 'Orca')",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/observability/logs-directory.ts",
+    "text": "return join(process.env.APPDATA ?? home, 'Orca')",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/opencode/status-plugin-post-source.ts",
+    "text": "'        \"X-Orca-Agent-Hook-Token\": coords.token,',",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/orcad/orcad-app-paths.ts",
+    "text": "return xdg ? join(xdg, 'Orca') : join(homedir(), '.orca')",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/pi/agent-status-extension-source.ts",
+    "text": "\"          'X-Orca-Agent-Hook-Token': coords.token,\",",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/pi/agent-status-wsl-curl-source.ts",
+    "text": "\"        '-H', `X-Orca-Agent-Hook-Token: ${windowsToken}`,\",",
+    "reason": "The X-Orca-Agent-Hook-* names are stable HTTP authentication headers shared with installed mixed-version agent hooks."
+  },
+  {
+    "path": "src/main/runtime/windows-mobile-firewall.ts",
+    "text": "const FIREWALL_RULE_NAME = 'Orca.MobilePairing'",
+    "reason": "This is the stable Windows firewall rule key used to update or remove existing rules; display text is canonical."
+  },
+  {
+    "path": "src/main/speech/model-cache-path.ts",
+    "text": ".map((root) => join(root, 'Orca', 'speech-models', requestedModelsDirHash))",
+    "reason": "This is a persisted storage path segment retained to avoid an out-of-scope data migration."
+  },
+  {
+    "path": "src/main/ssh/relay-protocol.ts",
+    "text": "export const RELAY_SENTINEL = `ORCA-RELAY v${RELAY_VERSION} READY\\n`",
+    "reason": "The sentinel is a remote wire token shared with older relay versions, not display copy."
+  },
+  {
+    "path": "src/main/ssh/relay-socket-path-limit.ts",
+    "text": "const SHORT_DIR_MARKER = 'ORCA-RELAY-SHORT-SOCKET-DIR'",
+    "reason": "The marker is an internal compatibility token for managed relay socket cleanup."
+  },
+  {
+    "path": "src/main/ssh/ssh-connection.ts",
+    "text": "(code === 0 && stdout.includes('ORCA-SYSTEM-SSH-OK')) ||",
+    "reason": "The token probes mixed-version SSH command handling and is not display copy."
+  },
+  {
+    "path": "src/main/ssh/ssh-connection.ts",
+    "text": "const channel = this.spawnTrackedSystemSshCommand('echo ORCA-SYSTEM-SSH-OK', {",
+    "reason": "The token probes mixed-version SSH command handling and is not display copy."
+  },
+  {
+    "path": "src/main/ssh/ssh-connection.ts",
+    "text": "if (firstLine !== 'Invalid command: echo ORCA-SYSTEM-SSH-OK') {",
+    "reason": "The token probes mixed-version SSH command handling and is not display copy."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-deploy.ts",
+    "text": "const NATIVE_DEPS_MISSING_PREFIX = 'ORCA-NATIVE-DEPS-MISSING:'",
+    "reason": "The prefix is an internal mixed-version relay probe token."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-deploy.ts",
+    "text": "const NODE_PTY_CLOEXEC_STATUS_PREFIX = 'ORCA-NPTY-CLOEXEC:'",
+    "reason": "The prefix is an internal mixed-version relay probe token."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-deploy.ts",
+    "text": "const PROBE_OK = 'ORCA-NPTY-PROBE-OK'",
+    "reason": "The value is an internal mixed-version relay probe token."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-deploy.ts",
+    "text": "const probeJs = nativeDepsProbeJs('ORCA-NATIVE-DEPS-OK')",
+    "reason": "The value is an internal mixed-version relay probe token."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-deploy.ts",
+    "text": "if (probe.includes('ORCA-NATIVE-DEPS-OK')) {",
+    "reason": "The value is an internal mixed-version relay probe token."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-endpoint-incumbent.ts",
+    "text": "const PROBE_BEGIN = 'ORCA-INCUMBENT-BEGIN'",
+    "reason": "The marker fences internal relay probe output and is not display copy."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-endpoint-incumbent.ts",
+    "text": "const PROBE_END = 'ORCA-INCUMBENT-END'",
+    "reason": "The marker fences internal relay probe output and is not display copy."
+  },
+  {
+    "path": "src/main/ssh/ssh-relay-node-headers.ts",
+    "text": "export const LOCAL_NODE_HEADERS_MARKER_PREFIX = 'ORCA-NODE-HEADERS:'",
+    "reason": "The prefix is an internal mixed-version SSH staging token."
+  },
+  {
+    "path": "src/main/startup/main-process-runtime-launch.ts",
+    "text": "'[serve] bare orca dispatcher install skipped:',",
+    "reason": "This internal diagnostic names the legacy dispatcher boundary used for mixed-version recovery."
+  },
+  {
+    "path": "src/main/startup/main-process-runtime-launch.ts",
+    "text": "`[serve] bare orca dispatcher ${dispatcher.state}: ${dispatcher.dispatcherPath}` +",
+    "reason": "This internal diagnostic names the legacy dispatcher boundary used for mixed-version recovery."
+  },
+  {
+    "path": "src/relay/protocol.ts",
+    "text": "export const RELAY_SENTINEL = `ORCA-RELAY v${RELAY_VERSION} READY\\n`",
+    "reason": "The sentinel is a remote wire token shared with older relay versions, not display copy."
+  },
+  {
+    "path": "src/shared/client-environment-info.ts",
+    "text": "/(^|\\r?\\n)---\\r?\\n(?:h0x-ADE|Orca):[^\\r\\n]*\\r?\\nOS:[^\\r\\n]*(?:\\r?\\nShell:[^\\r\\n]*)?/",
+    "reason": "This exact legacy text is accepted only when parsing persisted or mixed-version input; canonical output uses h0x-ADE."
+  },
+  {
+    "path": "src/shared/remote-runtime-client-error-classification.ts",
+    "text": "'could not connect to the remote orca runtime',",
+    "reason": "The lowercase text is a parser fixture for errors emitted by older remote runtimes."
+  },
+  {
+    "path": "src/shared/remote-runtime-client-error-classification.ts",
+    "text": "'remote orca runtime closed the connection',",
+    "reason": "The lowercase text is a parser fixture for errors emitted by older remote runtimes."
+  },
+  {
+    "path": "src/shared/remote-runtime-client-error-classification.ts",
+    "text": "'remote orca runtime connection closed',",
+    "reason": "The lowercase text is a parser fixture for errors emitted by older remote runtimes."
+  },
+  {
+    "path": "src/shared/remote-runtime-client-error-classification.ts",
+    "text": "'remote orca runtime is not connected',",
+    "reason": "The lowercase text is a parser fixture for errors emitted by older remote runtimes."
+  },
+  {
+    "path": "src/shared/remote-runtime-client-error-classification.ts",
+    "text": "'timed out waiting for the remote orca runtime'",
+    "reason": "The lowercase text is a parser fixture for errors emitted by older remote runtimes."
+  },
+  {
+    "path": "src/shared/structured-agent-session-projection.ts",
+    "text": "/\\n\\[(?:h0x-ADE|Orca): output truncated — \\d+ bytes total, digest [0-9a-f]+\\]$/",
+    "reason": "This exact legacy text is accepted only when parsing persisted or mixed-version input; canonical output uses h0x-ADE."
+  },
+  {
+    "path": "src/shared/wsl-browser-network-relay-contract.ts",
+    "text": "export const WSL_BROWSER_NETWORK_RELAY_SENTINEL = 'ORCA-WSL-BROWSER-NETWORK v1 READY\\n'",
+    "reason": "The sentinel is a WSL wire token shared with older app versions, not display copy."
+  }
+]

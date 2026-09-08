@@ -1,5 +1,5 @@
 // Single source of truth for the app's logs directory and the files inside it.
-// macOS convention is `~/Library/Application Support/Orca/logs/`; Windows and
+// macOS convention is `~/Library/Application Support/h0x-ADE/logs/`; Windows and
 // Linux resolve the same intent via the host's `userData` dir. Falls back to a
 // homedir-derived path when no AppEnvironment is installed (unit tests).
 

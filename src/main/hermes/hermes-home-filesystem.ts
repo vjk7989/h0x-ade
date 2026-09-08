@@ -14,10 +14,10 @@ import { dirname, join } from 'node:path'
 import type { ConfigParseResult, HermesConfig } from './hermes-config-yaml'
 import { parseHermesConfig, serializeHermesConfig } from './hermes-config-yaml'
 import {
-  HERMES_PLUGIN_MARKER,
   HERMES_PLUGIN_NAME,
   getPluginInitSource,
-  getPluginManifest
+  getPluginManifest,
+  hasHermesPluginMarker
 } from './hermes-managed-plugin-source'
 
 export function getHermesHome(env: NodeJS.ProcessEnv = process.env): string {
@@ -93,11 +93,11 @@ export function getPluginFilesState(pluginDir = getPluginDir()): {
   try {
     const manifest = readFileSync(manifestPath, 'utf-8')
     const init = readFileSync(initPath, 'utf-8')
-    const managed = manifest.includes(HERMES_PLUGIN_MARKER) && init.includes(HERMES_PLUGIN_MARKER)
+    const managed = hasHermesPluginMarker(manifest) && hasHermesPluginMarker(init)
     return {
       present: true,
       managed,
-      detail: managed ? null : 'Hermes orca-status plugin exists but is not Orca-managed'
+      detail: managed ? null : 'Hermes orca-status plugin exists but is not h0x-ADE-managed'
     }
   } catch (error) {
     return {

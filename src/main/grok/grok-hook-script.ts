@@ -22,7 +22,7 @@ export function getGrokManagedScriptPath(): string {
 
 export function getGrokManagedCommand(scriptPath: string): string {
   // A cmd-safe bare path avoids two extra Windows interpreters; POSIX can gate before spawning the
-  // managed script because Orca injects ORCA_PANE_KEY only into panes it owns.
+  // managed script because h0x-ADE injects ORCA_PANE_KEY only into panes it owns.
   return process.platform === 'win32'
     ? wrapWindowsCmdHookCommand(scriptPath)
     : wrapPosixHookCommand(scriptPath, {}, { requiredEnvVar: 'ORCA_PANE_KEY' })

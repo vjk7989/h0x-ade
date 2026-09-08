@@ -7,12 +7,10 @@ import type { GlobalSettings } from '../../../../shared/global-settings-types'
 import { AppearanceSection } from './AppearanceSection'
 import { AppearanceInterfaceSection } from './AppearanceInterfaceSection'
 import { AppearanceWindowSidebarSection } from './AppearanceWindowSidebarSection'
-import { SearchableSetting } from './SearchableSetting'
 import { matchesSettingsSearch, normalizeSettingsSearchQuery } from './settings-search'
 import { useAppStore } from '../../store'
 import { USAGE_PERCENTAGE_DISPLAY_SETTING_ID } from './appearance-usage-percentage-search'
 import {
-  getAppIconEntries,
   getAppearancePaneSearchEntries,
   getLanguageEntries,
   getLayoutEntries,
@@ -29,8 +27,6 @@ import { getTerminalAppearanceSearchEntries } from './terminal-search'
 import { TerminalAppearanceSection } from './TerminalAppearanceSection'
 import type { UseGhosttyImportReturn } from './useGhosttyImport'
 import type { UseWarpThemeImportReturn } from './useWarpThemeImport'
-import { AppIconSelector } from './AppIconSelector'
-import { normalizeAppIconId } from '../../../../shared/app-icon'
 import { getRendererAppPlatform } from '@/lib/renderer-app-platform'
 import { isWebClientLocation } from '@/lib/web-client-location'
 import { SHOW_UI_LANGUAGE_SETTING } from '@/i18n/supported-languages'
@@ -170,7 +166,6 @@ export function AppearancePane({
     title: windowSidebarTitle,
     description: windowSidebarSummary
   })
-  const appIconMatches = matchesSettingsSearch(searchQuery, getAppIconEntries())
 
   // While searching, force-open every section that contains a match so its
   // controls (including advanced ones) are revealed; otherwise use the user's
@@ -229,7 +224,7 @@ export function AppearancePane({
         </AppearanceSection>
       ) : null}
 
-      {/* Why: Code & Markdown is intentionally omitted. Orca has no Appearance-level
+      {/* Why: Code & Markdown is intentionally omitted. h0x-ADE has no Appearance-level
           code/markdown settings — the Monaco editor reuses the terminal font and
           there is no markdown-style or line-number setting — so a fourth row would
           be empty. We surface only the three sections that hold real controls
@@ -274,29 +269,6 @@ export function AppearancePane({
             forceVisiblePrimary={windowLabelMatches}
           />
         </AppearanceSection>
-      ) : null}
-
-      {/* App icon stays at the bottom of Appearance as a small easter egg,
-          matching production — not buried inside Interface advanced. */}
-      {appIconMatches ? (
-        <SearchableSetting
-          title={translate('auto.components.settings.AppearancePane.ca1590d42f', 'App Icon')}
-          description={translate(
-            'auto.components.settings.AppearancePane.0cd9b8228f',
-            'Choose the app icon shown in the Dock and window switcher.'
-          )}
-          keywords={getAppIconEntries().flatMap((entry) => [
-            entry.title,
-            entry.description ?? '',
-            ...(entry.keywords ?? [])
-          ])}
-          className="max-w-none px-1 pt-2"
-        >
-          <AppIconSelector
-            value={normalizeAppIconId(settings.appIcon)}
-            onChange={(appIcon) => updateSettings({ appIcon })}
-          />
-        </SearchableSetting>
       ) : null}
     </div>
   )

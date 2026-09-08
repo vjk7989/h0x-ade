@@ -26,7 +26,7 @@ export type CliRegistrationActions = {
 function unknownReason(): string {
   return translate(
     'auto.components.settings.CliSection.installFailureUnknownReason',
-    'Orca could not finish CLI registration and reported no reason.'
+    'h0x-ADE could not finish CLI registration and reported no reason.'
   )
 }
 

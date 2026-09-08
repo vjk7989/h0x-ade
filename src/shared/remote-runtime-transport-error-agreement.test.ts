@@ -329,7 +329,7 @@ const TAILSCALE_HINTED_TRANSPORT_ERRORS: TransportErrorPair[] = [
     producer: 'main/ipc/runtime-environment-transport-routing.ts:153',
     code: 'remote_runtime_unavailable',
     message: withRemoteRuntimeTailscaleHint(
-      'Could not connect to the remote Orca runtime.',
+      'Could not connect to the remote h0x-ADE runtime.',
       'https://desk.example.com'
     )
   },
@@ -337,7 +337,7 @@ const TAILSCALE_HINTED_TRANSPORT_ERRORS: TransportErrorPair[] = [
     producer: 'main/ipc/runtime-environment-transport-routing.ts:200',
     code: 'remote_runtime_unavailable',
     message: withRemoteRuntimeTailscaleHint(
-      'Remote Orca runtime closed the connection.',
+      'Remote h0x-ADE runtime closed the connection.',
       'https://desk.tail1234.ts.net'
     )
   }
@@ -355,18 +355,18 @@ const CODED_TRANSPORT_ERRORS: TransportErrorPair[] = [
 const CODELESS_TRANSPORT_ERRORS: (TransportErrorPair & { recoverable: boolean })[] = [
   {
     producer: 'web-runtime-client.ts:117 / :328',
-    message: 'Remote Orca runtime is not connected.',
+    message: 'Remote h0x-ADE runtime is not connected.',
     recoverable: true
   },
   {
     producer: 'web-runtime-client.ts:359 / :360 / :591',
-    message: 'Remote Orca runtime connection closed.',
+    message: 'Remote h0x-ADE runtime connection closed.',
     recoverable: true
   },
   {
     producer: 'web-runtime-client.ts:437 / :601',
     message: withRemoteRuntimeTailscaleHint(
-      'Could not connect to the remote Orca runtime.',
+      'Could not connect to the remote h0x-ADE runtime.',
       'https://desk.example.com'
     ),
     recoverable: true
@@ -378,7 +378,7 @@ const CODELESS_TRANSPORT_ERRORS: (TransportErrorPair & { recoverable: boolean })
   },
   {
     producer: 'remote-runtime-terminal-multiplexer.ts:511',
-    message: 'Remote Orca runtime closed the connection.',
+    message: 'Remote h0x-ADE runtime closed the connection.',
     recoverable: true
   },
   {
@@ -396,6 +396,31 @@ const CODELESS_TRANSPORT_ERRORS: (TransportErrorPair & { recoverable: boolean })
     producer: 'untyped host rejection with no connection wording',
     message: 'Worktree is missing on the remote host.',
     recoverable: false
+  },
+  {
+    producer: 'legacy mixed-version error input',
+    message: 'Could not connect to the remote Orca runtime.',
+    recoverable: true
+  },
+  {
+    producer: 'legacy mixed-version error input',
+    message: 'Remote Orca runtime closed the connection.',
+    recoverable: true
+  },
+  {
+    producer: 'legacy mixed-version error input',
+    message: 'Remote Orca runtime connection closed.',
+    recoverable: true
+  },
+  {
+    producer: 'legacy mixed-version error input',
+    message: 'Remote Orca runtime is not connected.',
+    recoverable: true
+  },
+  {
+    producer: 'legacy mixed-version error input',
+    message: 'Timed out waiting for the remote Orca runtime.',
+    recoverable: true
   }
 ]
 

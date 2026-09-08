@@ -29,7 +29,7 @@ function cloneProcessEnv(): Record<string, string> {
 
 // Why: with system-default real-home routing, the headless Codex commit run
 // must use the user's own ~/.codex. If Orca itself was launched from a nested
-// Orca terminal it can inherit an Orca-owned CODEX_HOME override; strip only
+// h0x terminal it can inherit an Orca-owned CODEX_HOME override; strip only
 // that (CODEX_HOME matching the private ORCA_CODEX_HOME marker), preserving a
 // user-set CODEX_HOME.
 function cloneProcessEnvWithoutOrcaCodexHomeOverride(): Record<string, string> {

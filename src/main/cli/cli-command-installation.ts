@@ -173,7 +173,7 @@ export class CliCommandInstallation extends CliCommandInspection {
     const extractedRoot = await ensureAppImageExtractedRoot(extractionOptions)
     if (!extractedRoot) {
       throw new Error(
-        `Could not extract the Orca AppImage at ${this.appImagePath}. Check that it is executable and that ${this.appImageCacheRootPath} has free space.`
+        `Could not extract the h0x-ADE AppImage at ${this.appImagePath}. Check that it is executable and that ${this.appImageCacheRootPath} has free space.`
       )
     }
     return extractedRoot

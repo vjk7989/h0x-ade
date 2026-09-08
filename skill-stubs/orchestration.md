@@ -1,6 +1,6 @@
-# Orca Orchestration
+# h0x-ADE Orchestration
 
-This file is a discovery stub, not the usage guide. The full, version-matched Orca
+This file is a discovery stub, not the usage guide. The full, version-matched h0x-ADE
 orchestration reference is served by the `h0x` binary itself — kept out of this file on
 purpose so it can never drift from the binary that will actually run your commands.
 
@@ -20,13 +20,10 @@ Choose the executable once and reuse it for every later command:
 - If the `ORCA_CLI_COMMAND` environment variable is set, use its value. h0x-ADE exports this
   for managed WSL sessions.
 - Otherwise, in a dev checkout whose session exposes `ORCA_DEV_REPO_ROOT`, use `h0x-dev`.
-- Otherwise, on Linux outside an h0x-ADE-managed terminal, use `h0x`. Never run bare
-  `orca` there — outside Orca's terminals it normally resolves to the
-  GNOME Orca screen reader (`/usr/bin/orca`) and starts speech on the user's machine.
-- Otherwise, use `orca`.
+- Otherwise, use `h0x`.
 
-Below, `ORCA` is a placeholder for the executable you resolved. Substitute it before
-running anything; do not create a shell variable or run `ORCA` literally. This works the
+Below, `H0X` is a placeholder for the executable you resolved. Substitute it before
+running anything; do not create a shell variable or run `H0X` literally. This works the
 same way in POSIX shells, PowerShell, and cmd.exe.
 
 If the selected executable cannot run, report its exact error and stop. Do not fall through
@@ -35,7 +32,7 @@ to another executable, which could silently target a different h0x-ADE build.
 ## Load the full guide before running h0x commands
 
 ```text
-ORCA skills get orchestration
+H0X skills get orchestration
 ```
 
 That prints the complete, version-matched guide for the exact binary that will handle your
@@ -45,10 +42,10 @@ command you need.
 
 Don't guess subcommands or flags from memory or from a cached copy of this stub. They
 change between h0x-ADE releases, and this file deliberately no longer lists them. Confirm the
-app is up with `ORCA status --json` (start it with `ORCA open --json` if needed), and
+app is up with `H0X status --json` (start it with `H0X open --json` if needed), and
 prefer `--json` for agent-driven calls.
 
-## If an older Orca does not recognize `skills get`
+## If an older installation does not recognize `skills get`
 
 Use this fallback only when the selected binary explicitly reports that `skills get` is an
 unknown command. Another failure is not proof of an older binary; report it rather than
@@ -56,11 +53,11 @@ guessing or changing executables. For a confirmed pre-guide binary, use only thi
 read-only bootstrap to orient. Do not dead-end and do not invent commands:
 
 ```text
-ORCA status --json
-ORCA orchestration task-list --json
-ORCA terminal list --json
+H0X status --json
+H0X orchestration task-list --json
+H0X terminal list --json
 ```
 
 Then tell the user that updating h0x-ADE restores the full, version-matched guide via
-`ORCA skills get orchestration`. Beyond these commands, ask the user rather than guessing a
+`H0X skills get orchestration`. Beyond these commands, ask the user rather than guessing a
 command surface this older binary may not support.

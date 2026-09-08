@@ -44,7 +44,7 @@ export function AutomationRunDetailsPage({
         title={automation?.name ?? run.title}
         breadcrumbs={[
           formatAutomationDateTimeWithRelative(run.scheduledFor, relativeNow),
-          'Orca',
+          'h0x-ADE',
           workspaceDisplay?.detailLabel ??
             translate('auto.components.automations.AutomationsPage.noWorkspace', 'No workspace')
         ]}

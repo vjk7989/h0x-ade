@@ -1,10 +1,10 @@
 // Silent NSIS install / update / uninstall and installed-app discovery.
 //
-// Orca ships a per-user oneClick NSIS installer (electron-builder defaults:
+// h0x-ADE ships a per-user oneClick NSIS installer (electron-builder defaults:
 // oneClick=true, perMachine=false) named h0x-windows-setup.exe. One-click
 // silent mode is `<setup.exe> /S`; the app installs under
-// %LOCALAPPDATA%\Programs\<dir> and the exe is Orca.exe. The install dir casing
-// is not guaranteed (observed lowercase "orca" on a dev box), so the exe is
+// %LOCALAPPDATA%\Programs\<dir> and the exe is h0x-ADE.exe. The install dir casing
+// is not guaranteed, so the exe is
 // located by search, never by a hard-coded path.
 
 import { existsSync, mkdtempSync } from 'node:fs'
@@ -14,8 +14,9 @@ import { spawnSync } from 'node:child_process'
 import { assertWin32 } from './platform-guard.mjs'
 import { runCommandSync } from './powershell-runner.mjs'
 
-const PRODUCT_NAME = 'Orca'
-const EXE_NAME = 'Orca.exe'
+const PRODUCT_NAME = 'h0x-ADE'
+const EXE_NAME = 'h0x-ADE.exe'
+const LEGACY_EXE_NAME = 'Orca.exe'
 
 /** Programs root that per-user oneClick NSIS installs into. */
 function programsRoot() {
@@ -92,7 +93,7 @@ export function silentInstall(setupExe, { timeoutMs = 180_000, installDir = null
     throw new Error(`Failed to launch installer ${setupExe}: ${proc.error.message}`)
   }
 
-  // On update runs the old Orca.exe already exists, so wait for the exe whose
+  // On update runs the old executable already exists, so wait for the exe whose
   // version matches this installer — not just any exe the installer hasn't yet
   // overwritten — to avoid reading the pre-update binary mid-copy.
   const targetVersion = getExeVersion(setupExe)
@@ -142,14 +143,18 @@ function waitForInstalledExe(timeoutMs, installDir = null, expectedVersion = nul
 }
 
 /**
- * Locate the installed Orca.exe. In isolated mode (`installDir` set), the exe is
- * at a known fixed path (<installDir>\Orca.exe). Otherwise it is discovered
+ * Locate the installed h0x-ADE executable. The legacy name is accepted only so
+ * a v1.4.199 install can be discovered before it is upgraded.
  * under %LOCALAPPDATA%\Programs (case-tolerant — casing is not guaranteed).
  */
 export function locateInstalledExe(installDir = null) {
   if (installDir) {
     const exe = path.join(installDir, EXE_NAME)
-    return existsSync(exe) ? exe : null
+    if (existsSync(exe)) {
+      return exe
+    }
+    const legacyExe = path.join(installDir, LEGACY_EXE_NAME)
+    return existsSync(legacyExe) ? legacyExe : null
   }
   const root = programsRoot()
   if (!existsSync(root)) {
@@ -157,7 +162,7 @@ export function locateInstalledExe(installDir = null) {
   }
   const { stdout } = runCommandSync(
     `Get-ChildItem -Path '${root}' -Directory -ErrorAction SilentlyContinue | ` +
-      `ForEach-Object { Join-Path $_.FullName '${EXE_NAME}' } | ` +
+      `ForEach-Object { @((Join-Path $_.FullName '${EXE_NAME}'), (Join-Path $_.FullName '${LEGACY_EXE_NAME}')) } | ` +
       `Where-Object { Test-Path $_ } | Select-Object -First 1`
   )
   const line = stdout.trim().split('\n')[0]?.trim()
@@ -191,15 +196,16 @@ export function silentUninstall(installDir, { allowDefaultLocation = false } = {
   if (!allowDefaultLocation && pathsEqual(resolved, path.join(programsRoot(), PRODUCT_NAME))) {
     throw new Error(
       `Refusing to uninstall the default install location "${resolved}" — this is where a ` +
-        `developer's REAL Orca lives. Isolated mode must target a separate --install-dir.`
+        `developer's real h0x-ADE lives. Isolated mode must target a separate --install-dir.`
     )
   }
-  const exe = path.join(resolved, EXE_NAME)
-  if (!existsSync(exe)) {
+  const exe = locateInstalledExe(resolved)
+  if (!exe) {
     return false
   }
   const exeDir = resolved
-  const uninstaller = path.join(exeDir, `Uninstall ${PRODUCT_NAME}.exe`)
+  const legacyInstall = path.basename(exe).toLowerCase() === LEGACY_EXE_NAME.toLowerCase()
+  const uninstaller = path.join(exeDir, `Uninstall ${legacyInstall ? 'Orca' : PRODUCT_NAME}.exe`)
   if (!existsSync(uninstaller)) {
     return false
   }

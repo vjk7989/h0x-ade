@@ -264,7 +264,7 @@ describe('electron-builder config', () => {
   })
 
   it('uses the multi-size icon source for Linux packages', () => {
-    expect(electronBuilderConfig.linux.icon).toBe('resources/build/icon.icns')
+    expect(electronBuilderConfig.linux.icon).toBe('resources/build/linux-icons')
   })
 
   it('matches the Linux desktop entry to Electron window class', () => {

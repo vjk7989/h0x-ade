@@ -1,7 +1,7 @@
 import { normalizeSshConfigAlias } from '../../../../shared/ssh-config-alias'
 import type { SshTarget } from '../../../../shared/ssh-types'
 
-/** True when an existing Orca host already owns this config alias / label. */
+/** True when an existing h0x host already owns this config alias / label. */
 export function isDuplicateSshTargetAlias({
   existingTargets,
   configHost,

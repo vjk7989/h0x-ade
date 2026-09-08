@@ -72,9 +72,7 @@ const H0X_ADE_SURFACE_KEYS = [
 
 const H0X_CLI_SURFACE_KEYS = ['auto.components.settings.CliSection.c5c0f2641d'] as const
 
-const ORCA_RELAY_COMPATIBILITY_KEYS = [
-  'auto.components.settings.orcaAccount.signedOut'
-] as const
+const H0X_RELAY_SURFACE_KEYS = ['auto.components.settings.orcaAccount.signedOut'] as const
 
 function lookup(catalog: unknown, key: string): unknown {
   return key
@@ -102,10 +100,10 @@ describe('h0x-ADE surface brand catalog contract', () => {
         expect(value, `${code}:${key} must render the h0x CLI brand`).toContain('h0x CLI')
       }
 
-      for (const key of ORCA_RELAY_COMPATIBILITY_KEYS) {
+      for (const key of H0X_RELAY_SURFACE_KEYS) {
         const value = lookup(catalog, key) ?? lookup(en, key)
-        expect(value, `${code}:${key} must preserve the Orca Relay product name`).toContain(
-          'Orca Relay'
+        expect(value, `${code}:${key} must render the h0x Relay product name`).toContain(
+          'h0x Relay'
         )
       }
     }

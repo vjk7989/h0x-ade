@@ -4,7 +4,7 @@ import { GLOBAL_FLAGS } from '../args'
 export const FILE_COMMAND_SPECS: CommandSpec[] = [
   {
     path: ['file', 'open'],
-    summary: 'Open a workspace file in the Orca editor',
+    summary: 'Open a workspace file in the h0x-ADE editor',
     usage: 'h0x file open <path> [--worktree <selector>] [--json]',
     allowedFlags: [...GLOBAL_FLAGS, 'path', 'worktree'],
     positionalArgs: ['path'],
@@ -15,7 +15,7 @@ export const FILE_COMMAND_SPECS: CommandSpec[] = [
   },
   {
     path: ['file', 'diff'],
-    summary: 'Open a workspace file diff in the Orca editor',
+    summary: 'Open a workspace file diff in the h0x-ADE editor',
     usage: 'h0x file diff <path> [--staged] [--worktree <selector>] [--json]',
     allowedFlags: [...GLOBAL_FLAGS, 'path', 'staged', 'worktree'],
     positionalArgs: ['path'],

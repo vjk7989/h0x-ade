@@ -3,6 +3,7 @@ import {
   type FeatureInteractionId,
   type FeatureInteractionState
 } from './feature-interactions'
+import { CLI_DISPLAY_NAME, PRODUCT_DISPLAY_NAME } from './brand'
 
 export type FeatureTipId = 'voice-dictation' | 'orca-cli' | 'cmd-j-palette'
 
@@ -33,7 +34,7 @@ export const FEATURE_TIPS = [
     id: 'orca-cli',
     priority: 'new',
     eyebrow: 'Tip',
-    title: 'Let agents drive Orca with the Orca CLI',
+    title: `Let agents drive ${PRODUCT_DISPLAY_NAME} with the ${CLI_DISPLAY_NAME} CLI`,
     description: 'Enable agents to coordinate child worktrees and communicate between worktrees.',
     action: 'setup-cli',
     ctaLabel: 'Install CLI & Skills',

@@ -25,7 +25,7 @@ const SHELL_READY_MARKER_ESCAPED = '\\033]777;orca-shell-ready\\007'
 // are one template again.
 function getRelayZshWrapperSpec(): ZshStartupHookSpec {
   return {
-    headerLabel: 'Orca relay zsh overlay wrapper',
+    headerLabel: 'h0x-ADE relay zsh overlay wrapper',
     readyMarkerEscaped: SHELL_READY_MARKER_ESCAPED,
     osc133CommandMarkers: false,
     startupCommandDelivery: false,
@@ -46,7 +46,7 @@ export function ensureOverlayRestoreWrappers(root: string): boolean {
   const bashDir = join(root, 'bash')
 
   const zshenv = buildZshStartupHook(getRelayZshWrapperSpec())
-  const bashRc = `# Orca relay bash overlay wrapper
+  const bashRc = `# h0x-ADE relay bash overlay wrapper
 ${BASH_FEATURE_CHANNEL_BLOCK}
 ${SHELL_STARTUP_IDENTITY_MARKER_BLOCK}
 # Why a plain variable: the channel is consumed and destroyed in these first
@@ -63,7 +63,7 @@ elif [[ -f "$HOME/.bash_login" ]]; then
 elif [[ -f "$HOME/.profile" ]]; then
   source "$HOME/.profile"
 fi
-# Why: enable bracketed paste so Orca can deliver a multiline startup prompt as
+# Why: enable bracketed paste so h0x-ADE can deliver a multiline startup prompt as
 # a single literal paste (ESC[200~…ESC[201~); without it, older readline builds
 # treat each embedded newline as Enter and mangle the prompt into PS2
 # continuation. Modern readline defaults this on; force it for the rest.

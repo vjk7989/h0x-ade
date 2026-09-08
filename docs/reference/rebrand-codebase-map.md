@@ -867,3 +867,24 @@ classification behavior while avoiding the transient synchronous-read failure.
 The authoritative CI rerun is pending. This robustness fix therefore does not
 yet establish a complete green PR gate or advance merge, build, version, or
 release status.
+
+## Node Shards 2–8 Second-Layer Corrections — Completed Local Slice
+
+The next full-suite pass updates 28 test files plus a generated Bash wrapper
+comment to match current fork-owned behavior. The corrected oracles cover
+dispatch prefixes, visible product copy, skill selectors, Relay branding, and
+packaged artifact names across shards 2–8.
+
+- Canonical output expectations use `h0x` and `h0x-ADE` where production now
+  emits them. Internal compatibility identifiers, legacy accepted inputs,
+  environment variables, persisted names, and mixed-version boundaries remain
+  unchanged.
+- The generated Bash comment was refreshed through its source/generation path;
+  it is not an independent hand-edited runtime contract.
+- Focused verification passed two batches totaling 193 and 86 tests. Changed
+  code quality, the visible-brand scanner, and the logo freshness contract also
+  passed.
+
+The Linux PR CI rerun is pending. Local focused evidence does not yet establish
+that all eight authoritative CI shards pass or advance merge, build, version,
+or release status.

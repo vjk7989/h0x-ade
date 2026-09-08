@@ -82,7 +82,7 @@ describe('ClientHostedBrowserPagePane popup notices', () => {
     emitPopup()
 
     expect(toastMocks.message).toHaveBeenCalledWith(
-      'https://accounts.example.com tried to open a popup Orca does not support here.',
+      'https://accounts.example.com tried to open a popup h0x-ADE does not support here.',
       { id: 'browser-popup:page-a:blocked:https://accounts.example.com' }
     )
   })
@@ -109,7 +109,7 @@ describe('ClientHostedBrowserPagePane popup notices', () => {
 
     expect(toastMocks.message).toHaveBeenNthCalledWith(
       1,
-      'https://accounts.example.com opened a new page in Orca.',
+      'https://accounts.example.com opened a new page in h0x-ADE.',
       { id: 'browser-popup:page-a:opened-in-orca:https://accounts.example.com' }
     )
     expect(toastMocks.message).toHaveBeenNthCalledWith(

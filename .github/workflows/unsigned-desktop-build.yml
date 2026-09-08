@@ -91,6 +91,7 @@ jobs:
         run: >-
           node config/scripts/run-headless-serve-shutdown-docker.mjs
           --appimage dist/h0x-linux.AppImage --entrypoint appimage
+          --signal-target serving-electron --int-delivery pid
 
       - name: Verify AppImage packaged CLI
         env:

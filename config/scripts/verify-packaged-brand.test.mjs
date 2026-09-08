@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { parse } from 'yaml'
 import {
+  inspectWindowsApp,
   parseUpdateManifest,
   verifyLinuxPackage,
   verifyUpdateManifest,
@@ -114,6 +115,7 @@ describe('packaged brand verifier', () => {
     const commands = workflow.jobs['linux-x64'].steps.map((step) => step.run ?? '').join('\n')
     expect(commands).toContain('run-headless-serve-shutdown-docker.mjs')
     expect(commands).toContain('--entrypoint appimage')
+    expect(commands).toContain('--signal-target serving-electron --int-delivery pid')
     expect(commands).toContain('run-linux-cli-launch-contract-docker.mjs')
     expect(commands).toContain('smoke-packaged-cli.mjs --app-dir=dist/linux-unpacked')
   })
@@ -151,4 +153,17 @@ describe('packaged brand verifier', () => {
     expect(generator).toContain('iconutil -c icns')
     expect(generator).not.toContain('xcrun actool')
   })
+
+  it.runIf(process.platform === 'win32')(
+    'transports Windows inspector paths outside PowerShell command text',
+    () => {
+      const result = inspectWindowsApp(
+        join(process.env.SystemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'),
+        join(process.cwd(), 'resources/build/linux-icons/32x32.png')
+      )
+      expect(result).toHaveProperty('ProductName')
+      expect(result).toHaveProperty('FileDescription')
+      expect(result).toHaveProperty('IconMatches')
+    }
+  )
 })

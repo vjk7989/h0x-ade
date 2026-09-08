@@ -983,10 +983,30 @@ change application runtime behavior or restore a legacy executable identity.
   512, and 1024 pixel iconset filenames (including the required `@2x` members),
   and compiles that iconset with `iconutil -c icns`. The prior `actool` and
   `.icon` source path is no longer the packaging contract.
-- GitHub release `v1.4.200` currently exists as a draft. The corrected unsigned
-  desktop packaging run has not yet been rerun, so this slice does not claim
-  successful replacement artifacts or publication.
+- [Unsigned desktop run 34273255660](https://github.com/vjk7989/h0x-ade/actions/runs/34273255660)
+  ran from merge commit `e4d04880c5c98c43ec8043ba9e15cfd5b127f8c2`.
+  macOS x64 and arm64 passed packaging, brand verification, packaged CLI smoke,
+  and artifact upload. Windows reached packaged-brand verification but failed
+  because paths appended after `powershell.exe -Command` were parsed as part of
+  the command instead of populating `$args`; Linux reached the AppImage shutdown
+  oracle but TERM left the serving Electron process tree and listener alive.
+- The follow-up Windows verifier transports the packaged executable and
+  canonical-icon paths through `H0X_PACKAGED_EXE_PATH` and
+  `H0X_CANONICAL_ICON_PATH`, outside the PowerShell command text. Embedded icon
+  pixels are compared against the canonical generated 32 px PNG frame at
+  `resources/build/linux-icons/32x32.png`, avoiding multi-frame ICO selection
+  ambiguity while retaining the VersionInfo checks.
+- The follow-up Linux workflow invokes the established AppImage shutdown oracle
+  with `--signal-target serving-electron --int-delivery pid`. Both INT and TERM
+  therefore target the serving Electron process; INT keeps the explicit PID
+  delivery required by the packaged-launch contract.
+- The focused packaged-brand verifier test passed locally: 1 file, 10 tests.
+  Its workflow assertion pins the Linux signal-target flags, and its native
+  Windows case proves the environment-based path transport produces parseable
+  product, description, and icon-match fields.
+- `v1.4.200` still has no Git tag or GitHub release after the separate release-cut
+  failure; no draft or public release was produced by this unsigned-build run.
 
-The authoritative unsigned desktop rerun and inspection of its Windows, Linux,
-macOS x64, and macOS arm64 outputs remain pending. Keep `v1.4.200` private as a
-draft until those corrected artifacts and release manifests pass verification.
+The macOS x64 and arm64 outputs from run `34273255660` are green and uploaded.
+Windows and Linux require an authoritative rerun with the follow-up verifier
+corrections; successful artifacts, a tag, and publication are not yet claimed.

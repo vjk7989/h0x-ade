@@ -390,6 +390,7 @@ module.exports = {
   },
   win: {
     executableName: 'h0x-ADE',
+    icon: 'resources/build/icon.ico',
     // Why: Windows installers are signed after electron-builder packaging by
     // SignPath, so the packager cannot infer the updater publisherName.
     //

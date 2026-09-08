@@ -803,16 +803,15 @@ implied by the focused green evidence above.
   version, filename, and file SHA-256, not the source commit.
 - `mobile/scripts/verify-unsigned-mobile-artifact.mjs` validates the packaged
   name, version `0.0.48`, package/bundle identifier, sole `pavii-h0x` output
-  scheme, native display and permission copy, required executable/icon assets,
+  scheme plus Expo's derived technical schemes, native display and permission copy, required executable/icon assets,
   and exact source logo hashes. It emits deterministic JSON metadata and a
   conventional SHA-256 sidecar next to each artifact.
-- `mobile/scripts/unsigned-android-release.gradle` is applied only by the
-  manual artifact workflow. It clears Expo's debug signing configuration from
-  the release build; the verifier then requires `apksigner` to prove that the
-  resulting APK has no signer. Normal release and store workflows are unchanged.
-  The init script resolves `:app` from `gradle.rootProject`, which is required by
-  the Gradle 9 init-script scope. The iOS lane uses runner CocoaPods directly.
-  Included Gradle builds are ignored, and the iOS lane resolves the single
+- `mobile/scripts/disable-android-release-signing.mjs` removes exactly one
+  Expo-generated debug-signing line from the generated Android `release {}`
+  block before Gradle configures variants. The verifier then requires
+  `apksigner` to prove that the resulting APK has no signer. Normal release and
+  store workflows are unchanged. The iOS lane uses runner CocoaPods directly
+  and resolves the single
   generated workspace, the single app project's basename-matching shared
   scheme, and the single simulator app instead of retaining a stale internal
   project filename.

@@ -61,8 +61,10 @@ jobs:
           java-version: 17
       - name: Generate Android project
         run: pnpm exec expo prebuild --platform android --no-install
+      - name: Disable generated release signing
+        run: node scripts/disable-android-release-signing.mjs android/app/build.gradle
       - name: Build unsigned release APK
-        run: ./gradlew --init-script ../scripts/unsigned-android-release.gradle assembleRelease
+        run: ./gradlew assembleRelease
         working-directory: mobile/android
       - name: Name and verify APK
         run: |

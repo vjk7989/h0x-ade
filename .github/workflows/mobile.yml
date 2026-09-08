@@ -18,7 +18,7 @@ on:
       - '.github/actions/install-node-dependencies/**'
       - '.github/workflows/mobile-ios-release.yml'
       - '.github/workflows/unsigned-mobile-build.yml'
-      - 'mobile/scripts/unsigned-android-release.gradle'
+      - 'mobile/scripts/disable-android-release-signing.mjs'
 
 concurrency:
   group: mobile-${{ github.event.pull_request.number || github.ref }}

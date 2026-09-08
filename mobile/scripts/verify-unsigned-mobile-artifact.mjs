@@ -64,6 +64,7 @@ export function verifySourceConfig(config, mobileRoot) {
   const expo = config.expo ?? fail('app config is missing expo')
   assertEqual(expo.name, 'h0x-ADE Mobile', 'app name')
   assertEqual(expo.version, '0.0.48', 'app version')
+  assertEqual(expo.slug, 'h0x-mobile', 'app slug')
   assertEqual(expo.scheme, 'pavii-h0x', 'packaged URL scheme')
   assertEqual(expo.android?.package, 'tech.pavii.h0xade.mobile', 'Android package')
   assertEqual(expo.ios?.bundleIdentifier, 'tech.pavii.h0xade.mobile', 'iOS bundle identifier')
@@ -91,11 +92,30 @@ export function verifySourceConfig(config, mobileRoot) {
   return expo
 }
 
+function verifyPackagedSchemes(csv, expo, platformIdentifier, label) {
+  const schemes = String(csv ?? '')
+    .split(',')
+    .filter(Boolean)
+  if (!schemes.includes(expo.scheme)) {
+    fail(`${label} must include canonical scheme ${JSON.stringify(expo.scheme)}`)
+  }
+  const allowed = new Set([expo.scheme, `exp+${expo.slug}`, platformIdentifier])
+  const unexpected = schemes.filter((scheme) => !allowed.has(scheme))
+  if (unexpected.length) {
+    fail(`${label} contains unexpected schemes: ${unexpected.join(',')}`)
+  }
+}
+
 export function verifyAndroidInspection(inspection, expo) {
   assertEqual(inspection.package, expo.android.package, 'Android package')
   assertEqual(inspection.versionName, expo.version, 'Android version')
   assertEqual(inspection.label, expo.name, 'Android label')
-  assertEqual(inspection.schemes, [expo.scheme].join(','), 'Android packaged URL schemes')
+  verifyPackagedSchemes(
+    inspection.schemes,
+    expo,
+    expo.android.package,
+    'Android packaged URL schemes'
+  )
   if (!inspection.iconEntries?.length) {
     fail('Android artifact is missing packaged icon resources')
   }
@@ -111,7 +131,12 @@ export function verifyIosInspection(inspection, expo) {
   assertEqual(inspection.bundleIdentifier, expo.ios.bundleIdentifier, 'iOS bundle identifier')
   assertEqual(inspection.version, expo.version, 'iOS version')
   assertEqual(inspection.displayName, expo.name, 'iOS display name')
-  assertEqual(inspection.schemes, [expo.scheme].join(','), 'iOS packaged URL schemes')
+  verifyPackagedSchemes(
+    inspection.schemes,
+    expo,
+    expo.ios.bundleIdentifier,
+    'iOS packaged URL schemes'
+  )
   if (!inspection.hasMachOExecutable) {
     fail('iOS artifact is missing its Mach-O executable')
   }

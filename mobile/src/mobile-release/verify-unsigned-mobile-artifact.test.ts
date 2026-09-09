@@ -5,6 +5,7 @@ import {
   checksumLine,
   expectedArtifactName,
   parseAndroidManifestSchemes,
+  parseAndroidIconEntries,
   verifyUnsignedApkResult,
   verifySourceConfig,
   verifyAndroidInspection,
@@ -205,6 +206,37 @@ describe('unsigned mobile artifact verifier', () => {
       )
     ).toEqual([])
     expect(parseAndroidManifestSchemes('A: android:scheme="pavii-h0x"')).toEqual([])
+  })
+
+  it('verifies launcher icons resolved by Android badging', () => {
+    const entries = [
+      'res/mipmap-anydpi-v26/ic_launcher.xml',
+      'res/mipmap-hdpi-v4/ic_launcher.webp',
+      'res/drawable-hdpi-v4/ic_launcher.png'
+    ]
+    expect(
+      parseAndroidIconEntries(
+        [
+          "application-icon-160:'res/mipmap-anydpi-v26/ic_launcher.xml'",
+          "application-icon-240:'res/mipmap-hdpi-v4/ic_launcher.webp'",
+          "application-icon-320:'res/drawable-hdpi-v4/ic_launcher.png'",
+          "launchable-activity: name='MainActivity'"
+        ].join('\n'),
+        entries
+      )
+    ).toEqual([...entries].sort())
+    expect(() =>
+      parseAndroidIconEntries("application-icon-160:'res/mipmap/../icon.png'", entries)
+    ).toThrow(/invalid launcher icon/)
+    expect(() =>
+      parseAndroidIconEntries("application-icon-hdpi:'res/mipmap-hdpi-v4/icon.png'", entries)
+    ).toThrow(/invalid launcher icon/)
+    expect(() =>
+      parseAndroidIconEntries("application-icon-160:'res/mipmap-hdpi-v4/icon.svg'", entries)
+    ).toThrow(/invalid launcher icon/)
+    expect(() =>
+      parseAndroidIconEntries("application-icon-160:'res/mipmap-hdpi-v4/missing.png'", entries)
+    ).toThrow(/absent from APK/)
   })
 
   it('builds Android with signing disabled and verifies the packaged signature', () => {

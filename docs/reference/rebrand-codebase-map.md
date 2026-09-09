@@ -863,11 +863,21 @@ implied by the focused green evidence above.
   numeric AAPT icon line, rejecting traversal, confirming the path exists in the
   APK ZIP, and retaining canonical source-asset hash checks. Android requires
   another authoritative rerun.
+- [Android run 34298555065](https://github.com/vjk7989/h0x-ade/actions/runs/34298555065)
+  passed from head `c5317c2d39fb86fd6ad7d8d895477207213262ce` and verified
+  `h0x-ade-mobile-0.0.48-android.apk`. Artifact container
+  `h0x-ade-mobile-android-c5317c2d39fb86fd6ad7d8d895477207213262ce`
+  has ID `10084588883`, size 58,235,735 bytes, and upload SHA-256
+  `11a9d35ddf666ae8d2b3e9f09f19b8668f7a5037ae5b8730a11e0721869f908a`.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 
-The iOS simulator artifact is established for the desktop release commit.
-Android packaging verification and artifact upload remain pending its rerun.
+Unsigned mobile artifacts are complete: Android is established by run
+`34298555065`; iOS remains established by run `34281836192` and artifact
+`h0x-ade-mobile-ios-simulator-8f234c6c5c140f90d69a3d4dab670f4abf42b318`.
+The reproducible ignored `mobile/node_modules` dependency tree was removed after
+verification to recover exactly 941,835,297 bytes; no source artifact was
+removed.
 
 ## Historical VM Rollback Fixture Pin — Completed Local Slice
 
@@ -1057,11 +1067,13 @@ change application runtime behavior or restore a legacy executable identity.
   inference was not the mismatch cause.
 - The Windows verifier now hashes the exact dimension-prefixed BGRA pixel stream
   for both images instead of hashing serialized PNG bytes, whose encoder metadata
-  can differ for identical pixels. The corrected pixel oracle requires another
-  authoritative Windows packaging rerun.
-- `v1.4.200` still has no Git tag or GitHub release after the separate release-cut
-  failure; no draft or public release was produced by this unsigned-build run.
+  can differ for identical pixels.
+- [Unsigned desktop run 34280018584](https://github.com/vjk7989/h0x-ade/actions/runs/34280018584)
+  passed Windows x64, Linux x64, and macOS x64/arm64 from
+  `8f234c6c5c140f90d69a3d4dab670f4abf42b318`; all four artifact containers were
+  uploaded. [Publish run 34281578093](https://github.com/vjk7989/h0x-ade/actions/runs/34281578093)
+  then verified and published all required artifacts, checksums, and updater
+  manifests as public stable release `v1.4.200` targeting the same commit.
 
-Linux x64 and both macOS architectures are now green and uploaded. Windows is
-the only remaining unsigned desktop rerun; its successful artifact, a tag, and
-publication are not yet claimed.
+Desktop `v1.4.200` unsigned release acceptance is complete across all four
+architectures.

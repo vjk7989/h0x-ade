@@ -210,6 +210,7 @@ describe('unsigned mobile artifact verifier', () => {
 
   it('verifies launcher icons resolved by Android badging', () => {
     const entries = [
+      'res/BW.xml',
       'res/mipmap-anydpi-v26/ic_launcher.xml',
       'res/mipmap-hdpi-v4/ic_launcher.webp',
       'res/drawable-hdpi-v4/ic_launcher.png'
@@ -217,6 +218,7 @@ describe('unsigned mobile artifact verifier', () => {
     expect(
       parseAndroidIconEntries(
         [
+          "application-icon-120:'res/BW.xml'",
           "application-icon-160:'res/mipmap-anydpi-v26/ic_launcher.xml'",
           "application-icon-240:'res/mipmap-hdpi-v4/ic_launcher.webp'",
           "application-icon-320:'res/drawable-hdpi-v4/ic_launcher.png'",

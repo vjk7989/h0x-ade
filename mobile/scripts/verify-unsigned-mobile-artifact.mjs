@@ -164,7 +164,7 @@ export function parseAndroidIconEntries(text, packagedEntries) {
       continue
     }
     const path = /^application-icon-[0-9]+:'([^']+)'$/.exec(line)?.[1]
-    if (!path || !/^res\/(?:mipmap|drawable)[^/]*\/[^/]+\.(?:png|webp|xml)$/i.test(path)) {
+    if (!path || !/^res\/(?:[^./][^/]*\/)?[^./][^/]*\.(?:png|webp|xml)$/i.test(path)) {
       fail(`Android badging contains invalid launcher icon entry: ${line}`)
     }
     if (!packaged.has(path)) {

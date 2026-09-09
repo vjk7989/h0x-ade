@@ -846,6 +846,15 @@ implied by the focused green evidence above.
   `<intent-filter>` blocks. `https` remains disallowed when the app actually
   handles it; focused coverage distinguishes query-only declarations from real
   handlers. Android still requires an authoritative rerun.
+- [Android rerun 34292414551](https://github.com/vjk7989/h0x-ade/actions/runs/34292414551)
+  passed scheme verification, then failed the generic raster-mipmap icon
+  heuristic.
+- Android icon verification now parses semantic `application-icon-density`
+  entries from `aapt dump badging`, accepts only safe PNG, WebP, or XML paths
+  under `res/mipmap-*` or `res/drawable-*`, and cross-checks every reported path
+  against the APK ZIP entries. Canonical source-asset hash checks remain in
+  force. The focused verifier suite passed 18/18 tests; Android still requires
+  an authoritative rerun.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 

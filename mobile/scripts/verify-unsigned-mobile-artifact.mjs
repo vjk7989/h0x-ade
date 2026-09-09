@@ -156,6 +156,25 @@ function parseAndroidBadging(text) {
   }
 }
 
+export function parseAndroidIconEntries(text, packagedEntries) {
+  const packaged = new Set(packagedEntries)
+  const icons = []
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.startsWith('application-icon-')) {
+      continue
+    }
+    const path = /^application-icon-[0-9]+:'([^']+)'$/.exec(line)?.[1]
+    if (!path || !/^res\/(?:mipmap|drawable)[^/]*\/[^/]+\.(?:png|webp|xml)$/i.test(path)) {
+      fail(`Android badging contains invalid launcher icon entry: ${line}`)
+    }
+    if (!packaged.has(path)) {
+      fail(`Android launcher icon is absent from APK: ${path}`)
+    }
+    icons.push(path)
+  }
+  return [...new Set(icons)].sort()
+}
+
 export function parseAndroidManifestSchemes(text) {
   const manifest = text.replace(/<!--[\s\S]*?-->/g, '')
   return [...manifest.matchAll(/<intent-filter(?=\s|>)[^>]*>([\s\S]*?)<\/intent-filter\s*>/g)]
@@ -182,7 +201,7 @@ function inspectAndroid(artifact) {
   return {
     ...parseAndroidBadging(badging),
     schemes: [...new Set(schemes)].sort().join(','),
-    iconEntries: entries.filter((entry) => /res\/mipmap[^/]*\/.*\.(png|webp)$/i.test(entry)),
+    iconEntries: parseAndroidIconEntries(badging, entries),
     permissionDescriptions: {}
   }
 }

@@ -855,6 +855,14 @@ implied by the focused green evidence above.
   against the APK ZIP entries. Canonical source-asset hash checks remain in
   force. The focused verifier suite passed 18/18 tests; Android still requires
   an authoritative rerun.
+- [Android rerun 34295682835](https://github.com/vjk7989/h0x-ade/actions/runs/34295682835)
+  passed all earlier gates; its numeric AAPT icon record resolved to the
+  resource-optimized direct path `res/BW.xml`.
+- The verifier safely accepts PNG, WebP, or XML icon paths either directly under
+  `res/` or under exactly one `res/<directory>/` level, while still requiring a
+  numeric AAPT icon line, rejecting traversal, confirming the path exists in the
+  APK ZIP, and retaining canonical source-asset hash checks. Android requires
+  another authoritative rerun.
 - Legacy `orca://pair` remains accepted as input by the existing compatibility
   parser; it is intentionally absent from generated native URL schemes.
 

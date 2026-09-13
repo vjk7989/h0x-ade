@@ -7,6 +7,8 @@ import { encodeIco, encodePng, resizeImage } from './trim-windows-icon-source.mj
 
 export const SOURCE_SHA256 = 'D54E012E3A323D284E5CF0AB9A41522F89A92B3AA3DF4D10316E5A06B267B6F8'
 export const SOURCE_SIZE = 1254
+export const APP_TILE_CORNER_RADIUS_RATIO = 0.125
+const APP_TILE_ANTIALIAS_GRID_SIZE = 4
 const BACKGROUND_NOISE_MAX_INK = 8
 const FOREGROUND_MIN_INK = 247
 const ICO_FRAME_SIZES = [256, 128, 64, 48, 32, 16]
@@ -67,6 +69,67 @@ function composite(image, rgb) {
   return { width: image.width, height: image.height, data }
 }
 
+function roundedRectangleCoverage(x, y, width, height, radius) {
+  if ((x >= radius && x + 1 <= width - radius) || (y >= radius && y + 1 <= height - radius)) {
+    return 255
+  }
+  let insideSamples = 0
+  const gridSize = APP_TILE_ANTIALIAS_GRID_SIZE
+  for (let sampleY = 0; sampleY < gridSize; sampleY++) {
+    const pointY = y + (sampleY + 0.5) / gridSize
+    const closestY = Math.max(radius, Math.min(height - radius, pointY))
+    for (let sampleX = 0; sampleX < gridSize; sampleX++) {
+      const pointX = x + (sampleX + 0.5) / gridSize
+      const closestX = Math.max(radius, Math.min(width - radius, pointX))
+      const deltaX = pointX - closestX
+      const deltaY = pointY - closestY
+      if (deltaX * deltaX + deltaY * deltaY <= radius * radius) {
+        insideSamples++
+      }
+    }
+  }
+  return Math.round((insideSamples * 255) / (gridSize * gridSize))
+}
+
+export function compositeOnRoundedAppTile(image) {
+  if (image.width !== image.height) {
+    throw new Error('h0x application tile must be square')
+  }
+  const radius = image.width * APP_TILE_CORNER_RADIUS_RATIO
+  const data = Buffer.alloc(image.data.length)
+  for (let y = 0; y < image.height; y++) {
+    for (let x = 0; x < image.width; x++) {
+      const index = (y * image.width + x) * 4
+      const tileAlpha = roundedRectangleCoverage(x, y, image.width, image.height, radius)
+      if (tileAlpha === 0) {
+        continue
+      }
+      const channel = Math.round(255 * (1 - image.data[index + 3] / 255))
+      data[index] = channel
+      data[index + 1] = channel
+      data[index + 2] = channel
+      data[index + 3] = tileAlpha
+    }
+  }
+  return { width: image.width, height: image.height, data }
+}
+
+function clearCornerPixels(image) {
+  for (const [x, y] of [
+    [0, 0],
+    [image.width - 1, 0],
+    [0, image.height - 1],
+    [image.width - 1, image.height - 1]
+  ]) {
+    image.data.fill(0, (y * image.width + x) * 4, (y * image.width + x) * 4 + 4)
+  }
+  return image
+}
+
+function resizeRoundedAppTile(image, size) {
+  return clearCornerPixels(resizeImage(image, size, size))
+}
+
 function opaqueBounds(image) {
   let minX = image.width
   let minY = image.height
@@ -124,38 +187,39 @@ export function generateBrandAssetBuffers(sourceBuffer) {
   const white = colorize(mask, 255)
   const black1024 = resizeImage(black, 1024, 1024)
   const white1024 = resizeImage(white, 1024, 1024)
-  const app1024 = composite(black1024, 255)
-  const app256 = resizeImage(app1024, 256, 256)
+  const squareApp1024 = composite(black1024, 255)
+  const roundedApp1024 = compositeOnRoundedAppTile(black1024)
+  const app256 = resizeRoundedAppTile(roundedApp1024, 256)
   const croppedWhite = crop(white, opaqueBounds(white))
   const tray1x = fit(croppedWhite, 22, 14, 1)
   const tray2x = fit(croppedWhite, 44, 28, 2)
   const splash = resizeImage(white, 400, 400)
-  const favicon = resizeImage(app1024, 48, 48)
-  const windowsFrames = ICO_FRAME_SIZES.map((size) => resizeImage(app1024, size, size))
-  const faviconFrames = [48, 32, 16].map((size) => resizeImage(app1024, size, size))
+  const mobileFavicon = resizeImage(squareApp1024, 48, 48)
+  const windowsFrames = ICO_FRAME_SIZES.map((size) => resizeRoundedAppTile(roundedApp1024, size))
+  const faviconFrames = [48, 32, 16].map((size) => resizeRoundedAppTile(roundedApp1024, size))
 
   const assets = new Map([
     ['resources/brand/h0x-mark-source.png', sourceBuffer],
     ['resources/brand/h0x-mark-black.png', encodePng(black1024)],
     ['resources/brand/h0x-mark-white.png', encodePng(white1024)],
-    ['resources/build/icon.png', encodePng(app1024)],
+    ['resources/build/icon.png', encodePng(roundedApp1024)],
     ['resources/build/icon.ico', encodeIco(windowsFrames)],
     ['resources/icon.png', encodePng(app256)],
     ['resources/icon-dev.png', encodePng(app256)],
-    ['resources/icon-source/icon.icon/Assets/logo.png', sourceBuffer],
+    ['resources/icon-source/icon.icon/Assets/logo.png', encodePng(roundedApp1024)],
     ['resources/tray/h0x-menu-barTemplate.png', encodePng(tray1x)],
     ['resources/tray/h0x-menu-barTemplate@2x.png', encodePng(tray2x)],
-    ['mobile/assets/icon.png', encodePng(app1024)],
+    ['mobile/assets/icon.png', encodePng(squareApp1024)],
     ['mobile/assets/adaptive-icon.png', encodePng(white1024)],
     ['mobile/assets/splash-icon.png', encodePng(splash)],
-    ['mobile/assets/favicon.png', encodePng(favicon)],
+    ['mobile/assets/favicon.png', encodePng(mobileFavicon)],
     ['docs/site/public/docs/logo.png', encodePng(resizeImage(white, 256, 256))],
     ['docs/site/public/docs/favicon.ico', encodeIco(faviconFrames)]
   ])
   for (const size of LINUX_ICON_SIZES) {
     assets.set(
       `resources/build/linux-icons/${size}x${size}.png`,
-      encodePng(resizeImage(app1024, size, size))
+      encodePng(resizeRoundedAppTile(roundedApp1024, size))
     )
   }
   return assets

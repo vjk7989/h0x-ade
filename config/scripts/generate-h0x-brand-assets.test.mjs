@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { PNG } from 'pngjs'
 import {
+  APP_TILE_CORNER_RADIUS_RATIO,
+  compositeOnRoundedAppTile,
   generateBrandAssetBuffers,
   LINUX_ICON_SIZES,
   SOURCE_SHA256,
@@ -13,6 +15,20 @@ import {
 
 const repoRoot = dirname(dirname(import.meta.dirname))
 const source = readFileSync(join(repoRoot, 'resources/brand/h0x-mark-source.png'))
+
+function rgbaAt(image, x, y) {
+  const index = (y * image.width + x) * 4
+  return Array.from(image.data.subarray(index, index + 4))
+}
+
+function decodeIcoFrames(buffer) {
+  return Array.from({ length: buffer.readUInt16LE(4) }, (_, index) => {
+    const entry = 6 + index * 16
+    const length = buffer.readUInt32LE(entry + 8)
+    const offset = buffer.readUInt32LE(entry + 12)
+    return PNG.sync.read(buffer.subarray(offset, offset + length))
+  })
+}
 
 describe('h0x brand asset generator', () => {
   it('pins the authoritative source and reproduces every committed output', () => {
@@ -34,6 +50,42 @@ describe('h0x brand asset generator', () => {
         black.data[index + 3] > 0 && (black.data[index] !== 0 || white.data[index] !== 255)
     }
     expect(mismatch).toBe(false)
+  })
+
+  it('composites the exact mark on a subtly rounded white application tile', () => {
+    const generated = generateBrandAssetBuffers(source)
+    const rounded = PNG.sync.read(generated.get('resources/build/icon.png'))
+    const mobileSquare = PNG.sync.read(generated.get('mobile/assets/icon.png'))
+
+    expect(APP_TILE_CORNER_RADIUS_RATIO).toBe(0.125)
+    for (const [x, y] of [
+      [0, 0],
+      [rounded.width - 1, 0],
+      [0, rounded.height - 1],
+      [rounded.width - 1, rounded.height - 1]
+    ]) {
+      expect(rgbaAt(rounded, x, y)).toEqual([0, 0, 0, 0])
+      expect(rgbaAt(mobileSquare, x, y)[3]).toBe(255)
+    }
+    expect(rgbaAt(rounded, Math.floor(rounded.width / 2), 0)).toEqual([255, 255, 255, 255])
+    expect(rounded.data.some((value, index) => index % 4 === 3 && value > 0 && value < 255)).toBe(
+      true
+    )
+    let markMismatch = false
+    for (let index = 0; index < rounded.data.length; index += 4) {
+      if (rounded.data[index + 3] === 255) {
+        markMismatch ||= !rounded.data
+          .subarray(index, index + 3)
+          .equals(mobileSquare.data.subarray(index, index + 3))
+      }
+    }
+    expect(markMismatch).toBe(false)
+  })
+
+  it('rejects a non-square application tile source', () => {
+    expect(() => compositeOnRoundedAppTile({ width: 2, height: 1, data: Buffer.alloc(8) })).toThrow(
+      /must be square/
+    )
   })
 
   it('keeps required platform sizes and removes legacy visual assets', () => {
@@ -64,6 +116,18 @@ describe('h0x brand asset generator', () => {
     expect(ico.readUInt16LE(4)).toBe(6)
     const widths = Array.from({ length: 6 }, (_, index) => ico.readUInt8(6 + index * 16) || 256)
     expect(widths).toEqual([256, 128, 64, 48, 32, 16])
+    for (const frame of decodeIcoFrames(ico)) {
+      expect(rgbaAt(frame, 0, 0)[3]).toBe(0)
+      expect(rgbaAt(frame, Math.floor(frame.width / 2), 0)).toEqual([255, 255, 255, 255])
+      expect(frame.data.some((value, index) => index % 4 === 3 && value > 0 && value < 255)).toBe(
+        true
+      )
+      if (frame.width === 16) {
+        expect(rgbaAt(frame, 1, 0)[3]).toBeGreaterThan(0)
+        expect(rgbaAt(frame, 1, 0)[3]).toBeLessThan(255)
+        expect(rgbaAt(frame, 2, 0)[3]).toBe(255)
+      }
+    }
   })
 
   it('emits the complete pre-sized Linux icon set', () => {
@@ -72,6 +136,8 @@ describe('h0x brand asset generator', () => {
       const path = `resources/build/linux-icons/${size}x${size}.png`
       const image = PNG.sync.read(generated.get(path))
       expect([image.width, image.height], path).toEqual([size, size])
+      expect(rgbaAt(image, 0, 0)[3]).toBe(0)
+      expect(rgbaAt(image, Math.floor(size / 2), 0)[3]).toBe(255)
     }
   })
 })

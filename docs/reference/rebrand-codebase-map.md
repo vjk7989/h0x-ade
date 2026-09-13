@@ -1078,7 +1078,7 @@ change application runtime behavior or restore a legacy executable identity.
 Desktop `v1.4.200` unsigned release acceptance is complete across all four
 architectures.
 
-## Rounded Desktop Application Tile — Completed Local Slice
+## Rounded Desktop Application Tile — Completed
 
 The deterministic brand generator now composites the exact canonical black h0x
 mark onto a white application tile with a 12.5% corner radius and antialiased,
@@ -1093,18 +1093,15 @@ remain unchanged.
   transparent or square geometry.
 - Product names, package and application identifiers, protocols, storage, RPC,
   IPC, environment variables, and legacy compatibility inputs are unchanged.
+- The concise product/design context lives at `docs/PRODUCT.md`; it was moved
+  from the repository root to satisfy the root-file guard.
 - Focused generator tests passed the source-hash, byte-freshness, rounded-corner,
   antialiasing, ICO-frame, Linux-size, centered-mark, and excluded-mobile-family
   contracts. The scoped code-quality checks also passed.
 
-Unsigned Windows, Linux, macOS x64, and macOS arm64 packaging remains pending
-for this new icon slice. Packaged acceptance must confirm transparent corners
-survive the Windows executable/shortcut/taskbar path, macOS Finder/Dock ICNS
-path, and Linux launcher packages without double masking or edge artifacts.
-
-[PR #16 run 34741860165](https://github.com/vjk7989/h0x-ade/actions/runs/34741860165)
-did not execute any validation: its jobs reported zero steps and `runner_id: 0`,
-with a GitHub billing/spending-limit annotation. This is an external account
-blocker, not evidence of a code failure. Fix **Billing & plans**, then rerun it
-with `gh run rerun 34741860165 --repo vjk7989/h0x-ade`. No Windows, Linux, or
-macOS packaged acceptance is claimed until that rerun completes successfully.
+[Current-head PR gate run 34742388501](https://github.com/vjk7989/h0x-ade/actions/runs/34742388501)
+passed after the public repository restored GitHub-hosted runners.
+[Unsigned desktop run 34742847096](https://github.com/vjk7989/h0x-ade/actions/runs/34742847096)
+then passed Windows x64, Linux x64, macOS x64, and macOS arm64, including
+packaged-brand verification, checksums, and macOS ICNS validation. Packaged
+acceptance for the rounded desktop icon slice is complete.

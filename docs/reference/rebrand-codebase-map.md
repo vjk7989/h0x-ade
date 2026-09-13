@@ -1101,3 +1101,10 @@ Unsigned Windows, Linux, macOS x64, and macOS arm64 packaging remains pending
 for this new icon slice. Packaged acceptance must confirm transparent corners
 survive the Windows executable/shortcut/taskbar path, macOS Finder/Dock ICNS
 path, and Linux launcher packages without double masking or edge artifacts.
+
+[PR #16 run 34741860165](https://github.com/vjk7989/h0x-ade/actions/runs/34741860165)
+did not execute any validation: its jobs reported zero steps and `runner_id: 0`,
+with a GitHub billing/spending-limit annotation. This is an external account
+blocker, not evidence of a code failure. Fix **Billing & plans**, then rerun it
+with `gh run rerun 34741860165 --repo vjk7989/h0x-ade`. No Windows, Linux, or
+macOS packaged acceptance is claimed until that rerun completes successfully.
